@@ -45,7 +45,7 @@ public class Lot {
     /// <summary>
     /// Изображения лота
     /// </summary>
-    public byte[] Images { get; init; }
+    public List<byte[]> Images { get; init; }
 
     /// <summary>
     /// Статус лота
@@ -60,7 +60,7 @@ public class Lot {
     /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки</param>
     /// <param name="images">Изображения лота</param>
-    public Lot(string name, string description, decimal startPrice, decimal betStep, byte[] images) {
+    public Lot(string name, string description, decimal startPrice, decimal betStep, List<byte[]> images) {
         Name = name;
         Description = description;
         StartPrice = startPrice;
@@ -76,7 +76,8 @@ public class Lot {
     /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки</param>
     /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> UpdateLotInformation(string name, string description, decimal startPrice, decimal betStep) {
+    public IBaseResponse<bool> UpdateLotInformation(string name, string description, decimal startPrice,
+        decimal betStep) {
         if (State == StatusState.Completed) {
             return new BaseResponse<bool>() {
                 Data = false,
@@ -112,7 +113,7 @@ public class Lot {
         }
 
         BuyoutPrice = price;
-        
+
         return new BaseResponse<bool>() {
             Data = true,
             Description = "Цена выкупа успешно установлена",
@@ -134,8 +135,8 @@ public class Lot {
             };
         }
 
-        var value = _bets.Count > 0 
-            ? _bets.Max(b => b.Value) + BetStep 
+        var value = _bets.Count > 0
+            ? _bets.Max(b => b.Value) + BetStep
             : BetStep;
 
         var bet = new Bet() {
@@ -144,9 +145,9 @@ public class Lot {
             UserId = userId,
             DateTime = DateTime.Now
         };
-        
+
         _bets.Add(bet);
-        
+
         return new BaseResponse<bool>() {
             Data = true,
             Description = "Ставка успешно сделана",
@@ -169,7 +170,7 @@ public class Lot {
         }
 
         State = state;
-        
+
         return new BaseResponse<bool>() {
             Data = true,
             Description = "Статус успешно изменен",
