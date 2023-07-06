@@ -2,4 +2,9 @@
 
 namespace Backend.Database.Interfaces;
 
-public interface IUserRepository : IBaseRepository<User> { }
+/// <summary>
+/// Интерфейс репозитория Пользователя
+/// </summary>
+public interface IUserRepository : IBaseRepository<User>
+{
+}

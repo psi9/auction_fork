@@ -2,4 +2,9 @@
 
 namespace Backend.Database.Interfaces;
 
-public interface IAuctionRepository : IBaseRepository<Auction> { }
+/// <summary>
+/// Интерфейс репозитория Аукциона
+/// </summary>
+public interface IAuctionRepository : IBaseRepository<Auction>
+{
+}

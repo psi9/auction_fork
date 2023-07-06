@@ -2,4 +2,9 @@
 
 namespace Backend.Database.Interfaces;
 
-public interface IBetRepository : IBaseRepository<Bet> { }
+/// <summary>
+/// Интерфейс репозитория Ставки
+/// </summary>
+public interface IBetRepository : IBaseRepository<Bet>
+{
+}

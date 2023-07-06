@@ -2,4 +2,9 @@
 
 namespace Backend.Database.Interfaces;
 
-public interface ILotRepository : IBaseRepository<Lot> { }
+/// <summary>
+/// Интерфейс репозитория Лота
+/// </summary>
+public interface ILotRepository : IBaseRepository<Lot>
+{
+}
