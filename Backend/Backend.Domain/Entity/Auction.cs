@@ -11,17 +11,17 @@ public class Auction {
     /// Уникальный идентификатор
     /// </summary>
     public Guid Id { get; init; } = Guid.NewGuid();
-    
+
     /// <summary>
     /// Название аукциона
     /// </summary>
     public string Name { get; private set; }
-    
+
     /// <summary>
     /// Описание аукциона
     /// </summary>
     public string Description { get; private set; }
-    
+
     /// <summary>
     /// Начало аукциона
     /// </summary>
@@ -31,12 +31,12 @@ public class Auction {
     /// Завершение аукциона
     /// </summary>
     public DateTime DateEnd { get; private set; }
-    
+
     /// <summary>
     /// Уникальный идентификатор пользователя-создателя
     /// </summary>
     public Guid AuthorId { get; init; }
-    
+
     /// <summary>
     /// Статус ставки
     /// </summary>
@@ -67,16 +67,16 @@ public class Auction {
                 StatusCode = StatusCode.Fail
             };
         }
-        
+
         DateStart = dateStart;
-        
+
         return new BaseResponse<bool>() {
             Data = true,
             Description = "Дата начала успешно установлена",
             StatusCode = StatusCode.Ok
         };
     }
-    
+
     /// <summary>
     /// Установить дату завершения аукциона
     /// </summary>
@@ -92,7 +92,7 @@ public class Auction {
         }
 
         DateEnd = dateEnd;
-        
+
         return new BaseResponse<bool>() {
             Data = true,
             Description = "Дата завершения успешно установлена",
@@ -115,7 +115,7 @@ public class Auction {
         }
 
         State = state;
-        
+
         return new BaseResponse<bool>() {
             Data = true,
             Description = "Статус успешно изменен",
