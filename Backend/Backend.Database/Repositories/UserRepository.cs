@@ -3,24 +3,28 @@ using Backend.Domain.Entity;
 
 namespace Backend.Database.Repositories;
 
-public class UserRepository : IUserRepository {
-    public async Task<bool> Create(User entity) {
+/// <summary>
+/// Репозиторий Пользователя
+/// </summary>
+public class UserRepository : IUserRepository
+{
+    public async Task<bool> CreateAsync(User entity)
+    {
         throw new NotImplementedException();
     }
 
-    public async Task<User> Get(int id) {
+    public async Task<List<User>> SelectAsync()
+    {
         throw new NotImplementedException();
     }
 
-    public async Task<List<User>> Select() {
+    public async Task<bool> DeleteAsync(User entity)
+    {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> Delete(User entity) {
-        throw new NotImplementedException();
-    }
-
-    public async Task<User> Update(User entity) {
+    public async Task<User> UpdateAsync(User entity)
+    {
         throw new NotImplementedException();
     }
 }

@@ -3,24 +3,28 @@ using Backend.Domain.Entity;
 
 namespace Backend.Database.Repositories;
 
-public class AuctionRepository : IAuctionRepository {
-    public async Task<bool> Create(Auction entity) {
+/// <summary>
+/// Репозиторий Аукциона
+/// </summary>
+public class AuctionRepository : IAuctionRepository
+{
+    public async Task<bool> CreateAsync(Auction entity)
+    {
         throw new NotImplementedException();
     }
 
-    public async Task<Auction> Get(int id) {
+    public async Task<List<Auction>> SelectAsync()
+    {
         throw new NotImplementedException();
     }
 
-    public async Task<List<Auction>> Select() {
+    public async Task<bool> DeleteAsync(Auction entity)
+    {
         throw new NotImplementedException();
     }
 
-    public async Task<bool> Delete(Auction entity) {
-        throw new NotImplementedException();
-    }
-
-    public async Task<Auction> Update(Auction entity) {
+    public async Task<Auction> UpdateAsync(Auction entity)
+    {
         throw new NotImplementedException();
     }
 }
