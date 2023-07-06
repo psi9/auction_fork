@@ -3,7 +3,8 @@ namespace Backend.Domain.Entity;
 /// <summary>
 /// Ставка
 /// </summary>
-public class Bet {
+public class Bet
+{
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>

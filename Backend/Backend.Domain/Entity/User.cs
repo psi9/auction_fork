@@ -3,7 +3,8 @@ namespace Backend.Domain.Entity;
 /// <summary>
 /// Пользователь
 /// </summary>
-public class User {
+public class User
+{
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>

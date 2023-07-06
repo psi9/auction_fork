@@ -3,7 +3,8 @@ namespace Backend.Domain.Enum;
 /// <summary>
 /// Статус результата запроса
 /// </summary>
-public enum StatusCode {
+public enum StatusCode
+{
     /// <summary>
     /// Данные получены/добавлены корректно
     /// </summary>

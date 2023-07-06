@@ -6,7 +6,8 @@ namespace Backend.Domain.Entity;
 /// <summary>
 /// Лот
 /// </summary>
-public class Lot {
+public class Lot
+{
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
@@ -60,7 +61,8 @@ public class Lot {
     /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки</param>
     /// <param name="images">Изображения лота</param>
-    public Lot(string name, string description, decimal startPrice, decimal betStep, List<byte[]> images) {
+    public Lot(string name, string description, decimal startPrice, decimal betStep, List<byte[]> images)
+    {
         Name = name;
         Description = description;
         StartPrice = startPrice;
@@ -77,9 +79,12 @@ public class Lot {
     /// <param name="betStep">Шаг ставки</param>
     /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
     public IBaseResponse<bool> UpdateLotInformation(string name, string description, decimal startPrice,
-        decimal betStep) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
+        decimal betStep)
+    {
+        if (State == StatusState.Completed)
+        {
+            return new BaseResponse<bool>()
+            {
                 Data = false,
                 Description = "Вы не можете изменить информацию, лот продан",
                 StatusCode = StatusCode.Fail
@@ -91,7 +96,8 @@ public class Lot {
         StartPrice = startPrice;
         BetStep = betStep;
 
-        return new BaseResponse<bool>() {
+        return new BaseResponse<bool>()
+        {
             Data = true,
             Description = "Лот успешно изменен",
             StatusCode = StatusCode.Ok
@@ -103,9 +109,12 @@ public class Lot {
     /// </summary>
     /// <param name="price">Цена выкупа</param>
     /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> SetBuyoutPrice(decimal price) {
-        if (State != StatusState.Completed) {
-            return new BaseResponse<bool>() {
+    public IBaseResponse<bool> SetBuyoutPrice(decimal price)
+    {
+        if (State != StatusState.Completed)
+        {
+            return new BaseResponse<bool>()
+            {
                 Data = false,
                 Description = "Вы не можете установить цену выкупа, лот еще не продан",
                 StatusCode = StatusCode.Fail
@@ -114,7 +123,8 @@ public class Lot {
 
         BuyoutPrice = price;
 
-        return new BaseResponse<bool>() {
+        return new BaseResponse<bool>()
+        {
             Data = true,
             Description = "Цена выкупа успешно установлена",
             StatusCode = StatusCode.Ok
@@ -126,9 +136,12 @@ public class Lot {
     /// </summary>
     /// <param name="userId">Уникальный идентификатор пользователя</param>
     /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> TryDoBet(Guid userId) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
+    public IBaseResponse<bool> TryDoBet(Guid userId)
+    {
+        if (State == StatusState.Completed)
+        {
+            return new BaseResponse<bool>()
+            {
                 Data = false,
                 Description = "Лот продан, сделать ставку невозможно",
                 StatusCode = StatusCode.Fail
@@ -139,7 +152,8 @@ public class Lot {
             ? _bets.Max(b => b.Value) + BetStep
             : BetStep;
 
-        var bet = new Bet() {
+        var bet = new Bet()
+        {
             Value = value,
             LotId = Id,
             UserId = userId,
@@ -148,7 +162,8 @@ public class Lot {
 
         _bets.Add(bet);
 
-        return new BaseResponse<bool>() {
+        return new BaseResponse<bool>()
+        {
             Data = true,
             Description = "Ставка успешно сделана",
             StatusCode = StatusCode.Ok
@@ -160,9 +175,12 @@ public class Lot {
     /// </summary>
     /// <param name="state">Состояние лота</param>
     /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> ChangeStatus(StatusState state) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
+    public IBaseResponse<bool> ChangeStatus(StatusState state)
+    {
+        if (State == StatusState.Completed)
+        {
+            return new BaseResponse<bool>()
+            {
                 Data = false,
                 Description = "Лот продан, изменение статуса невозможно",
                 StatusCode = StatusCode.Fail
@@ -171,7 +189,8 @@ public class Lot {
 
         State = state;
 
-        return new BaseResponse<bool>() {
+        return new BaseResponse<bool>()
+        {
             Data = true,
             Description = "Статус успешно изменен",
             StatusCode = StatusCode.Ok

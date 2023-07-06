@@ -6,7 +6,8 @@ namespace Backend.Domain.Response;
 /// Класс-оболочка результата запросов
 /// </summary>
 /// <typeparam name="T">Передаваемый тип данных</typeparam>
-public class BaseResponse<T> : IBaseResponse<T> {
+public class BaseResponse<T> : IBaseResponse<T>
+{
     /// <summary>
     /// Данные запроса
     /// </summary>
@@ -28,7 +29,8 @@ public class BaseResponse<T> : IBaseResponse<T> {
 /// Будет возвращать данные запроса, описание результата и статус успешности
 /// </summary>
 /// <typeparam name="T">Передаваемый тип данных</typeparam>
-public interface IBaseResponse<T> {
+public interface IBaseResponse<T>
+{
     /// <summary>
     /// Данные запроса
     /// </summary>
