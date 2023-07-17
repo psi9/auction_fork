@@ -1,5 +1,5 @@
 using Backend.Domain.Enum;
-using Backend.Domain.Response;
+using FluentResults;
 
 namespace Backend.Domain.Entity;
 
@@ -41,7 +41,7 @@ public class Auction
     /// <summary>
     /// Статус ставки
     /// </summary>
-    public StatusState State { get; private set; } = StatusState.Awaiting;
+    public State State { get; private set; } = State.Awaiting;
 
     /// <summary>
     /// .ctor
@@ -60,80 +60,50 @@ public class Auction
     /// Установить дату начала аукциона
     /// </summary>
     /// <param name="dateStart">Дата начала</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> SetDateStart(DateTime dateStart)
+    /// <returns>Успех или неудача</returns>
+    public Result SetDateStart(DateTime dateStart)
     {
-        if (State == StatusState.Completed)
+        if (State is State.Completed or State.Canceled)
         {
-            return new BaseResponse<bool>()
-            {
-                Data = false,
-                Description = "Аукцион завершен, установить дату начала невозможно",
-                StatusCode = StatusCode.Fail
-            };
+            return Result.Fail("Аукцион завершен ли отменен, установить дату начала невозможно");
         }
 
         DateStart = dateStart;
 
-        return new BaseResponse<bool>()
-        {
-            Data = true,
-            Description = "Дата начала успешно установлена",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 
     /// <summary>
     /// Установить дату завершения аукциона
     /// </summary>
     /// <param name="dateEnd">Дата завершения</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> SetDateEnd(DateTime dateEnd)
+    /// <returns>Успех или неудача</returns>
+    public Result SetDateEnd(DateTime dateEnd)
     {
-        if (State == StatusState.Running)
+        if (State is State.Running)
         {
-            return new BaseResponse<bool>()
-            {
-                Data = false,
-                Description = "Аукцион активен, установить дату завершения невозможно",
-                StatusCode = StatusCode.Fail
-            };
+            return Result.Fail("Аукцион активен, установить дату завершения невозможно");
         }
 
         DateEnd = dateEnd;
 
-        return new BaseResponse<bool>()
-        {
-            Data = true,
-            Description = "Дата завершения успешно установлена",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 
     /// <summary>
     /// Изменить статус аукциона
     /// </summary>
-    /// <param name="state">Состояние лота</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> ChangeStatus(StatusState state)
+    /// <param name="state">Состояние аукциона</param>
+    /// <returns>Успех или неудача</returns>
+    public Result ChangeStatus(State state)
     {
-        if (State == StatusState.Completed)
+        if (State is State.Completed)
         {
-            return new BaseResponse<bool>()
-            {
-                Data = false,
-                Description = "Лот продан, изменение статуса невозможно",
-                StatusCode = StatusCode.Fail
-            };
+            return Result.Fail("Аукцион окончен, изменение статуса невозможно");
         }
 
         State = state;
 
-        return new BaseResponse<bool>()
-        {
-            Data = true,
-            Description = "Статус успешно изменен",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 }

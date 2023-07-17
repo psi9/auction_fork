@@ -3,7 +3,7 @@ namespace Backend.Domain.Enum;
 /// <summary>
 /// Статусы состояния Аукциона и Лота
 /// </summary>
-public enum StatusState
+public enum State
 {
     /// <summary>
     /// Лот/Аукцион подготавливается
