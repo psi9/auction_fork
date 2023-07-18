@@ -26,7 +26,7 @@ public class Lot
     /// <summary>
     /// Стартовая цена лота
     /// </summary>
-    public decimal StartPrice { get; private set; }
+    public decimal StartPrice { get; init; }
 
     /// <summary>
     /// Цена выкупа лота
@@ -41,7 +41,7 @@ public class Lot
     /// <summary>
     /// Ставки лота
     /// </summary>
-    private readonly List<Bet> _bets = new List<Bet>();
+    private readonly List<Bet> _bets = new();
 
     public IReadOnlyCollection<Bet> Bets => _bets;
 
@@ -54,6 +54,16 @@ public class Lot
     /// Статус лота
     /// </summary>
     public State State { get; private set; } = State.Awaiting;
+
+    /// <summary>
+    /// Проверка актуальности лота
+    /// </summary>
+    public bool IsPurchased => State is (State.Canceled or State.Completed);
+    
+    /// <summary>
+    /// Проверка редактируемости лота
+    /// </summary>
+    public bool IsEditable => State is not (State.Running or State.Canceled or State.Completed);
 
     /// <summary>
     /// .ctor
@@ -77,20 +87,15 @@ public class Lot
     /// </summary>
     /// <param name="name">Название лота</param>
     /// <param name="description">Описание лота</param>
-    /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки</param>
     /// <returns>Успех или неудача</returns>
-    public Result UpdateLotInformation(string name, string description, decimal startPrice,
-        decimal betStep)
+    public Result UpdateInformation(string name, string description, decimal betStep)
     {
-        if (State == State.Completed)
-        {
-            return Result.Fail("Вы не можете изменить информацию, лот продан");
-        }
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить информацию, лот не редактируем");
 
         Name = name;
         Description = description;
-        StartPrice = startPrice;
         BetStep = betStep;
 
         return Result.Ok();
@@ -99,16 +104,13 @@ public class Lot
     /// <summary>
     /// Установить цену выкупа лота
     /// </summary>
-    /// <param name="price">Цена выкупа</param>
     /// <returns>Успех или неудача</returns>
-    public Result SetBuyoutPrice(decimal price)
+    public Result SetBuyoutPrice()
     {
-        if (State != State.Completed)
-        {
-            return Result.Fail("Вы не можете установить цену выкупа, лот еще не продан");
-        }
+        if (!IsPurchased)
+            return Result.Fail("Вы не можете установить цену выкупа, лот не продан");
 
-        BuyoutPrice = price;
+        BuyoutPrice = _bets.Count > 0 ? _bets.Max()?.Value : 0;
 
         return Result.Ok();
     }
@@ -120,10 +122,8 @@ public class Lot
     /// <returns>Успех или неудача</returns>
     public Result TryDoBet(Guid userId)
     {
-        if (State == State.Completed)
-        {
-            return Result.Fail("Лот продан, сделать ставку невозможно");
-        }
+        if (IsPurchased)
+            return Result.Fail("Вы не можете изменить информацию, лот не продан");
 
         var value = _bets.Count > 0
             ? _bets.Max(b => b.Value) + BetStep
@@ -149,10 +149,8 @@ public class Lot
     /// <returns>Успех или неудача</returns>
     public Result ChangeStatus(State state)
     {
-        if (State == State.Completed)
-        {
-            return Result.Fail("Лот продан, изменение статуса невозможно");
-        }
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить статус, лот не редактируем");
 
         State = state;
 
