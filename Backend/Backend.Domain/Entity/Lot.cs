@@ -1,12 +1,13 @@
 using Backend.Domain.Enum;
-using Backend.Domain.Response;
+using FluentResults;
 
 namespace Backend.Domain.Entity;
 
 /// <summary>
 /// Лот
 /// </summary>
-public class Lot {
+public class Lot
+{
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
@@ -25,7 +26,7 @@ public class Lot {
     /// <summary>
     /// Стартовая цена лота
     /// </summary>
-    public decimal StartPrice { get; private set; }
+    public decimal StartPrice { get; init; }
 
     /// <summary>
     /// Цена выкупа лота
@@ -40,17 +41,29 @@ public class Lot {
     /// <summary>
     /// Ставки лота
     /// </summary>
-    private readonly List<Bet> _bets = new List<Bet>();
+    private readonly List<Bet> _bets = new();
+
+    public IReadOnlyCollection<Bet> Bets => _bets;
 
     /// <summary>
     /// Изображения лота
     /// </summary>
-    public List<byte[]> Images { get; init; }
+    public IReadOnlyCollection<string> Images { get; init; }
 
     /// <summary>
     /// Статус лота
     /// </summary>
-    public StatusState State { get; private set; } = StatusState.Awaiting;
+    public State State { get; private set; } = State.Awaiting;
+
+    /// <summary>
+    /// Проверка актуальности лота
+    /// </summary>
+    public bool IsPurchased => State is (State.Canceled or State.Completed);
+    
+    /// <summary>
+    /// Проверка редактируемости лота
+    /// </summary>
+    public bool IsEditable => State is not (State.Running or State.Canceled or State.Completed);
 
     /// <summary>
     /// .ctor
@@ -60,7 +73,8 @@ public class Lot {
     /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки</param>
     /// <param name="images">Изображения лота</param>
-    public Lot(string name, string description, decimal startPrice, decimal betStep, List<byte[]> images) {
+    public Lot(string name, string description, decimal startPrice, decimal betStep, IReadOnlyCollection<string> images)
+    {
         Name = name;
         Description = description;
         StartPrice = startPrice;
@@ -73,73 +87,50 @@ public class Lot {
     /// </summary>
     /// <param name="name">Название лота</param>
     /// <param name="description">Описание лота</param>
-    /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> UpdateLotInformation(string name, string description, decimal startPrice,
-        decimal betStep) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
-                Data = false,
-                Description = "Вы не можете изменить информацию, лот продан",
-                StatusCode = StatusCode.Fail
-            };
-        }
+    /// <returns>Успех или неудача</returns>
+    public Result UpdateInformation(string name, string description, decimal betStep)
+    {
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить информацию, лот не редактируем");
 
         Name = name;
         Description = description;
-        StartPrice = startPrice;
         BetStep = betStep;
 
-        return new BaseResponse<bool>() {
-            Data = true,
-            Description = "Лот успешно изменен",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 
     /// <summary>
     /// Установить цену выкупа лота
     /// </summary>
-    /// <param name="price">Цена выкупа</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> SetBuyoutPrice(decimal price) {
-        if (State != StatusState.Completed) {
-            return new BaseResponse<bool>() {
-                Data = false,
-                Description = "Вы не можете установить цену выкупа, лот еще не продан",
-                StatusCode = StatusCode.Fail
-            };
-        }
+    /// <returns>Успех или неудача</returns>
+    public Result SetBuyoutPrice()
+    {
+        if (!IsPurchased)
+            return Result.Fail("Вы не можете установить цену выкупа, лот не продан");
 
-        BuyoutPrice = price;
+        BuyoutPrice = _bets.Count > 0 ? _bets.Max()?.Value : 0;
 
-        return new BaseResponse<bool>() {
-            Data = true,
-            Description = "Цена выкупа успешно установлена",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 
     /// <summary>
     /// Попытаться сделать ставку
     /// </summary>
     /// <param name="userId">Уникальный идентификатор пользователя</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> TryDoBet(Guid userId) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
-                Data = false,
-                Description = "Лот продан, сделать ставку невозможно",
-                StatusCode = StatusCode.Fail
-            };
-        }
+    /// <returns>Успех или неудача</returns>
+    public Result TryDoBet(Guid userId)
+    {
+        if (IsPurchased)
+            return Result.Fail("Вы не можете изменить информацию, лот не продан");
 
         var value = _bets.Count > 0
             ? _bets.Max(b => b.Value) + BetStep
             : BetStep;
 
-        var bet = new Bet() {
+        var bet = new Bet()
+        {
             Value = value,
             LotId = Id,
             UserId = userId,
@@ -148,33 +139,21 @@ public class Lot {
 
         _bets.Add(bet);
 
-        return new BaseResponse<bool>() {
-            Data = true,
-            Description = "Ставка успешно сделана",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 
     /// <summary>
     /// Изменить статус лота
     /// </summary>
     /// <param name="state">Состояние лота</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> ChangeStatus(StatusState state) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
-                Data = false,
-                Description = "Лот продан, изменение статуса невозможно",
-                StatusCode = StatusCode.Fail
-            };
-        }
+    /// <returns>Успех или неудача</returns>
+    public Result ChangeStatus(State state)
+    {
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить статус, лот не редактируем");
 
         State = state;
 
-        return new BaseResponse<bool>() {
-            Data = true,
-            Description = "Статус успешно изменен",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 }

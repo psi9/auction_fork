@@ -1,3 +1,3 @@
 # Auction
 
-This app is for bidding. Namely auctions. 🪙💰
+This app is for bidding. Namely auctions. 🎫💰

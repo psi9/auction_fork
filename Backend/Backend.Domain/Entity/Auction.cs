@@ -1,12 +1,13 @@
 using Backend.Domain.Enum;
-using Backend.Domain.Response;
+using FluentResults;
 
 namespace Backend.Domain.Entity;
 
 /// <summary>
 /// Аукцион
 /// </summary>
-public class Auction {
+public class Auction
+{
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
@@ -40,7 +41,22 @@ public class Auction {
     /// <summary>
     /// Статус ставки
     /// </summary>
-    public StatusState State { get; private set; } = StatusState.Awaiting;
+    public State State { get; private set; } = State.Awaiting;
+
+    /// <summary>
+    /// Лоты аукциона
+    /// </summary>
+    private Dictionary<Guid, Lot> Lots { get; init; } = new();
+
+    /// <summary>
+    /// Проверка актуальности аукциона
+    /// </summary>
+    public bool IsActive => State is not (State.Canceled or State.Completed);
+
+    /// <summary>
+    /// Проверка редактируемости аукциона
+    /// </summary>
+    public bool IsEditable => State is not (State.Running or State.Canceled or State.Completed);
 
     /// <summary>
     /// .ctor
@@ -48,78 +64,180 @@ public class Auction {
     /// <param name="name">Название аукциона</param>
     /// <param name="description">Описание аукциона</param>
     /// <param name="authorId">Уникальный идентификатор автора</param>
-    public Auction(string name, string description, Guid authorId) {
+    public Auction(string name, string description, Guid authorId)
+    {
         Name = name;
         Description = description;
         AuthorId = authorId;
     }
 
     /// <summary>
+    /// Обновить информацию аукциона
+    /// </summary>
+    /// <param name="name">Название аукциона</param>
+    /// <param name="description">Описание аукциона</param>
+    /// <returns>Успех или неудача</returns>
+    public Result UpdateInformation(string name, string description)
+    {
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить информацию, аукцион не редактируем");
+
+        Name = name;
+        Description = description;
+
+        return Result.Ok();
+    }
+
+    /// <summary>
     /// Установить дату начала аукциона
     /// </summary>
-    /// <param name="dateStart">Дата начала</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> SetDateStart(DateTime dateStart) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
-                Data = false,
-                Description = "Аукцион завершен, установить дату начала невозможно",
-                StatusCode = StatusCode.Fail
-            };
-        }
+    /// <returns>Успех или неудача</returns>
+    public Result SetDateStart()
+    {
+        if (!IsActive)
+            return Result.Fail("Аукцион завершен или отменен, установить дату начала нельзя");
 
-        DateStart = dateStart;
+        DateStart = DateTime.Now;
 
-        return new BaseResponse<bool>() {
-            Data = true,
-            Description = "Дата начала успешно установлена",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
     }
 
     /// <summary>
     /// Установить дату завершения аукциона
     /// </summary>
-    /// <param name="dateEnd">Дата завершения</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> SetDateEnd(DateTime dateEnd) {
-        if (State == StatusState.Running) {
-            return new BaseResponse<bool>() {
-                Data = false,
-                Description = "Аукцион активен, установить дату завершения невозможно",
-                StatusCode = StatusCode.Fail
-            };
-        }
+    /// <returns>Успех или неудача</returns>
+    public Result SetDateEnd()
+    {
+        if (IsActive)
+            return Result.Fail("Аукцион активен, установить дату завершения нельзя");
 
-        DateEnd = dateEnd;
+        DateEnd = DateTime.Now;
 
-        return new BaseResponse<bool>() {
-            Data = true,
-            Description = "Дата завершения успешно установлена",
-            StatusCode = StatusCode.Ok
-        };
+        var lotsWithBets = Lots.Values.Where(l => l.Bets.Count > 0).ToArray();
+        var maxBetDate = lotsWithBets.SelectMany(l => l.Bets).Max(s => s.DateTime).AddSeconds(30);
+
+        DateEnd = DateEnd >= maxBetDate ? DateEnd : maxBetDate;
+
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// Выкупить лот
+    /// </summary>
+    /// <param name="lotId">Уникальный идентификатор лота</param>
+    /// <returns>Успех или неудача</returns>
+    public Result BuyoutLot(Guid lotId)
+    {
+        if (!IsActive)
+            return Result.Fail("Аукцион не активен, выкупить лот нельзя");
+
+        return Lots.TryGetValue(lotId, out var lot)
+            ? lot.SetBuyoutPrice()
+            : Result.Fail("Лот не найден");
     }
 
     /// <summary>
     /// Изменить статус аукциона
     /// </summary>
-    /// <param name="state">Состояние лота</param>
-    /// <returns>IBaseResponse - обрабатывает успех или неудачу</returns>
-    public IBaseResponse<bool> ChangeStatus(StatusState state) {
-        if (State == StatusState.Completed) {
-            return new BaseResponse<bool>() {
-                Data = false,
-                Description = "Лот продан, изменение статуса невозможно",
-                StatusCode = StatusCode.Fail
-            };
-        }
+    /// <param name="state">Состояние аукциона</param>
+    /// <returns>Успех или неудача</returns>
+    public Result ChangeStatus(State state)
+    {
+        if (!IsEditable)
+            return Result.Fail("Аукцион не редактируем, изменять статус нельзя");
 
         State = state;
 
-        return new BaseResponse<bool>() {
-            Data = true,
-            Description = "Статус успешно изменен",
-            StatusCode = StatusCode.Ok
-        };
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// Изменить статус лота
+    /// </summary>
+    /// <param name="lotId">Уникальный идентификатор лота</param>
+    /// <param name="state">Новое состояние</param>
+    /// <returns>Успех или неудача</returns>
+    public Result ChangeLotStatus(Guid lotId, State state)
+    {
+        if (!IsEditable)
+            return Result.Fail("Аукцион не редактируем, изменять статус лота нельзя");
+
+        return Lots.TryGetValue(lotId, out var lot)
+            ? lot.ChangeStatus(state)
+            : Result.Fail("Лот не найден");
+    }
+
+    /// <summary>
+    /// Сделать ставку
+    /// </summary>
+    /// <param name="lotId">Уникальный идентификатор лота</param>
+    /// <param name="userId">Уникальный идентификатор пользователя</param>
+    /// <returns>Успех или неудача</returns>
+    public Result DoBet(Guid lotId, Guid userId)
+    {
+        if (!IsActive)
+            return Result.Fail("Аукцион не активен, выкупить лот нельзя");
+
+        return Lots.TryGetValue(lotId, out var lot)
+            ? lot.TryDoBet(userId)
+            : Result.Fail("Лот не найден");
+    }
+
+    /// <summary>
+    /// Добавить лот
+    /// </summary>
+    /// <param name="name">Название лота</param>
+    /// <param name="description">Описание лота</param>
+    /// <param name="startPrice">Стартовая цена</param>
+    /// <param name="betStep">Шаг ставки</param>
+    /// <param name="images">Изображения</param>
+    /// <returns></returns>
+    public Result AddLot(string name, string description, decimal startPrice, decimal betStep,
+        IReadOnlyCollection<string> images)
+    {
+        if (!IsActive)
+            return Result.Fail("Аукцион не активен, выкупить лот нельзя");
+
+        var lot = new Lot(name, description, startPrice, betStep, images);
+
+        Lots.Add(lot.Id, lot);
+
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// Обновить лот
+    /// </summary>
+    /// <param name="lotId">Уникальный идентификатор лота</param>
+    /// <param name="name">Новое название</param>
+    /// <param name="description">Новое описание</param>
+    /// <param name="betStep">Новый шаг ставки</param>
+    /// <returns>Успех или неудача</returns>
+    public Result UpdateLot(Guid lotId, string name, string description, decimal betStep)
+    {
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить информацию, аукцион не редактируем");
+
+        return Lots.TryGetValue(lotId, out var lot)
+            ? lot.UpdateInformation(name, description, betStep)
+            : Result.Fail("Лот не найден");
+    }
+
+    /// <summary>
+    /// Удалить лот
+    /// </summary>
+    /// <param name="lotId">Уникальный идентификатор лота</param>
+    /// <returns>Успех или неудача</returns>
+    public Result RemoveLot(Guid lotId)
+    {
+        if (!IsActive)
+            return Result.Fail("Аукцион не активен, выкупить лот нельзя");
+
+        if (!Lots.ContainsKey(lotId))
+            return Result.Fail("Лот не найден");
+
+        Lots.Remove(lotId);
+
+        return Result.Ok();
     }
 }
