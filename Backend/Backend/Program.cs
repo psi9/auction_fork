@@ -1,6 +1,6 @@
-using Backend.Application.Repositories;
-using Backend.Database.Interfaces;
+using Backend.Application.Interfaces;
 using Backend.Database.PostgreSQL;
+using Backend.Database.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +11,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOptions<PgsqlConnection>()
     .Bind(builder.Configuration.GetSection("Config:PgsqlConnection"));
 
-builder.Services.AddTransient<IAuctionRepository, IAuctionRepository>();
-builder.Services.AddTransient<IBetRepository, BetRepository>();
-builder.Services.AddTransient<ILotRepository, LotRepository>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<IAuctionRepository, AuctionRepository>();
+builder.Services.AddSingleton<IBetRepository, BetRepository>();
+builder.Services.AddSingleton<ILotRepository, LotRepository>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.AddSingleton<IImageRepository, ImageRepository>();
+
+builder.Services.AddSingleton<PgsqlHandler>();
 
 var app = builder.Build();
 
