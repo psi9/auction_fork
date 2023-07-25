@@ -18,7 +18,7 @@ internal class AssemblyReader
     static AssemblyReader()
     {
         var databaseAssembly = Assembly.GetExecutingAssembly();
-        
+
         var resourceNames = databaseAssembly.GetManifestResourceNames()
             .Where(rn => rn.EndsWith(".sql"));
 
@@ -26,7 +26,7 @@ internal class AssemblyReader
         {
             using var stream = databaseAssembly.GetManifestResourceStream(resourceName);
             using var streamReader = new StreamReader(stream!);
-            
+
             Scripts.Add(resourceName.Replace(".sql", string.Empty), streamReader.ReadToEnd());
         }
     }

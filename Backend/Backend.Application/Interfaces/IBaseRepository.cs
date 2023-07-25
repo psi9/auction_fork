@@ -18,7 +18,7 @@ public interface IBaseRepository<T>
     /// </summary>
     /// <returns>Сушность</returns>
     public Task<T?> SelectAsync(Guid id);
-    
+
     /// <summary>
     /// Получить сущности
     /// </summary>
@@ -33,7 +33,8 @@ public interface IBaseRepository<T>
     /// <param name="resourceName">Имя скрипта для поиска по параметру</param>
     /// <typeparam name="K">Тип параметра поиска</typeparam>
     /// <returns>Сушности</returns>
-    public Task<IReadOnlyCollection<T>?> SelectManyByParameterAsync<K>(string parameterName, K parameter, string resourceName);
+    public Task<IReadOnlyCollection<T>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
+        string resourceName);
 
     /// <summary>
     /// Удаление сущности

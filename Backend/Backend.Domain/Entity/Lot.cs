@@ -136,7 +136,7 @@ public class Lot
         Name = name;
         Description = description;
         BetStep = betStep;
-        
+
         _images.Clear();
 
         foreach (var image in images)
