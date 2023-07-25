@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Backend.Application.Interfaces;
 using Backend.Database.PostgreSQL;
 using Backend.Domain.Entity;
@@ -7,9 +7,9 @@ using Npgsql;
 namespace Backend.Database.Repositories;
 
 /// <summary>
-/// Репозиторий Ставки
+/// 
 /// </summary>
-public class BetRepository : IBetRepository
+public class ImageRepository : IImageRepository
 {
     /// <summary>
     /// Обработчик запросов к базе данных
@@ -20,7 +20,7 @@ public class BetRepository : IBetRepository
     /// .ctor
     /// </summary>
     /// <param name="pgsqlHandler">Обработчик запросов к базе данных</param>
-    public BetRepository(PgsqlHandler pgsqlHandler)
+    public ImageRepository(PgsqlHandler pgsqlHandler)
     {
         _pgsqlHandler = pgsqlHandler;
     }
@@ -30,16 +30,14 @@ public class BetRepository : IBetRepository
     /// </summary>
     /// <param name="entity">Ставка</param>
     /// <returns>True или False</returns>
-    public async Task<bool> CreateAsync(Bet entity)
+    public async Task<bool> CreateAsync(Image entity)
     {
-        await _pgsqlHandler.ExecuteAsync("InsertBet", command =>
+        await _pgsqlHandler.ExecuteAsync("InsertImage", command =>
         {
             using var cmd = new NpgsqlCommand(command.Key, command.Value);
             cmd.Parameters.AddWithValue("id", entity.Id);
-            cmd.Parameters.AddWithValue("value", entity.Value);
             cmd.Parameters.AddWithValue("lotId", entity.LotId);
-            cmd.Parameters.AddWithValue("userId", entity.UserId);
-            cmd.Parameters.AddWithValue("dateTime", entity.DateTime);
+            cmd.Parameters.AddWithValue("path", entity.Path);
 
             return cmd;
         });
@@ -52,67 +50,61 @@ public class BetRepository : IBetRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор ставки</param>
     /// <returns>Ставка</returns>
-    public async Task<Bet?> SelectAsync(Guid id)
+    public async Task<Image?> SelectAsync(Guid id)
     {
-        var bet = await _pgsqlHandler.ReadAsync(id, "SelectBet",
-            dataReader => new Bet
+        var image = await _pgsqlHandler.ReadAsync(id, "SelectImage",
+            dataReader => new Image
             {
                 Id = dataReader.GetGuid("id"),
-                Value = dataReader.GetDecimal("value"),
                 LotId = dataReader.GetGuid("lotId"),
-                UserId = dataReader.GetGuid("userId"),
-                DateTime = dataReader.GetDateTime("dateTime")
+                Path = dataReader.GetString("path")
             });
 
-        return bet;
+        return image;
     }
 
     /// <summary>
     /// Запрос на выбор ставки
     /// </summary>
     /// <returns>Ставка</returns>
-    public async Task<IReadOnlyCollection<Bet>?> SelectManyAsync()
+    public async Task<IReadOnlyCollection<Image>?> SelectManyAsync()
     {
-        var bets = await _pgsqlHandler.ReadManyAsync<Bet>("SelectBets",
-            dataReader => new Bet
+        var images = await _pgsqlHandler.ReadManyAsync("SelectImages",
+            dataReader => new Image
             {
                 Id = dataReader.GetGuid("id"),
-                Value = dataReader.GetDecimal("value"),
                 LotId = dataReader.GetGuid("lotId"),
-                UserId = dataReader.GetGuid("userId"),
-                DateTime = dataReader.GetDateTime("dateTime")
+                Path = dataReader.GetString("path")
             });
 
-        return bets != null ? new List<Bet>(bets) : null;
+        return images != null ? new List<Image>(images) : null;
     }
 
     /// <summary>
-    /// Запрос на выбор ставок по параметру
+    /// Запрос на выбор изображений по параметру
     /// </summary>
     /// <param name="parameterName">Название параметра поиска в базе данных</param>
     /// <param name="parameter">Параметр поиска</param>
     /// <param name="resourceName">Имя скрипта запроса</param>
     /// <typeparam name="K">Тип параметра поиска</typeparam>
     /// <returns>Список сущностей</returns>
-    public async Task<IReadOnlyCollection<Bet>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
+    public async Task<IReadOnlyCollection<Image>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
         string resourceName)
     {
-        var bets = await _pgsqlHandler.ReadManyByParameterAsync<Bet, K>(
+        var images = await _pgsqlHandler.ReadManyByParameterAsync<Image, K>(
             resourceName,
             new KeyValuePair<string, K>(parameterName, parameter),
-            dataReader => new Bet
+            dataReader => new Image
             {
                 Id = dataReader.GetGuid("id"),
-                Value = dataReader.GetDecimal("value"),
                 LotId = dataReader.GetGuid("lotId"),
-                UserId = dataReader.GetGuid("userId"),
-                DateTime = dataReader.GetDateTime("dateTime")
+                Path = dataReader.GetString("Path")
             });
 
-        return bets != null ? new List<Bet>(bets) : null;
+        return images != null ? new List<Image>(images) : null;
     }
 
-    public Task<Bet> UpdateAsync(Bet entity)
+    public Task<Image> UpdateAsync(Image entity)
     {
         throw new NotImplementedException();
     }
@@ -124,7 +116,7 @@ public class BetRepository : IBetRepository
     /// <returns>True или False</returns>
     public async Task<bool> DeleteAsync(Guid id)
     {
-        await _pgsqlHandler.ExecuteAsync("DeleteBet", command =>
+        await _pgsqlHandler.ExecuteAsync("DeleteImage", command =>
         {
             using var cmd = new NpgsqlCommand(command.Key, command.Value);
             cmd.Parameters.AddWithValue("id", id);

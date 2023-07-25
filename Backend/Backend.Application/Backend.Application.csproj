@@ -6,4 +6,14 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <Reference Include="Microsoft.Extensions.Options">
+            <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.20\Microsoft.Extensions.Options.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Backend.Domain\Backend.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

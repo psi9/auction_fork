@@ -1,6 +1,6 @@
 ﻿using Backend.Domain.Entity;
 
-namespace Backend.Database.Interfaces;
+namespace Backend.Application.Interfaces;
 
 /// <summary>
 /// Интерфейс репозитория Пользователя

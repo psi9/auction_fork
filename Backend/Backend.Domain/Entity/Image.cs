@@ -1,9 +1,9 @@
 namespace Backend.Domain.Entity;
 
 /// <summary>
-/// Ставка
+/// Класс Изображения лота
 /// </summary>
-public class Bet
+public class Image
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -11,22 +11,12 @@ public class Bet
     public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
-    /// Значение ставки
-    /// </summary>
-    public decimal Value { get; init; }
-
-    /// <summary>
     /// Уникальный идентификатор лота
     /// </summary>
     public Guid LotId { get; init; }
 
     /// <summary>
-    /// Уникальный идентификатор пользователя
+    /// Путь изображения
     /// </summary>
-    public Guid UserId { get; init; }
-
-    /// <summary>
-    /// VВремя ставки
-    /// </summary>
-    public DateTime DateTime { get; init; }
+    public string Path { get; init; }
 }

@@ -9,6 +9,11 @@ namespace Backend.Domain.Entity;
 public class Lot
 {
     /// <summary>
+    /// Примитив синхронизации потоков
+    /// </summary>
+    private readonly object _locker = new();
+
+    /// <summary>
     /// Уникальный идентификатор
     /// </summary>
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -48,7 +53,9 @@ public class Lot
     /// <summary>
     /// Изображения лота
     /// </summary>
-    public IReadOnlyCollection<string> Images { get; init; }
+    private readonly List<Image> _images = new();
+
+    public IReadOnlyCollection<Image> Images => _images;
 
     /// <summary>
     /// Статус лота
@@ -59,7 +66,7 @@ public class Lot
     /// Проверка актуальности лота
     /// </summary>
     public bool IsPurchased => State is (State.Canceled or State.Completed);
-    
+
     /// <summary>
     /// Проверка редактируемости лота
     /// </summary>
@@ -71,15 +78,46 @@ public class Lot
     /// <param name="name">Название лота</param>
     /// <param name="description">Описание лота</param>
     /// <param name="startPrice">Начальная цена</param>
-    /// <param name="betStep">Шаг ставки</param>
+    /// <param name="betStep">Шаг ставки лота</param>
     /// <param name="images">Изображения лота</param>
-    public Lot(string name, string description, decimal startPrice, decimal betStep, IReadOnlyCollection<string> images)
+    public Lot(string name, string description, decimal startPrice, decimal betStep, IEnumerable<Image> images)
     {
         Name = name;
         Description = description;
         StartPrice = startPrice;
         BetStep = betStep;
-        Images = images;
+
+        foreach (var image in images)
+        {
+            _images.Add(new Image
+            {
+                Id = image.Id,
+                LotId = image.LotId,
+                Path = image.Path
+            });
+        }
+    }
+
+    /// <summary>
+    /// .ctor
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор лота</param>
+    /// <param name="name">Название лота</param>
+    /// <param name="description">Описание лота</param>
+    /// <param name="startPrice">Начальная цена</param>
+    /// <param name="buyoutPrice">Цена выкупа лота</param>
+    /// <param name="betStep">Шаг ставки лота</param>
+    /// <param name="state">Состояние лота</param>
+    public Lot(Guid id, string name, string description, decimal startPrice, decimal buyoutPrice, decimal betStep,
+        State state)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+        StartPrice = startPrice;
+        BuyoutPrice = buyoutPrice;
+        BetStep = betStep;
+        State = state;
     }
 
     /// <summary>
@@ -88,8 +126,9 @@ public class Lot
     /// <param name="name">Название лота</param>
     /// <param name="description">Описание лота</param>
     /// <param name="betStep">Шаг ставки</param>
+    /// <param name="images">Изображения лота</param>
     /// <returns>Успех или неудача</returns>
-    public Result UpdateInformation(string name, string description, decimal betStep)
+    public Result UpdateInformation(string name, string description, decimal betStep, IEnumerable<Image> images)
     {
         if (!IsEditable)
             return Result.Fail("Вы не можете изменить информацию, лот не редактируем");
@@ -97,6 +136,18 @@ public class Lot
         Name = name;
         Description = description;
         BetStep = betStep;
+
+        _images.Clear();
+
+        foreach (var image in images)
+        {
+            _images.Add(new Image
+            {
+                Id = image.Id,
+                LotId = image.LotId,
+                Path = image.Path
+            });
+        }
 
         return Result.Ok();
     }
@@ -125,19 +176,22 @@ public class Lot
         if (IsPurchased)
             return Result.Fail("Вы не можете изменить информацию, лот не продан");
 
-        var value = _bets.Count > 0
-            ? _bets.Max(b => b.Value) + BetStep
-            : BetStep;
-
-        var bet = new Bet()
+        lock (_locker)
         {
-            Value = value,
-            LotId = Id,
-            UserId = userId,
-            DateTime = DateTime.Now
-        };
+            var value = _bets.Count > 0
+                ? _bets.Max(b => b.Value) + BetStep
+                : BetStep;
 
-        _bets.Add(bet);
+            var bet = new Bet
+            {
+                Value = value,
+                LotId = Id,
+                UserId = userId,
+                DateTime = DateTime.Now
+            };
+
+            _bets.Add(bet);
+        }
 
         return Result.Ok();
     }

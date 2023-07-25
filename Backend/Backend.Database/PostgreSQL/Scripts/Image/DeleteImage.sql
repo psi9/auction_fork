@@ -1,3 +1,3 @@
 DELETE
-FROM "Auctions"
+FROM "Images"
 WHERE "id" = @id;

@@ -7,11 +7,74 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Npgsql" Version="6.0.9" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="PostgreSQL\Scripts\Auction\DeleteAuction.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Auction\DeleteAuction.sql" />
+        <None Remove="PostgreSQL\Scripts\Auction\InsertAuction.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Auction\InsertAuction.sql" />
+        <None Remove="PostgreSQL\Scripts\Auction\SelectAuctions.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Auction\SelectAuctions.sql" />
+        <None Remove="PostgreSQL\Scripts\Auction\UpdateAuction.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Auction\UpdateAuction.sql" />
+        <None Remove="PostgreSQL\Scripts\Bet\DeleteBet.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Bet\DeleteBet.sql" />
+        <None Remove="PostgreSQL\Scripts\Bet\GetBets.sql" />
+        <None Remove="PostgreSQL\Scripts\Bet\InsertBet.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Bet\InsertBet.sql" />
+        <None Remove="PostgreSQL\Scripts\Bet\UpdateBet.sql" />
+        <None Remove="PostgreSQL\Scripts\Lot\DeleteLot.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Lot\DeleteLot.sql" />
+        <None Remove="PostgreSQL\Scripts\Lot\GetLots.sql" />
+        <None Remove="PostgreSQL\Scripts\Lot\InsertLot.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Lot\InsertLot.sql" />
+        <None Remove="PostgreSQL\Scripts\Lot\UpdateLot.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Lot\UpdateLot.sql" />
+        <None Remove="PostgreSQL\Scripts\User\DeleteUser.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\User\DeleteUser.sql" />
+        <None Remove="PostgreSQL\Scripts\User\GetUsers.sql" />
+        <None Remove="PostgreSQL\Scripts\User\InsertUser.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\User\InsertUser.sql" />
+        <None Remove="PostgreSQL\Scripts\User\UpdateUser.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\User\UpdateUser.sql" />
+        <None Remove="PostgreSQL\Scripts\Bet\SelectBets.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Bet\SelectBets.sql" />
+        <None Remove="PostgreSQL\Scripts\User\SelectUsers.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\User\SelectUsers.sql" />
+        <None Remove="PostgreSQL\Scripts\Lot\SelectLots.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Lot\SelectLots.sql" />
+        <None Remove="PostgreSQL\Scripts\Auction\SelectAuction.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Auction\SelectAuction.sql" />
+        <None Remove="PostgreSQL\Scripts\Bet\SelectBet.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Bet\SelectBet.sql" />
+        <None Remove="PostgreSQL\Scripts\Lot\SelectLot.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Lot\SelectLot.sql" />
+        <None Remove="PostgreSQL\Scripts\User\SelectUser.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\User\SelectUser.sql" />
+        <None Remove="PostgreSQL\Scripts\Image\DeleteImage.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Image\DeleteImage.sql" />
+        <None Remove="PostgreSQL\Scripts\Image\InsertImage.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Image\InsertImage.sql" />
+        <None Remove="PostgreSQL\Scripts\Image\SelectImages.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Image\SelectImages.sql" />
+        <None Remove="PostgreSQL\Scripts\Image\UpdateImages.sql" />
+        <None Remove="PostgreSQL\Scripts\Bet\SelectBetsByLot.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Bet\SelectBetsByLot.sql" />
+        <None Remove="PostgreSQL\Scripts\Image\SelectImagesByLot.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Image\SelectImagesByLot.sql" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Backend.Application\Backend.Application.csproj" />
         <ProjectReference Include="..\Backend.Domain\Backend.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Npgsql" Version="6.0.9" />
+        <Reference Include="Microsoft.Extensions.Options">
+            <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.20\Microsoft.Extensions.Options.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>
