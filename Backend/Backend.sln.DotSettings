@@ -1,0 +1,5 @@
+﻿<wpf:ResourceDictionary xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib"
+                        xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xml:space="preserve">
+	<s:Boolean
+            x:Key="/Default/UserDictionary/Words/=_0410_0443_043A_0446_0438_043E_043D_0430/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
