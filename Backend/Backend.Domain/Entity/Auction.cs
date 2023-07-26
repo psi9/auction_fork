@@ -206,6 +206,22 @@ public class Auction
     }
 
     /// <summary>
+    /// Добавить изображения лота
+    /// </summary>
+    /// <param name="lotId">Уникальный идентификатор лота</param>
+    /// <param name="images">Изображения</param>
+    /// <returns>Успех или неудача</returns>
+    public Result AddLotImages(Guid lotId, IEnumerable<Image> images)
+    {
+        if (!IsEditable)
+            return Result.Fail("Аукцион не редактируем, изменять изображения лота нельзя");
+
+        return Lots.TryGetValue(lotId, out var lot)
+            ? lot.SetImages(images)
+            : Result.Fail("Лот не найден");
+    }
+
+    /// <summary>
     /// Добавить лот
     /// </summary>
     /// <param name="name">Название лота</param>

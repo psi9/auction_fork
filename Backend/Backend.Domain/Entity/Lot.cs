@@ -1,3 +1,4 @@
+using System.Net.Mime;
 using Backend.Domain.Enum;
 using FluentResults;
 
@@ -137,8 +138,23 @@ public class Lot
         Description = description;
         BetStep = betStep;
 
-        _images.Clear();
+        SetImages(images);
 
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// Установить изображения лота
+    /// </summary>
+    /// <param name="images">Изображения</param>
+    /// <returns>Успех или неудача</returns>
+    public Result SetImages(IEnumerable<Image> images)
+    {
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить информацию, лот не редактируем");
+        
+        _images.Clear();
+        
         foreach (var image in images)
         {
             _images.Add(new Image
