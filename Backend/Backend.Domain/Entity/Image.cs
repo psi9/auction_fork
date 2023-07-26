@@ -18,5 +18,5 @@ public class Image
     /// <summary>
     /// Путь изображения
     /// </summary>
-    public string Path { get; init; }
+    public string? Path { get; init; }
 }

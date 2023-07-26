@@ -17,24 +17,25 @@ public interface IBaseRepository<T>
     /// Получить сущность
     /// </summary>
     /// <returns>Сушность</returns>
-    public Task<T?> SelectAsync(Guid id);
+    public Task<T> SelectAsync(Guid id);
 
     /// <summary>
     /// Получить сущности
     /// </summary>
     /// <returns>Сушности</returns>
-    public Task<IReadOnlyCollection<T>?> SelectManyAsync();
+    public Task<IReadOnlyCollection<T>> SelectManyAsync();
 
     /// <summary>
     /// Получить сущности, выбраннные по параметру
     /// </summary>
-    /// <param name="parameterName">Название параметра для команды</param>
-    /// <param name="parameter">Параметр поиска</param>
     /// <param name="resourceName">Имя скрипта для поиска по параметру</param>
-    /// <typeparam name="K">Тип параметра поиска</typeparam>
+    /// <param
+    ///     name="commandParameters">Массив параметров для команды
+    ///             (string - Название параметра, object - Параметр)
+    /// </param>
     /// <returns>Сушности</returns>
-    public Task<IReadOnlyCollection<T>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName);
+    public Task<IReadOnlyCollection<T>> SelectManyByParameterAsync(string resourceName,
+        params KeyValuePair<string, object>[] commandParameters);
 
     /// <summary>
     /// Удаление сущности

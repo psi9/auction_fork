@@ -51,9 +51,12 @@ public class UserRepository : IUserRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор пользователя</param>
     /// <returns>Пользователь</returns>
-    public async Task<User?> SelectAsync(Guid id)
+    public async Task<User> SelectAsync(Guid id)
     {
-        var user = await _pgsqlHandler.ReadAsync<User>(id, "SelectUser",
+        var user = await _pgsqlHandler.ReadAsync<User>(
+            "SelectUser",
+            "id",
+            id,
             dataReader => new User(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -67,7 +70,7 @@ public class UserRepository : IUserRepository
     /// Запрос на получение списка Пользователей
     /// </summary>
     /// <returns>Список пользователей</returns>
-    public async Task<IReadOnlyCollection<User>?> SelectManyAsync()
+    public async Task<IReadOnlyCollection<User>> SelectManyAsync()
     {
         var users = await _pgsqlHandler.ReadManyAsync<User>("SelectUsers",
             dataReader => new User(
@@ -76,11 +79,11 @@ public class UserRepository : IUserRepository
                 dataReader.GetString("email"),
                 dataReader.GetString("password")));
 
-        return users != null ? new List<User>(users) : null;
+        return users;
     }
 
-    public Task<IReadOnlyCollection<User>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName)
+    public Task<IReadOnlyCollection<User>> SelectManyByParameterAsync(string resourceName,
+        params KeyValuePair<string, object>[] commandParameters)
     {
         throw new NotImplementedException();
     }

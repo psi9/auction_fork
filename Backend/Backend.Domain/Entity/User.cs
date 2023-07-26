@@ -1,5 +1,3 @@
-using FluentResults;
-
 namespace Backend.Domain.Entity;
 
 /// <summary>

@@ -37,7 +37,7 @@ public class ImageRepository : IImageRepository
             using var cmd = new NpgsqlCommand(command.Key, command.Value);
             cmd.Parameters.AddWithValue("id", entity.Id);
             cmd.Parameters.AddWithValue("lotId", entity.LotId);
-            cmd.Parameters.AddWithValue("path", entity.Path);
+            cmd.Parameters.AddWithValue("path", entity.Path!);
 
             return cmd;
         });
@@ -50,9 +50,12 @@ public class ImageRepository : IImageRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор ставки</param>
     /// <returns>Ставка</returns>
-    public async Task<Image?> SelectAsync(Guid id)
+    public async Task<Image> SelectAsync(Guid id)
     {
-        var image = await _pgsqlHandler.ReadAsync(id, "SelectImage",
+        var image = await _pgsqlHandler.ReadAsync(
+            "SelectImage",
+            "id",
+            id,
             dataReader => new Image
             {
                 Id = dataReader.GetGuid("id"),
@@ -67,7 +70,7 @@ public class ImageRepository : IImageRepository
     /// Запрос на выбор ставки
     /// </summary>
     /// <returns>Ставка</returns>
-    public async Task<IReadOnlyCollection<Image>?> SelectManyAsync()
+    public async Task<IReadOnlyCollection<Image>> SelectManyAsync()
     {
         var images = await _pgsqlHandler.ReadManyAsync("SelectImages",
             dataReader => new Image
@@ -77,31 +80,32 @@ public class ImageRepository : IImageRepository
                 Path = dataReader.GetString("path")
             });
 
-        return images != null ? new List<Image>(images) : null;
+        return images;
     }
 
     /// <summary>
     /// Запрос на выбор изображений по параметру
     /// </summary>
-    /// <param name="parameterName">Название параметра поиска в базе данных</param>
-    /// <param name="parameter">Параметр поиска</param>
     /// <param name="resourceName">Имя скрипта запроса</param>
-    /// <typeparam name="K">Тип параметра поиска</typeparam>
-    /// <returns>Список сущностей</returns>
-    public async Task<IReadOnlyCollection<Image>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName)
+    /// <param
+    ///     name="commandParameters">Массив параметров для команды
+    ///             (string - Название параметра, object - Параметр)
+    /// </param>    /// <returns>Список сущностей</returns>
+    public async Task<IReadOnlyCollection<Image>> SelectManyByParameterAsync(string resourceName,
+        params KeyValuePair<string, object>[] commandParameters)
     {
-        var images = await _pgsqlHandler.ReadManyByParameterAsync<Image, K>(
+        var images = await _pgsqlHandler.ReadManyByParameterAsync<Image>(
             resourceName,
-            new KeyValuePair<string, K>(parameterName, parameter),
             dataReader => new Image
             {
                 Id = dataReader.GetGuid("id"),
                 LotId = dataReader.GetGuid("lotId"),
                 Path = dataReader.GetString("Path")
-            });
+            },
+            commandParameters
+        );
 
-        return images != null ? new List<Image>(images) : null;
+        return images;
     }
 
     public Task<Image> UpdateAsync(Image entity)

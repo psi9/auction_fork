@@ -26,7 +26,7 @@ public class Bet
     public Guid UserId { get; init; }
 
     /// <summary>
-    /// VВремя ставки
+    /// Время ставки
     /// </summary>
     public DateTime DateTime { get; init; }
 }

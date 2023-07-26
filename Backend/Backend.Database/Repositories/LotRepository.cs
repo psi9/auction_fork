@@ -54,9 +54,12 @@ public class LotRepository : ILotRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор лота</param>
     /// <returns>Лот</returns>
-    public async Task<Lot?> SelectAsync(Guid id)
+    public async Task<Lot> SelectAsync(Guid id)
     {
-        var lot = await _pgsqlHandler.ReadAsync<Lot>(id, "SelectLot",
+        var lot = await _pgsqlHandler.ReadAsync<Lot>(
+            "SelectLot",
+            "id",
+            id,
             dataReader => new Lot(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -73,7 +76,7 @@ public class LotRepository : ILotRepository
     /// Запрос на получение списка Лотов
     /// </summary>
     /// <returns>Список лотов</returns>
-    public async Task<IReadOnlyCollection<Lot>?> SelectManyAsync()
+    public async Task<IReadOnlyCollection<Lot>> SelectManyAsync()
     {
         var lots = await _pgsqlHandler.ReadManyAsync<Lot>("SelectLots",
             dataReader => new Lot(
@@ -85,11 +88,11 @@ public class LotRepository : ILotRepository
                 dataReader.GetDecimal("betStep"),
                 (State)dataReader.GetInt32("state")));
 
-        return lots != null ? new List<Lot>(lots) : null;
+        return lots;
     }
 
-    public Task<IReadOnlyCollection<Lot>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName)
+    public Task<IReadOnlyCollection<Lot>> SelectManyByParameterAsync(string resourceName,
+        params KeyValuePair<string, object>[] commandParameters)
     {
         throw new NotImplementedException();
     }

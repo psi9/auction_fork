@@ -52,9 +52,12 @@ public class BetRepository : IBetRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор ставки</param>
     /// <returns>Ставка</returns>
-    public async Task<Bet?> SelectAsync(Guid id)
+    public async Task<Bet> SelectAsync(Guid id)
     {
-        var bet = await _pgsqlHandler.ReadAsync(id, "SelectBet",
+        var bet = await _pgsqlHandler.ReadAsync(
+            "SelectBet",
+            "id",
+            id,
             dataReader => new Bet
             {
                 Id = dataReader.GetGuid("id"),
@@ -71,7 +74,7 @@ public class BetRepository : IBetRepository
     /// Запрос на выбор ставки
     /// </summary>
     /// <returns>Ставка</returns>
-    public async Task<IReadOnlyCollection<Bet>?> SelectManyAsync()
+    public async Task<IReadOnlyCollection<Bet>> SelectManyAsync()
     {
         var bets = await _pgsqlHandler.ReadManyAsync<Bet>("SelectBets",
             dataReader => new Bet
@@ -83,23 +86,22 @@ public class BetRepository : IBetRepository
                 DateTime = dataReader.GetDateTime("dateTime")
             });
 
-        return bets != null ? new List<Bet>(bets) : null;
+        return bets;
     }
 
     /// <summary>
     /// Запрос на выбор ставок по параметру
     /// </summary>
-    /// <param name="parameterName">Название параметра поиска в базе данных</param>
-    /// <param name="parameter">Параметр поиска</param>
     /// <param name="resourceName">Имя скрипта запроса</param>
-    /// <typeparam name="K">Тип параметра поиска</typeparam>
-    /// <returns>Список сущностей</returns>
-    public async Task<IReadOnlyCollection<Bet>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName)
+    /// <param
+    ///     name="commandParameters">Массив параметров для команды
+    ///             (string - Название параметра, object - Параметр)
+    /// </param>    /// <returns>Список сущностей</returns>
+    public async Task<IReadOnlyCollection<Bet>> SelectManyByParameterAsync(string resourceName,
+        params KeyValuePair<string, object>[] commandParameters)
     {
-        var bets = await _pgsqlHandler.ReadManyByParameterAsync<Bet, K>(
+        var bets = await _pgsqlHandler.ReadManyByParameterAsync<Bet>(
             resourceName,
-            new KeyValuePair<string, K>(parameterName, parameter),
             dataReader => new Bet
             {
                 Id = dataReader.GetGuid("id"),
@@ -107,9 +109,11 @@ public class BetRepository : IBetRepository
                 LotId = dataReader.GetGuid("lotId"),
                 UserId = dataReader.GetGuid("userId"),
                 DateTime = dataReader.GetDateTime("dateTime")
-            });
+            },
+            commandParameters
+        );
 
-        return bets != null ? new List<Bet>(bets) : null;
+        return bets;
     }
 
     public Task<Bet> UpdateAsync(Bet entity)

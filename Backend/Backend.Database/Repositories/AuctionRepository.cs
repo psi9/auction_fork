@@ -52,9 +52,12 @@ public class AuctionRepository : IAuctionRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор аукциона</param>
     /// <returns>Аукцион</returns>
-    public async Task<Auction?> SelectAsync(Guid id)
+    public async Task<Auction> SelectAsync(Guid id)
     {
-        var auction = await _pgsqlHandler.ReadAsync<Auction>(id, "SelectAuction",
+        var auction = await _pgsqlHandler.ReadAsync<Auction>(
+            "SelectAuction",
+            "id",
+            id,
             dataReader => new Auction(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -71,7 +74,7 @@ public class AuctionRepository : IAuctionRepository
     /// Запрос на получение списка Аукционов
     /// </summary>
     /// <returns>Список аукционов</returns>
-    public async Task<IReadOnlyCollection<Auction>?> SelectManyAsync()
+    public async Task<IReadOnlyCollection<Auction>> SelectManyAsync()
     {
         var auctions = await _pgsqlHandler.ReadManyAsync<Auction>("SelectAuctions",
             dataReader => new Auction(
@@ -83,11 +86,11 @@ public class AuctionRepository : IAuctionRepository
                 dataReader.GetGuid("authorId"),
                 (State)dataReader.GetInt32("state")));
 
-        return auctions != null ? new List<Auction>(auctions) : null;
+        return auctions;
     }
 
-    public Task<IReadOnlyCollection<Auction>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName)
+    public Task<IReadOnlyCollection<Auction>> SelectManyByParameterAsync(string resourceName,
+        params KeyValuePair<string, object>[] commandParameters)
     {
         throw new NotImplementedException();
     }
