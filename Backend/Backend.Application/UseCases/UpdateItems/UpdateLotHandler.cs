@@ -4,15 +4,29 @@ using Backend.Domain.Entity;
 
 namespace Backend.Application.UseCases.UpdateItems;
 
+/// <summary>
+/// Обновление лота
+/// </summary>
 public class UpdateLotHandler
 {
+    /// <summary>
+    /// Репозиторий аукциона
+    /// </summary>
     private readonly IAuctionRepository _auctionRepository;
 
+    /// <summary>
+    /// .ctor
+    /// </summary>
+    /// <param name="auctionRepository">Репозиторий аукциона</param>
     public UpdateLotHandler(IAuctionRepository auctionRepository)
     {
         _auctionRepository = auctionRepository;
     }
 
+    /// <summary>
+    /// Обновить лот
+    /// </summary>
+    /// <param name="entity">Модель лота</param>
     public async Task UpdateLotAsync(LotDto entity)
     {
         var auction = await _auctionRepository.SelectAsync(entity.AuctionId);

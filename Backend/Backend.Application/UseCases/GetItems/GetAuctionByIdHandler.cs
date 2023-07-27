@@ -3,15 +3,30 @@ using Backend.Application.Interfaces;
 
 namespace Backend.Application.UseCases.GetItems;
 
+/// <summary>
+/// Получение аукциона
+/// </summary>
 public class GetAuctionByIdHandler
 {
+    /// <summary>
+    /// Репозиторий аукциона
+    /// </summary>
     private readonly IAuctionRepository _auctionRepository;
 
+    /// <summary>
+    /// .ctor
+    /// </summary>
+    /// <param name="auctionRepository">Репозиторий аукциона</param>
     public GetAuctionByIdHandler(IAuctionRepository auctionRepository)
     {
         _auctionRepository = auctionRepository;
     }
 
+    /// <summary>
+    /// Получить аукцион
+    /// </summary>
+    /// <param name="id">Уникальный идентификатор аукциона</param>
+    /// <returns>Модель аукциона</returns>
     public async Task<AuctionDto> GetAuctionByIdAsync(Guid id)
     {
         var auction = await _auctionRepository.SelectAsync(id);

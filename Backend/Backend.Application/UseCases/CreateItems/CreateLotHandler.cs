@@ -4,15 +4,29 @@ using Backend.Domain.Entity;
 
 namespace Backend.Application.UseCases.CreateItems;
 
+/// <summary>
+/// Создание лота
+/// </summary>
 public class CreateLotHandler
 {
+    /// <summary>
+    /// Репозиторий лота
+    /// </summary>
     private readonly ILotRepository _lotRepository;
 
+    /// <summary>
+    /// .ctor
+    /// </summary>
+    /// <param name="lotRepository">Репозиторий лота</param>
     public CreateLotHandler(ILotRepository lotRepository)
     {
         _lotRepository = lotRepository;
     }
 
+    /// <summary>
+    /// Создать лот
+    /// </summary>
+    /// <param name="entity">Лот</param>
     public async Task CreateLotAsync(LotDto entity)
     {
         var imagesDto = entity.Images;
