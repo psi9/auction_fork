@@ -17,24 +17,13 @@ public interface IBaseRepository<T>
     /// Получить сущность
     /// </summary>
     /// <returns>Сушность</returns>
-    public Task<T?> SelectAsync(Guid id);
+    public Task<T> SelectAsync(Guid id);
 
     /// <summary>
     /// Получить сущности
     /// </summary>
     /// <returns>Сушности</returns>
-    public Task<IReadOnlyCollection<T>?> SelectManyAsync();
-
-    /// <summary>
-    /// Получить сущности, выбраннные по параметру
-    /// </summary>
-    /// <param name="parameterName">Название параметра для команды</param>
-    /// <param name="parameter">Параметр поиска</param>
-    /// <param name="resourceName">Имя скрипта для поиска по параметру</param>
-    /// <typeparam name="K">Тип параметра поиска</typeparam>
-    /// <returns>Сушности</returns>
-    public Task<IReadOnlyCollection<T>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName);
+    public Task<IReadOnlyCollection<T>> SelectManyAsync();
 
     /// <summary>
     /// Удаление сущности
@@ -48,5 +37,5 @@ public interface IBaseRepository<T>
     /// </summary>
     /// <param name="entity"></param>
     /// <returns>Сущность</returns>
-    public Task<T> UpdateAsync(T entity);
+    public Task<bool> UpdateAsync(T entity);
 }

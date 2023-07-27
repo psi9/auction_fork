@@ -1,9 +1,9 @@
-namespace Backend.Domain.Entity;
+namespace Backend.Application.Dto;
 
 /// <summary>
-/// Класс Изображения лота
+/// Изображения лота
 /// </summary>
-public class Image
+public class ImageDto
 {
     /// <summary>
     /// Уникальный идентификатор

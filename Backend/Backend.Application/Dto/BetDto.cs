@@ -1,32 +1,32 @@
-namespace Backend.Domain.Entity;
+namespace Backend.Application.Dto;
 
 /// <summary>
 /// Ставка
 /// </summary>
-public class Bet
+public class BetDto
 {
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Значение ставки
     /// </summary>
-    public decimal Value { get; init; }
+    public decimal Value { get; set; }
 
     /// <summary>
     /// Уникальный идентификатор лота
     /// </summary>
-    public Guid LotId { get; init; }
+    public Guid LotId { get; set; }
 
     /// <summary>
     /// Уникальный идентификатор пользователя
     /// </summary>
-    public Guid UserId { get; init; }
+    public Guid UserId { get; set; }
 
     /// <summary>
-    /// Время ставки
+    /// VВремя ставки
     /// </summary>
-    public DateTime DateTime { get; init; }
+    public DateTime DateTime { get; set; }
 }

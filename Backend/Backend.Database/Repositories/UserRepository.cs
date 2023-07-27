@@ -32,16 +32,11 @@ public class UserRepository : IUserRepository
     /// <returns>True или False</returns>
     public async Task<bool> CreateAsync(User entity)
     {
-        await _pgsqlHandler.ExecuteAsync("InsertUser", command =>
-        {
-            using var cmd = new NpgsqlCommand(command.Key, command.Value);
-            cmd.Parameters.AddWithValue("id", entity.Id);
-            cmd.Parameters.AddWithValue("name", entity.Name);
-            cmd.Parameters.AddWithValue("email", entity.Email);
-            cmd.Parameters.AddWithValue("password", entity.Password);
-
-            return cmd;
-        });
+        await _pgsqlHandler.ExecuteAsync("InsertUser",
+            new KeyValuePair<string, object>("id", entity.Id),
+            new KeyValuePair<string, object>("name", entity.Name),
+            new KeyValuePair<string, object>("email", entity.Email),
+            new KeyValuePair<string, object>("password", entity.Password));
 
         return true;
     }
@@ -51,38 +46,31 @@ public class UserRepository : IUserRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор пользователя</param>
     /// <returns>Пользователь</returns>
-    public async Task<User?> SelectAsync(Guid id)
+    public async Task<User> SelectAsync(Guid id)
     {
-        var user = await _pgsqlHandler.ReadAsync<User>(id, "SelectUser",
+        return await _pgsqlHandler.ReadAsync<User>(
+            "SelectUser",
+            "id",
+            id,
             dataReader => new User(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
                 dataReader.GetString("email"),
                 dataReader.GetString("password")));
-
-        return user;
     }
 
     /// <summary>
     /// Запрос на получение списка Пользователей
     /// </summary>
     /// <returns>Список пользователей</returns>
-    public async Task<IReadOnlyCollection<User>?> SelectManyAsync()
+    public async Task<IReadOnlyCollection<User>> SelectManyAsync()
     {
-        var users = await _pgsqlHandler.ReadManyAsync<User>("SelectUsers",
+        return await _pgsqlHandler.ReadManyAsync<User>("SelectUsers",
             dataReader => new User(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
                 dataReader.GetString("email"),
                 dataReader.GetString("password")));
-
-        return users != null ? new List<User>(users) : null;
-    }
-
-    public Task<IReadOnlyCollection<User>?> SelectManyByParameterAsync<K>(string parameterName, K parameter,
-        string resourceName)
-    {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -90,20 +78,15 @@ public class UserRepository : IUserRepository
     /// </summary>
     /// <param name="entity">Пользователь</param>
     /// <returns>Пользователь</returns>
-    public async Task<User> UpdateAsync(User entity)
+    public async Task<bool> UpdateAsync(User entity)
     {
-        await _pgsqlHandler.ExecuteAsync("UpdateUser", command =>
-        {
-            using var cmd = new NpgsqlCommand(command.Key, command.Value);
-            cmd.Parameters.AddWithValue("id", entity.Id);
-            cmd.Parameters.AddWithValue("name", entity.Name);
-            cmd.Parameters.AddWithValue("email", entity.Email);
-            cmd.Parameters.AddWithValue("password", entity.Password);
+        await _pgsqlHandler.ExecuteAsync("UpdateUser",
+            new KeyValuePair<string, object>("id", entity.Id),
+            new KeyValuePair<string, object>("name", entity.Name),
+            new KeyValuePair<string, object>("email", entity.Email),
+            new KeyValuePair<string, object>("password", entity.Password));
 
-            return cmd;
-        });
-
-        return entity;
+        return true;
     }
 
     /// <summary>
@@ -113,13 +96,11 @@ public class UserRepository : IUserRepository
     /// <returns>True или False</returns>
     public async Task<bool> DeleteAsync(Guid id)
     {
-        await _pgsqlHandler.ExecuteAsync("DeleteUser", command =>
-        {
-            using var cmd = new NpgsqlCommand(command.Key, command.Value);
-            cmd.Parameters.AddWithValue("id", id);
+        await _pgsqlHandler.ExecuteAsync("DeleteUser",
+            new KeyValuePair<string, object>("id", id));
 
-            return cmd;
-        });
+        await _pgsqlHandler.ExecuteAsync("DeleteBet",
+            new KeyValuePair<string, object>("userId", id));
 
         return true;
     }
