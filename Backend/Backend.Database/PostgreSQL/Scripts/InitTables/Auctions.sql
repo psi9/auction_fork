@@ -7,5 +7,5 @@ CREATE TABLE "Auctions"
     "dateEnd"     timestamp,
     "authorId"    integer             NOT NULL,
     "state"       integer,
-    CONSTRAINT fk_author FOREIGN KEY ("authorId") REFERENCES "Users" ("id") ON DELETE CASCADE
+    CONSTRAINT fk_author FOREIGN KEY ("authorId") REFERENCES "Users" ("id")
 ); 

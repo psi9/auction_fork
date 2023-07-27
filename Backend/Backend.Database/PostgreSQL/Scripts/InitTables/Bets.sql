@@ -5,6 +5,6 @@ CREATE TABLE "Bets"
     "lotId"    integer             NOT NULL,
     "userId"   integer             NOT NULL,
     "dateTime" timestamp,
-    CONSTRAINT fk_lot FOREIGN KEY ("lotId") REFERENCES "Lots" ("id") ON DELETE CASCADE,
-    CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES "Users" ("id") ON DELETE CASCADE
+    CONSTRAINT fk_lot FOREIGN KEY ("lotId") REFERENCES "Lots" ("id"),
+    CONSTRAINT fk_user FOREIGN KEY ("userId") REFERENCES "Users" ("id")
 ); 
