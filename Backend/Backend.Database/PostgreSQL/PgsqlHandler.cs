@@ -31,16 +31,23 @@ public class PgsqlHandler
     /// Выполнить запрос без возвращаемых данных
     /// </summary>
     /// <param name="resourceName">Имя скрипта</param>
-    /// <param name="selector">Делегат, задающий NpgsqlCommand, необходимую для запроса</param>
-    public async Task ExecuteAsync(string resourceName,
-        Func<KeyValuePair<string, NpgsqlConnection>, NpgsqlCommand> selector)
+    /// <param
+    ///     name="commandParameters">Массив параметров для команды
+    ///             (string - Название параметра, object - Параметр)
+    /// </param>
+    public async Task ExecuteAsync(string resourceName, params KeyValuePair<string, object>[] commandParameters)
     {
         var commandText = AssemblyReader.GetScript(ResourcePath + resourceName);
 
         await using var connection = new NpgsqlConnection(_connectionString);
         await connection.OpenAsync();
 
-        await using var command = selector(new KeyValuePair<string, NpgsqlConnection>(commandText, connection));
+        await using var command = new NpgsqlCommand(commandText, connection);
+
+        foreach (var commandParameter in commandParameters)
+        {
+            command.Parameters.AddWithValue(commandParameter.Key, commandParameter.Value);
+        }
 
         await command.ExecuteNonQueryAsync();
     }
@@ -108,7 +115,8 @@ public class PgsqlHandler
     /// <param
     ///     name="commandParameters">Массив параметров для команды
     ///             (string - Название параметра, object - Параметр)
-    /// </param>    /// <typeparam name="T">Сущность</typeparam>
+    /// </param>
+    /// <typeparam name="T">Сущность</typeparam>
     /// <returns>Список сущностей</returns>
     public async Task<IReadOnlyCollection<T>> ReadManyByParameterAsync<T>(string resourceName,
         Func<NpgsqlDataReader, T> entityTemplate,

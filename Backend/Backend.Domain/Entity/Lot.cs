@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using Backend.Domain.Enum;
 using FluentResults;
 
@@ -30,6 +29,11 @@ public class Lot
     public string Description { get; private set; }
 
     /// <summary>
+    /// Уникальный идентификатор аукциона лота
+    /// </summary>
+    public Guid AuctionId { get; init; }
+
+    /// <summary>
     /// Стартовая цена лота
     /// </summary>
     public decimal StartPrice { get; init; }
@@ -37,7 +41,7 @@ public class Lot
     /// <summary>
     /// Цена выкупа лота
     /// </summary>
-    public decimal? BuyoutPrice { get; private set; }
+    public decimal BuyoutPrice { get; private set; }
 
     /// <summary>
     /// Шаг ставки лота
@@ -78,25 +82,20 @@ public class Lot
     /// </summary>
     /// <param name="name">Название лота</param>
     /// <param name="description">Описание лота</param>
+    /// <param name="auctionId">Уникальный идентификатор аукциона лота</param>
     /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки лота</param>
     /// <param name="images">Изображения лота</param>
-    public Lot(string name, string description, decimal startPrice, decimal betStep, IEnumerable<Image> images)
+    public Lot(string name, string description, Guid auctionId, decimal startPrice, decimal betStep,
+        IEnumerable<Image> images)
     {
         Name = name;
         Description = description;
+        AuctionId = auctionId;
         StartPrice = startPrice;
         BetStep = betStep;
 
-        foreach (var image in images)
-        {
-            _images.Add(new Image
-            {
-                Id = image.Id,
-                LotId = image.LotId,
-                Path = image.Path
-            });
-        }
+        SetImages(images);
     }
 
     /// <summary>
@@ -105,16 +104,18 @@ public class Lot
     /// <param name="id">Уникальный идентификатор лота</param>
     /// <param name="name">Название лота</param>
     /// <param name="description">Описание лота</param>
+    /// <param name="auctionId">Уникальный идентификатор аукциона лота</param>
     /// <param name="startPrice">Начальная цена</param>
     /// <param name="buyoutPrice">Цена выкупа лота</param>
     /// <param name="betStep">Шаг ставки лота</param>
     /// <param name="state">Состояние лота</param>
-    public Lot(Guid id, string name, string description, decimal startPrice, decimal buyoutPrice, decimal betStep,
-        State state)
+    public Lot(Guid id, string name, string description, Guid auctionId, decimal startPrice, decimal buyoutPrice,
+        decimal betStep, State state)
     {
         Id = id;
         Name = name;
         Description = description;
+        AuctionId = auctionId;
         StartPrice = startPrice;
         BuyoutPrice = buyoutPrice;
         BetStep = betStep;
@@ -152,9 +153,9 @@ public class Lot
     {
         if (!IsEditable)
             return Result.Fail("Вы не можете изменить информацию, лот не редактируем");
-        
+
         _images.Clear();
-        
+
         foreach (var image in images)
         {
             _images.Add(new Image
@@ -162,6 +163,33 @@ public class Lot
                 Id = image.Id,
                 LotId = image.LotId,
                 Path = image.Path
+            });
+        }
+
+        return Result.Ok();
+    }
+
+    /// <summary>
+    /// Установить ствавки лота
+    /// </summary>
+    /// <param name="bets">Ставки</param>
+    /// <returns>Успех или неудача</returns>
+    public Result SetBets(IEnumerable<Bet> bets)
+    {
+        if (!IsEditable)
+            return Result.Fail("Вы не можете изменить информацию, лот не редактируем");
+
+        _bets.Clear();
+
+        foreach (var bet in bets)
+        {
+            _bets.Add(new Bet
+            {
+                Id = bet.Id,
+                Value = bet.Value,
+                LotId = bet.LotId,
+                UserId = bet.UserId,
+                DateTime = bet.DateTime
             });
         }
 
@@ -177,7 +205,7 @@ public class Lot
         if (!IsPurchased)
             return Result.Fail("Вы не можете установить цену выкупа, лот не продан");
 
-        BuyoutPrice = _bets.Count > 0 ? _bets.Max()?.Value : 0;
+        BuyoutPrice = _bets.Count > 0 ? _bets.Max()!.Value : 0;
 
         return Result.Ok();
     }
@@ -219,9 +247,6 @@ public class Lot
     /// <returns>Успех или неудача</returns>
     public Result ChangeStatus(State state)
     {
-        if (!IsEditable)
-            return Result.Fail("Вы не можете изменить статус, лот не редактируем");
-
         State = state;
 
         return Result.Ok();

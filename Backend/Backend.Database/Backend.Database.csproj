@@ -58,12 +58,13 @@
         <None Remove="PostgreSQL\Scripts\Image\InsertImage.sql" />
         <EmbeddedResource Include="PostgreSQL\Scripts\Image\InsertImage.sql" />
         <None Remove="PostgreSQL\Scripts\Image\SelectImages.sql" />
-        <EmbeddedResource Include="PostgreSQL\Scripts\Image\SelectImages.sql" />
         <None Remove="PostgreSQL\Scripts\Image\UpdateImages.sql" />
         <None Remove="PostgreSQL\Scripts\Bet\SelectBetsByLot.sql" />
         <EmbeddedResource Include="PostgreSQL\Scripts\Bet\SelectBetsByLot.sql" />
         <None Remove="PostgreSQL\Scripts\Image\SelectImagesByLot.sql" />
         <EmbeddedResource Include="PostgreSQL\Scripts\Image\SelectImagesByLot.sql" />
+        <None Remove="PostgreSQL\Scripts\Lot\SelectLotByAuction.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\Lot\SelectLotByAuction.sql" />
     </ItemGroup>
 
     <ItemGroup>

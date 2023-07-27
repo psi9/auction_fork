@@ -3,7 +3,6 @@ using Backend.Application.Interfaces;
 using Backend.Database.PostgreSQL;
 using Backend.Domain.Entity;
 using Backend.Domain.Enum;
-using Npgsql;
 
 namespace Backend.Database.Repositories;
 
@@ -33,18 +32,22 @@ public class LotRepository : ILotRepository
     /// <returns>True или False</returns>
     public async Task<bool> CreateAsync(Lot entity)
     {
-        await _pgsqlHandler.ExecuteAsync("InsertLot", command =>
-        {
-            using var cmd = new NpgsqlCommand(command.Key, command.Value);
-            cmd.Parameters.AddWithValue("id", entity.Id);
-            cmd.Parameters.AddWithValue("name", entity.Name);
-            cmd.Parameters.AddWithValue("description", entity.Description);
-            cmd.Parameters.AddWithValue("startPrice", entity.StartPrice);
-            cmd.Parameters.AddWithValue("betStep", entity.BetStep);
-            cmd.Parameters.AddWithValue("images", entity.Images);
+        await _pgsqlHandler.ExecuteAsync("InsertLot",
+            new KeyValuePair<string, object>("id", entity.Id),
+            new KeyValuePair<string, object>("name", entity.Name),
+            new KeyValuePair<string, object>("description", entity.Description),
+            new KeyValuePair<string, object>("auctionId", entity.AuctionId),
+            new KeyValuePair<string, object>("startPrice", entity.StartPrice),
+            new KeyValuePair<string, object>("betStep", entity.BetStep),
+            new KeyValuePair<string, object>("images", entity.Images));
 
-            return cmd;
-        });
+        foreach (var image in entity.Images)
+        {
+            await _pgsqlHandler.ExecuteAsync("InsertImage",
+                new KeyValuePair<string, object>("id", image.Id),
+                new KeyValuePair<string, object>("lotId", image.LotId),
+                new KeyValuePair<string, object>("path", image.Path!));
+        }
 
         return true;
     }
@@ -64,10 +67,36 @@ public class LotRepository : ILotRepository
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
                 dataReader.GetString("description"),
+                dataReader.GetGuid("auctionId"),
                 dataReader.GetDecimal("startPrice"),
                 dataReader.GetDecimal("buyoutPrice"),
                 dataReader.GetDecimal("betStep"),
                 (State)dataReader.GetInt32("state")));
+
+        var bets = await _pgsqlHandler.ReadManyByParameterAsync(
+            "SelectBetsByLot",
+            dataReader => new Bet
+            {
+                Id = dataReader.GetGuid("id"),
+                Value = dataReader.GetDecimal("value"),
+                LotId = dataReader.GetGuid("lotId"),
+                UserId = dataReader.GetGuid("userId"),
+                DateTime = dataReader.GetDateTime("dateTime")
+            },
+            new KeyValuePair<string, object>("lotId", lot.Id));
+
+        var images = await _pgsqlHandler.ReadManyByParameterAsync(
+            "SelectImagesByLot",
+            dataReader => new Image
+            {
+                Id = dataReader.GetGuid("id"),
+                LotId = dataReader.GetGuid("lotId"),
+                Path = dataReader.GetString("path")
+            },
+            new KeyValuePair<string, object>("lotId", lot.Id));
+
+        lot.SetImages(images);
+        lot.SetBets(bets);
 
         return lot;
     }
@@ -83,18 +112,45 @@ public class LotRepository : ILotRepository
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
                 dataReader.GetString("description"),
+                dataReader.GetGuid("auctionId"),
                 dataReader.GetDecimal("startPrice"),
                 dataReader.GetDecimal("buyoutPrice"),
                 dataReader.GetDecimal("betStep"),
                 (State)dataReader.GetInt32("state")));
 
-        return lots;
-    }
+        var newLots = new List<Lot>();
 
-    public Task<IReadOnlyCollection<Lot>> SelectManyByParameterAsync(string resourceName,
-        params KeyValuePair<string, object>[] commandParameters)
-    {
-        throw new NotImplementedException();
+        foreach (var lot in lots)
+        {
+            var bets = await _pgsqlHandler.ReadManyByParameterAsync(
+                "SelectBetsByLot",
+                dataReader => new Bet
+                {
+                    Id = dataReader.GetGuid("id"),
+                    Value = dataReader.GetDecimal("value"),
+                    LotId = dataReader.GetGuid("lotId"),
+                    UserId = dataReader.GetGuid("userId"),
+                    DateTime = dataReader.GetDateTime("dateTime")
+                },
+                new KeyValuePair<string, object>("lotId", lot.Id));
+
+            var images = await _pgsqlHandler.ReadManyByParameterAsync(
+                "SelectImagesByLot",
+                dataReader => new Image
+                {
+                    Id = dataReader.GetGuid("id"),
+                    LotId = dataReader.GetGuid("lotId"),
+                    Path = dataReader.GetString("path")
+                },
+                new KeyValuePair<string, object>("lotId", lot.Id));
+
+            lot.SetImages(images);
+            lot.SetBets(bets);
+
+            newLots.Add(lot);
+        }
+
+        return newLots;
     }
 
     /// <summary>
@@ -102,21 +158,26 @@ public class LotRepository : ILotRepository
     /// </summary>
     /// <param name="entity">Лот</param>
     /// <returns>Лот</returns>
-    public async Task<Lot> UpdateAsync(Lot entity)
+    public async Task<bool> UpdateAsync(Lot entity)
     {
-        await _pgsqlHandler.ExecuteAsync("UpdateLot", command =>
+        await _pgsqlHandler.ExecuteAsync("UpdateLot",
+            new KeyValuePair<string, object>("id", entity.Id),
+            new KeyValuePair<string, object>("name", entity.Name),
+            new KeyValuePair<string, object>("description", entity.Description),
+            new KeyValuePair<string, object>("betStep", entity.BetStep));
+
+        await _pgsqlHandler.ExecuteAsync("DeleteImage",
+            new KeyValuePair<string, object>("lotId", entity.Id));
+
+        foreach (var image in entity.Images)
         {
-            using var cmd = new NpgsqlCommand(command.Key, command.Value);
-            cmd.Parameters.AddWithValue("id", entity.Id);
-            cmd.Parameters.AddWithValue("name", entity.Name);
-            cmd.Parameters.AddWithValue("description", entity.Description);
-            cmd.Parameters.AddWithValue("betStep", entity.BetStep);
-            cmd.Parameters.AddWithValue("images", entity.Images);
+            await _pgsqlHandler.ExecuteAsync("InsertImage",
+                new KeyValuePair<string, object>("id", image.Id),
+                new KeyValuePair<string, object>("lotId", image.LotId),
+                new KeyValuePair<string, object>("path", image.Path!));
+        }
 
-            return cmd;
-        });
-
-        return entity;
+        return true;
     }
 
     /// <summary>
@@ -126,13 +187,14 @@ public class LotRepository : ILotRepository
     /// <returns>True или False</returns>
     public async Task<bool> DeleteAsync(Guid id)
     {
-        await _pgsqlHandler.ExecuteAsync("DeleteLot", command =>
-        {
-            using var cmd = new NpgsqlCommand(command.Key, command.Value);
-            cmd.Parameters.AddWithValue("id", id);
+        await _pgsqlHandler.ExecuteAsync("DeleteLot",
+            new KeyValuePair<string, object>("id", id));
 
-            return cmd;
-        });
+        await _pgsqlHandler.ExecuteAsync("DeleteImage",
+            new KeyValuePair<string, object>("lotId", id));
+
+        await _pgsqlHandler.ExecuteAsync("DeleteBet",
+            new KeyValuePair<string, object>("lotId", id));
 
         return true;
     }

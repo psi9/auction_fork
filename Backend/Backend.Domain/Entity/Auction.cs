@@ -46,7 +46,7 @@ public class Auction
     /// <summary>
     /// Лоты аукциона
     /// </summary>
-    private Dictionary<Guid, Lot> Lots { get; } = new();
+    public Dictionary<Guid, Lot> Lots { get; } = new();
 
     /// <summary>
     /// Проверка актуальности аукциона
@@ -165,11 +165,7 @@ public class Auction
     /// <returns>Успех или неудача</returns>
     public Result ChangeStatus(State state)
     {
-        if (!IsEditable)
-            return Result.Fail("Аукцион не редактируем, изменять статус нельзя");
-
         State = state;
-
         return Result.Ok();
     }
 
@@ -181,9 +177,6 @@ public class Auction
     /// <returns>Успех или неудача</returns>
     public Result ChangeLotStatus(Guid lotId, State state)
     {
-        if (!IsEditable)
-            return Result.Fail("Аукцион не редактируем, изменять статус лота нельзя");
-
         return Lots.TryGetValue(lotId, out var lot)
             ? lot.ChangeStatus(state)
             : Result.Fail("Лот не найден");
@@ -214,7 +207,7 @@ public class Auction
     public Result AddLotImages(Guid lotId, IEnumerable<Image> images)
     {
         if (!IsEditable)
-            return Result.Fail("Аукцион не редактируем, изменять изображения лота нельзя");
+            return Result.Fail("Аукцион не редактируем, устанавливать изображения лота нельзя");
 
         return Lots.TryGetValue(lotId, out var lot)
             ? lot.SetImages(images)
@@ -222,23 +215,36 @@ public class Auction
     }
 
     /// <summary>
+    /// Добавить ставки лота
+    /// </summary>
+    /// <param name="lotId">Уникальный идентификатор лота</param>
+    /// <param name="bets">Ставки</param>
+    /// <returns>Успех или неудача</returns>
+    public Result AddLotBets(Guid lotId, IEnumerable<Bet> bets)
+    {
+        if (!IsEditable)
+            return Result.Fail("Аукцион не редактируем, устанавливать ставки лота нельзя");
+
+        return Lots.TryGetValue(lotId, out var lot)
+            ? lot.SetBets(bets)
+            : Result.Fail("Лот не найден");
+    }
+
+    /// <summary>
     /// Добавить лот
     /// </summary>
-    /// <param name="name">Название лота</param>
-    /// <param name="description">Описание лота</param>
-    /// <param name="startPrice">Стартовая цена</param>
-    /// <param name="betStep">Шаг ставки</param>
+    /// <param name="lot">Лот</param>
     /// <param name="images">Изображения лота</param>
-    /// <returns></returns>
-    public Result AddLot(string name, string description, decimal startPrice, decimal betStep,
-        IEnumerable<Image> images)
+    /// <param name="bets">Ставки</param>
+    /// <returns>Успех или неудача</returns>
+    public Result AddLot(Lot lot, IEnumerable<Image> images, IEnumerable<Bet> bets)
     {
         if (!IsActive)
             return Result.Fail("Аукцион не активен, выкупить лот нельзя");
 
-        var lot = new Lot(name, description, startPrice, betStep, images);
-
         Lots.Add(lot.Id, lot);
+        AddLotImages(lot.Id, images);
+        AddLotBets(lot.Id, bets);
 
         return Result.Ok();
     }

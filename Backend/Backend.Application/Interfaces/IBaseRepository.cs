@@ -26,18 +26,6 @@ public interface IBaseRepository<T>
     public Task<IReadOnlyCollection<T>> SelectManyAsync();
 
     /// <summary>
-    /// Получить сущности, выбраннные по параметру
-    /// </summary>
-    /// <param name="resourceName">Имя скрипта для поиска по параметру</param>
-    /// <param
-    ///     name="commandParameters">Массив параметров для команды
-    ///             (string - Название параметра, object - Параметр)
-    /// </param>
-    /// <returns>Сушности</returns>
-    public Task<IReadOnlyCollection<T>> SelectManyByParameterAsync(string resourceName,
-        params KeyValuePair<string, object>[] commandParameters);
-
-    /// <summary>
     /// Удаление сущности
     /// </summary>
     /// <param name="id">Уникальный идентификатор</param>
@@ -49,5 +37,5 @@ public interface IBaseRepository<T>
     /// </summary>
     /// <param name="entity"></param>
     /// <returns>Сущность</returns>
-    public Task<T> UpdateAsync(T entity);
+    public Task<bool> UpdateAsync(T entity);
 }
