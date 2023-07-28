@@ -1,3 +1,4 @@
+using Backend;
 using Backend.Application.Interfaces;
 using Backend.Application.UseCases.ChangeState;
 using Backend.Application.UseCases.CreateItems;
@@ -9,6 +10,7 @@ using Backend.Database.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSignalR();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -58,6 +60,12 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
+
+    app.UseCors(x => x
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true)
+        .AllowCredentials());
 }
 
 app.UseHttpsRedirection();
@@ -65,5 +73,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<WebApiHub>("/api");
 
 app.Run();
