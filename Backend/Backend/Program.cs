@@ -1,12 +1,12 @@
-using Backend;
-using Backend.Application.Interfaces;
-using Backend.Application.UseCases.ChangeState;
-using Backend.Application.UseCases.CreateItems;
-using Backend.Application.UseCases.DeleteItems;
-using Backend.Application.UseCases.GetItems;
-using Backend.Application.UseCases.UpdateItems;
+using Backend.Application.AuctionData.IRepository;
+using Backend.Application.AuctionData.UseCases;
+using Backend.Application.LotData.IRepository;
+using Backend.Application.LotData.UseCases;
+using Backend.Application.UserData.IRepository;
+using Backend.Application.UserData.UseCases;
 using Backend.Database.PostgreSQL;
 using Backend.Database.Repositories;
+using Backend.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,28 +24,30 @@ builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 builder.Services.AddSingleton<PgsqlHandler>();
 
-builder.Services.AddSingleton<BuyoutLotHandler>();
 builder.Services.AddSingleton<ChangeAuctionStatusHandler>();
-builder.Services.AddSingleton<ChangeLotStatusHandler>();
-builder.Services.AddSingleton<DoBetHandler>();
 builder.Services.AddSingleton<SetDateEndAuctionHandler>();
 builder.Services.AddSingleton<SetDateStartAuctionHandler>();
 
 builder.Services.AddSingleton<CreateAuctionHandler>();
-builder.Services.AddSingleton<CreateLotHandler>();
-builder.Services.AddSingleton<CreateUserHandler>();
-
 builder.Services.AddSingleton<DeleteAuctionHandler>();
-builder.Services.AddSingleton<DeleteLotHandler>();
-builder.Services.AddSingleton<DeleteUserHandler>();
-
 builder.Services.AddSingleton<GetAuctionsHandler>();
 builder.Services.AddSingleton<GetAuctionByIdHandler>();
+builder.Services.AddSingleton<UpdateAuctionHandler>();
+
+builder.Services.AddSingleton<BuyoutLotHandler>();
+builder.Services.AddSingleton<ChangeLotStatusHandler>();
+builder.Services.AddSingleton<DoBetHandler>();
+
+builder.Services.AddSingleton<CreateLotHandler>();
+builder.Services.AddSingleton<DeleteLotHandler>();
+builder.Services.AddSingleton<UpdateLotHandler>();
+
+builder.Services.AddSingleton<SignUpUserHandler>();
+builder.Services.AddSingleton<SignInUserHandler>();
+
+builder.Services.AddSingleton<DeleteUserHandler>();
 builder.Services.AddSingleton<GetUsersHandler>();
 builder.Services.AddSingleton<GetUserByIdHandler>();
-
-builder.Services.AddSingleton<UpdateAuctionHandler>();
-builder.Services.AddSingleton<UpdateLotHandler>();
 builder.Services.AddSingleton<UpdateUserHandler>();
 
 var app = builder.Build();
@@ -74,6 +76,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<WebApiHub>("/api");
+app.MapHub<AuctionHub>("/custom");
+app.MapHub<UserHub>("/custom");
 
 app.Run();
