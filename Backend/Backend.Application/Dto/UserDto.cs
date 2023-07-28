@@ -13,15 +13,15 @@ public class UserDto
     /// <summary>
     /// Имя пользователя
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 
     /// <summary>
     /// Почта пользователя
     /// </summary>
-    public string Email { get; set; }
+    public string Email { get; set; } = string.Empty;
 
     /// <summary>
     /// Пароль пользователя
     /// </summary>
-    public string Password { get; set; }
+    public string Password { get; set; } = string.Empty;
 }
