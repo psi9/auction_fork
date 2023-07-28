@@ -1,8 +1,7 @@
 ﻿using System.Data;
-using Backend.Application.Interfaces;
+using Backend.Application.UserData.IRepository;
 using Backend.Database.PostgreSQL;
 using Backend.Domain.Entity;
-using Npgsql;
 
 namespace Backend.Database.Repositories;
 

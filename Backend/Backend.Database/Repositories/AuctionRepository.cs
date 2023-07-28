@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using Backend.Application.Interfaces;
+using Backend.Application.AuctionData.IRepository;
 using Backend.Database.PostgreSQL;
 using Backend.Domain.Entity;
 using Backend.Domain.Enum;
