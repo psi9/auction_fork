@@ -1,2 +1,2 @@
-INSERT INTO "Auctions" ("id", "name", "description", "authorId")
-VALUES (@id, @name, @description, @authorId);
+INSERT INTO "Auctions" ("id", "name", "description", "authorId", "state")
+VALUES (@id, @name, @description, @authorId, @state);

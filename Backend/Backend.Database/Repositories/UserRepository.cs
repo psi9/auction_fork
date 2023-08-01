@@ -1,8 +1,7 @@
 ﻿using System.Data;
-using Backend.Application.Interfaces;
+using Backend.Application.UserData.IRepository;
 using Backend.Database.PostgreSQL;
 using Backend.Domain.Entity;
-using Npgsql;
 
 namespace Backend.Database.Repositories;
 
@@ -30,15 +29,13 @@ public class UserRepository : IUserRepository
     /// </summary>
     /// <param name="entity">Пользователь</param>
     /// <returns>True или False</returns>
-    public async Task<bool> CreateAsync(User entity)
+    public async Task CreateAsync(User entity)
     {
-        await _pgsqlHandler.ExecuteAsync("InsertUser",
+        await _pgsqlHandler.ExecuteAsync("User.InsertUser",
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name),
             new KeyValuePair<string, object>("email", entity.Email),
             new KeyValuePair<string, object>("password", entity.Password));
-
-        return true;
     }
 
     /// <summary>
@@ -49,9 +46,27 @@ public class UserRepository : IUserRepository
     public async Task<User> SelectAsync(Guid id)
     {
         return await _pgsqlHandler.ReadAsync<User>(
-            "SelectUser",
+            "User.SelectUser",
             "id",
             id,
+            dataReader => new User(
+                dataReader.GetGuid("id"),
+                dataReader.GetString("name"),
+                dataReader.GetString("email"),
+                dataReader.GetString("password")));
+    }
+    
+    /// <summary>
+    /// Запрос на получение пользователя по имени
+    /// </summary>
+    /// <param name="name">Имя пользователя</param>
+    /// <returns>Пользователь</returns>
+    public async Task<User> SelectByNameAsync(string name)
+    {
+        return await _pgsqlHandler.ReadAsync<User>(
+            "User.SelectUserByName",
+            "name",
+            name,
             dataReader => new User(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -65,7 +80,7 @@ public class UserRepository : IUserRepository
     /// <returns>Список пользователей</returns>
     public async Task<IReadOnlyCollection<User>> SelectManyAsync()
     {
-        return await _pgsqlHandler.ReadManyAsync<User>("SelectUsers",
+        return await _pgsqlHandler.ReadManyAsync<User>("User.SelectUsers",
             dataReader => new User(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -78,15 +93,13 @@ public class UserRepository : IUserRepository
     /// </summary>
     /// <param name="entity">Пользователь</param>
     /// <returns>Пользователь</returns>
-    public async Task<bool> UpdateAsync(User entity)
+    public async Task UpdateAsync(User entity)
     {
-        await _pgsqlHandler.ExecuteAsync("UpdateUser",
+        await _pgsqlHandler.ExecuteAsync("User.UpdateUser",
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name),
             new KeyValuePair<string, object>("email", entity.Email),
             new KeyValuePair<string, object>("password", entity.Password));
-
-        return true;
     }
 
     /// <summary>
@@ -94,14 +107,12 @@ public class UserRepository : IUserRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор пользователя</param>
     /// <returns>True или False</returns>
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        await _pgsqlHandler.ExecuteAsync("DeleteUser",
+        await _pgsqlHandler.ExecuteAsync("User.DeleteUser",
             new KeyValuePair<string, object>("id", id));
 
-        await _pgsqlHandler.ExecuteAsync("DeleteBet",
+        await _pgsqlHandler.ExecuteAsync("Bet.DeleteBet",
             new KeyValuePair<string, object>("userId", id));
-
-        return true;
     }
 }

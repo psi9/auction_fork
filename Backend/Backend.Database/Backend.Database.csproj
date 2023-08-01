@@ -65,17 +65,19 @@
         <EmbeddedResource Include="PostgreSQL\Scripts\Image\SelectImagesByLot.sql" />
         <None Remove="PostgreSQL\Scripts\Lot\SelectLotByAuction.sql" />
         <EmbeddedResource Include="PostgreSQL\Scripts\Lot\SelectLotByAuction.sql" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\Backend.Application\Backend.Application.csproj" />
-        <ProjectReference Include="..\Backend.Domain\Backend.Domain.csproj" />
+        <None Remove="PostgreSQL\Scripts\User\SelectUserByName.sql" />
+        <EmbeddedResource Include="PostgreSQL\Scripts\User\SelectUserByName.sql" />
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="Microsoft.Extensions.Options">
             <HintPath>..\..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\6.0.20\Microsoft.Extensions.Options.dll</HintPath>
         </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Backend.Application\Backend.Application.csproj" />
+      <ProjectReference Include="..\Backend.Domain\Backend.Domain.csproj" />
     </ItemGroup>
 
 </Project>
