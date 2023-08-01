@@ -3,12 +3,20 @@ import "./Header.css"
 export default function Header() {
     return (
         <header className="header">
-        <a href="#default" className="logo">ЛоготипКомпании</a>
-        <div className="header-right">
-            <a className="active" href="#home">Главная</a>
-            <a href="#contact">Контакты</a>
-            <a href="#about">О нас</a>
-        </div>
+            <div className="container">
+                <div className="logo">
+                    <img src="./assets/logo.svg" alt="Логотип" />
+                </div>
+                <div className="content">
+                    <button>Аукционы</button>
+                    <button>Лоты</button>
+                    <button>Участники</button>
+                </div>
+                <div className="tools">
+                    <img src="./assets/search.svg" alt="Поиск" />
+                    <img src="./assets/user.svg" alt="Профиль" />
+                </div>
+            </div>
         </header>
     );
 }
