@@ -13,12 +13,19 @@ public class DoBetHandler
     private readonly IAuctionRepository _auctionRepository;
 
     /// <summary>
+    /// Обработчик уведомлений
+    /// </summary>
+    private readonly INotificationHandler _notificationHandler;
+
+    /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="auctionRepository">Репозиторий аукциона</param>
-    public DoBetHandler(IAuctionRepository auctionRepository)
+    /// <param name="notificationHandler">Обработчик уведомлений</param>
+    public DoBetHandler(IAuctionRepository auctionRepository, INotificationHandler notificationHandler)
     {
         _auctionRepository = auctionRepository;
+        _notificationHandler = notificationHandler;
     }
 
     /// <summary>
@@ -34,5 +41,7 @@ public class DoBetHandler
         auction.DoBet(lotId, userId);
 
         await _auctionRepository.UpdateAsync(auction);
+
+        await _notificationHandler.MadeBetNoticeAsync();
     }
 }

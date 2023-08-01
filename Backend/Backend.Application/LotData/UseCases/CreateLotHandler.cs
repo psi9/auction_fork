@@ -15,12 +15,19 @@ public class CreateLotHandler
     private readonly ILotRepository _lotRepository;
 
     /// <summary>
+    /// Обработчик уведомлений
+    /// </summary>
+    private readonly INotificationHandler _notificationHandler;
+
+    /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="lotRepository">Репозиторий лота</param>
-    public CreateLotHandler(ILotRepository lotRepository)
+    /// <param name="notificationHandler">Обработчик уведомлений</param>
+    public CreateLotHandler(ILotRepository lotRepository, INotificationHandler notificationHandler)
     {
         _lotRepository = lotRepository;
+        _notificationHandler = notificationHandler;
     }
 
     /// <summary>
@@ -51,5 +58,7 @@ public class CreateLotHandler
         lot.SetImages(images);
 
         await _lotRepository.CreateAsync(lot);
+
+        await _notificationHandler.CreatedLotNoticeAsync();
     }
 }

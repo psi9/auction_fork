@@ -12,14 +12,21 @@ public class ChangeAuctionStatusHandler
     /// Репозиторий аукциона
     /// </summary>
     private readonly IAuctionRepository _auctionRepository;
+    
+    /// <summary>
+    /// Обработчик уведомлений
+    /// </summary>
+    private readonly INotificationHandler _notificationHandler;
 
     /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="auctionRepository">Репозиторий аукциона</param>
-    public ChangeAuctionStatusHandler(IAuctionRepository auctionRepository)
+    /// <param name="notificationHandler"></param>
+    public ChangeAuctionStatusHandler(IAuctionRepository auctionRepository, INotificationHandler notificationHandler)
     {
         _auctionRepository = auctionRepository;
+        _notificationHandler = notificationHandler;
     }
 
     /// <summary>
@@ -34,5 +41,7 @@ public class ChangeAuctionStatusHandler
         auction.ChangeStatus(state);
 
         await _auctionRepository.UpdateAsync(auction);
+
+        await _notificationHandler.ChangedAuctionStatusNoticeAsync();
     }
 }
