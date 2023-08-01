@@ -1,3 +1,4 @@
+using Backend.Application;
 using Backend.Application.AuctionData.IRepository;
 using Backend.Application.AuctionData.UseCases;
 using Backend.Application.LotData.IRepository;
@@ -19,6 +20,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddOptions<PgsqlConnection>()
     .Bind(builder.Configuration.GetSection("Config:PgsqlConnection"));
+
+builder.Services.AddOptions<AuthorityHandler>()
+    .Bind(builder.Configuration.GetSection("Config:AuthorityHandler"));
 
 builder.Services.AddSingleton<IAuctionRepository, AuctionRepository>();
 builder.Services.AddSingleton<ILotRepository, LotRepository>();
@@ -53,7 +57,7 @@ builder.Services.AddSingleton<GetUsersHandler>();
 builder.Services.AddSingleton<GetUserByIdHandler>();
 builder.Services.AddSingleton<UpdateUserHandler>();
 
-builder.Services.AddSingleton<NotificationHandler>();
+builder.Services.AddSingleton<INotificationHandler, NotificationHandler>();
 builder.Services.AddSingleton<AuctionController>();
 builder.Services.AddSingleton<LotController>();
 builder.Services.AddSingleton<UserController>();

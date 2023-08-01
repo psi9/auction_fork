@@ -15,27 +15,22 @@ public class AuthorityHandler
     /// <summary>
     /// Длина хеша
     /// </summary>
-    private const int KeySize = 30;
+    public int KeySize { get; set; }
 
     /// <summary>
     /// Количество итераций хеширования
     /// </summary>
-    private const int Iterations = 350000;
+    public int Iterations { get; set; }
 
     /// <summary>
     /// Соль для хеширования пароля
     /// </summary>
-    private const string Salt = "ASdkjhikuj98210as2l3kai32io4i0";
-
-    /// <summary>
-    /// Алгоритм хеширования
-    /// </summary>
-    private readonly HashAlgorithmName _algorithmName = HashAlgorithmName.SHA256;
+    public string Salt { get; set; } = string.Empty;
 
     /// <summary>
     /// Ассиметричный ключ для токена
     /// </summary>
-    private const string Secret = "db3OIsj+BXE9NZDy0t8W3TcNekrF+2";
+    public string Secret { get; set; } = string.Empty;
 
     /// <summary>
     /// Захешировать пароль с солью
@@ -48,7 +43,7 @@ public class AuthorityHandler
             Encoding.ASCII.GetBytes(password),
             Encoding.ASCII.GetBytes(Salt),
             Iterations,
-            _algorithmName,
+            HashAlgorithmName.SHA256,
             KeySize);
 
         return Convert.ToHexString(hash);
@@ -67,7 +62,7 @@ public class AuthorityHandler
             Encoding.ASCII.GetBytes(password),
             Encoding.ASCII.GetBytes(Salt),
             Iterations,
-            _algorithmName,
+            HashAlgorithmName.SHA256,
             KeySize);
 
         if (!CryptographicOperations.FixedTimeEquals(

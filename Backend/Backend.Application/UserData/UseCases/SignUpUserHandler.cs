@@ -1,6 +1,7 @@
 using Backend.Application.UserData.Dto;
 using Backend.Application.UserData.IRepository;
 using Backend.Domain.Entity;
+using Microsoft.Extensions.Options;
 
 namespace Backend.Application.UserData.UseCases;
 
@@ -24,10 +25,10 @@ public class SignUpUserHandler
     /// </summary>
     /// <param name="userRepository">Репозиторий пользователя</param>
     /// <param name="authorityHandler">Обработчик авторизации</param>
-    public SignUpUserHandler(IUserRepository userRepository, AuthorityHandler authorityHandler)
+    public SignUpUserHandler(IUserRepository userRepository, IOptions<AuthorityHandler> authorityHandler)
     {
         _userRepository = userRepository;
-        _authorityHandler = authorityHandler;
+        _authorityHandler = authorityHandler.Value;
     }
 
     /// <summary>

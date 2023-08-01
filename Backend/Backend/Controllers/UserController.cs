@@ -100,7 +100,7 @@ public class UserController : ControllerBase
     /// <param name="password">Пароль</param>
     /// <returns>Пользователь</returns>
     [HttpGet("sign_in/{username}/{password}")]
-    public async Task<UserDto> SignInUserAsync(string username, [FromBody] string password)
+    public async Task<UserDto> SignInUserAsync(string username, string password)
     {
         return await _signInHandler.SignInUserAsync(username, password);
     }
