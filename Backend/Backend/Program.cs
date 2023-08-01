@@ -4,9 +4,11 @@ using Backend.Application.LotData.IRepository;
 using Backend.Application.LotData.UseCases;
 using Backend.Application.UserData.IRepository;
 using Backend.Application.UserData.UseCases;
+using Backend.Controllers;
 using Backend.Database.PostgreSQL;
 using Backend.Database.Repositories;
 using Backend.Hubs;
+using Backend.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,11 +46,17 @@ builder.Services.AddSingleton<UpdateLotHandler>();
 
 builder.Services.AddSingleton<SignUpUserHandler>();
 builder.Services.AddSingleton<SignInUserHandler>();
+builder.Services.AddSingleton<AuthorityHandler>();
 
 builder.Services.AddSingleton<DeleteUserHandler>();
 builder.Services.AddSingleton<GetUsersHandler>();
 builder.Services.AddSingleton<GetUserByIdHandler>();
 builder.Services.AddSingleton<UpdateUserHandler>();
+
+builder.Services.AddSingleton<NotificationHandler>();
+builder.Services.AddSingleton<AuctionController>();
+builder.Services.AddSingleton<LotController>();
+builder.Services.AddSingleton<UserController>();
 
 var app = builder.Build();
 
@@ -57,11 +65,7 @@ if (app.Environment.IsDevelopment())
     app.UseExceptionHandler("/error");
 
     app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-        options.RoutePrefix = string.Empty;
-    });
+    app.UseSwaggerUI();
 
     app.UseCors(x => x
         .AllowAnyMethod()
@@ -72,11 +76,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.MapControllers();
 
-app.MapHub<AuctionHub>("/custom");
-app.MapHub<UserHub>("/custom");
+app.MapHub<AuctionHub>("/auction");
 
 app.Run();

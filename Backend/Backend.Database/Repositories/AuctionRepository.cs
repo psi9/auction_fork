@@ -30,15 +30,14 @@ public class AuctionRepository : IAuctionRepository
     /// </summary>
     /// <param name="entity">Аукцион</param>
     /// <returns>True или False</returns>
-    public async Task<bool> CreateAsync(Auction entity)
+    public async Task CreateAsync(Auction entity)
     {
-        await _pgsqlHandler.ExecuteAsync("InsertAuction",
+        await _pgsqlHandler.ExecuteAsync("Auction.InsertAuction",
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name!),
             new KeyValuePair<string, object>("description", entity.Description!),
+            new KeyValuePair<string, object>("state", entity.State),
             new KeyValuePair<string, object>("authorId", entity.AuthorId));
-
-        return true;
     }
 
     /// <summary>
@@ -49,7 +48,7 @@ public class AuctionRepository : IAuctionRepository
     public async Task<Auction> SelectAsync(Guid id)
     {
         var auction = await _pgsqlHandler.ReadAsync<Auction>(
-            "SelectAuction",
+            "Auction.SelectAuction",
             "id",
             id,
             dataReader => new Auction(
@@ -62,7 +61,7 @@ public class AuctionRepository : IAuctionRepository
                 (State)dataReader.GetInt32("state")));
 
         var lots = await _pgsqlHandler.ReadManyByParameterAsync<Lot>(
-            "SelectLotByAuction",
+            "Lot.SelectLotByAuction",
             dataReader => new Lot(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -77,7 +76,7 @@ public class AuctionRepository : IAuctionRepository
         foreach (var lot in lots)
         {
             var bets = await _pgsqlHandler.ReadManyByParameterAsync(
-                "SelectBetsByLot",
+                "Bet.SelectBetsByLot",
                 dataReader => new Bet
                 {
                     Id = dataReader.GetGuid("id"),
@@ -89,7 +88,7 @@ public class AuctionRepository : IAuctionRepository
                 new KeyValuePair<string, object>("lotId", lot.Id));
 
             var images = await _pgsqlHandler.ReadManyByParameterAsync(
-                "SelectImagesByLot",
+                "Image.SelectImagesByLot",
                 dataReader => new Image
                 {
                     Id = dataReader.GetGuid("id"),
@@ -110,7 +109,7 @@ public class AuctionRepository : IAuctionRepository
     /// <returns>Список аукционов</returns>
     public async Task<IReadOnlyCollection<Auction>> SelectManyAsync()
     {
-        var auctions = await _pgsqlHandler.ReadManyAsync<Auction>("SelectAuctions",
+        var auctions = await _pgsqlHandler.ReadManyAsync<Auction>("Auction.SelectAuctions",
             dataReader => new Auction(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -125,7 +124,7 @@ public class AuctionRepository : IAuctionRepository
         foreach (var auction in auctions)
         {
             var lots = await _pgsqlHandler.ReadManyByParameterAsync<Lot>(
-                "SelectLotByAuction",
+                "Lot.SelectLotByAuction",
                 dataReader => new Lot(
                     dataReader.GetGuid("id"),
                     dataReader.GetString("name"),
@@ -140,7 +139,7 @@ public class AuctionRepository : IAuctionRepository
             foreach (var lot in lots)
             {
                 var bets = await _pgsqlHandler.ReadManyByParameterAsync(
-                    "SelectBetsByLot",
+                    "Bet.SelectBetsByLot",
                     dataReader => new Bet
                     {
                         Id = dataReader.GetGuid("id"),
@@ -152,7 +151,7 @@ public class AuctionRepository : IAuctionRepository
                     new KeyValuePair<string, object>("lotId", lot.Id));
 
                 var images = await _pgsqlHandler.ReadManyByParameterAsync(
-                    "SelectImagesByLot",
+                    "Image.SelectImagesByLot",
                     dataReader => new Image
                     {
                         Id = dataReader.GetGuid("id"),
@@ -174,34 +173,32 @@ public class AuctionRepository : IAuctionRepository
     /// </summary>
     /// <param name="entity">Аукцион</param>
     /// <returns>Аукцион</returns>
-    public async Task<bool> UpdateAsync(Auction entity)
+    public async Task UpdateAsync(Auction entity)
     {
-        await _pgsqlHandler.ExecuteAsync("UpdateAuction",
+        await _pgsqlHandler.ExecuteAsync("Auction.UpdateAuction",
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name!),
             new KeyValuePair<string, object>("description", entity.Description!));
 
         foreach (var lot in entity.Lots.Values)
         {
-            await _pgsqlHandler.ExecuteAsync("UpdateLot",
+            await _pgsqlHandler.ExecuteAsync("Lot.UpdateLot",
                 new KeyValuePair<string, object>("id", entity.Id),
                 new KeyValuePair<string, object>("name", lot.Name),
                 new KeyValuePair<string, object>("description", lot.Description),
                 new KeyValuePair<string, object>("betStep", lot.BetStep));
 
-            await _pgsqlHandler.ExecuteAsync("DeleteImage",
+            await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
                 new KeyValuePair<string, object>("lotId", lot.Id));
 
             foreach (var image in lot.Images)
             {
-                await _pgsqlHandler.ExecuteAsync("InsertImage",
+                await _pgsqlHandler.ExecuteAsync("Image.InsertImage",
                     new KeyValuePair<string, object>("id", image.Id),
                     new KeyValuePair<string, object>("lotId", image.LotId),
                     new KeyValuePair<string, object>("path", image.Path!));
             }
         }
-
-        return true;
     }
 
     /// <summary>
@@ -209,13 +206,13 @@ public class AuctionRepository : IAuctionRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор аукциона</param>
     /// <returns>True или False</returns>
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        await _pgsqlHandler.ExecuteAsync("DeleteAuction",
+        await _pgsqlHandler.ExecuteAsync("Auction.DeleteAuction",
             new KeyValuePair<string, object>("id", id));
 
         var lots = await _pgsqlHandler.ReadManyByParameterAsync<Lot>(
-            "SelectLotByAuction",
+            "Lot.SelectLotByAuction",
             dataReader => new Lot(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -229,16 +226,14 @@ public class AuctionRepository : IAuctionRepository
 
         foreach (var lot in lots)
         {
-            await _pgsqlHandler.ExecuteAsync("DeleteImage",
+            await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
                 new KeyValuePair<string, object>("lotId", lot.Id));
 
-            await _pgsqlHandler.ExecuteAsync("DeleteBet",
+            await _pgsqlHandler.ExecuteAsync("Bet.DeleteBet",
                 new KeyValuePair<string, object>("lotId", lot.Id));
         }
 
-        await _pgsqlHandler.ExecuteAsync("DeleteLot",
+        await _pgsqlHandler.ExecuteAsync("Lot.DeleteLot",
             new KeyValuePair<string, object>("auctionId", id));
-
-        return true;
     }
 }

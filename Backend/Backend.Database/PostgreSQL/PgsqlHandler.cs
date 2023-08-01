@@ -16,7 +16,7 @@ public class PgsqlHandler
     /// <summary>
     /// Основной путь к ресурсу скрипта
     /// </summary>
-    private const string ResourcePath = "Backend.Database.PostgreSQL.Scripts.Auction.";
+    private const string ResourcePath = "Backend.Database.PostgreSQL.Scripts.";
 
     /// <summary>
     /// .ctor

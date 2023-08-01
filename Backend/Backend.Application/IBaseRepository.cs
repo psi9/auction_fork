@@ -10,8 +10,7 @@ public interface IBaseRepository<T>
     /// Создать сущность
     /// </summary>
     /// <param name="entity">Создаваемая сущность</param>
-    /// <returns>True или false</returns>
-    public Task<bool> CreateAsync(T entity);
+    public Task CreateAsync(T entity);
 
     /// <summary>
     /// Получить сущность
@@ -29,13 +28,12 @@ public interface IBaseRepository<T>
     /// Удаление сущности
     /// </summary>
     /// <param name="id">Уникальный идентификатор</param>
-    /// <returns>True или False</returns>
-    public Task<bool> DeleteAsync(Guid id);
+    public Task DeleteAsync(Guid id);
 
     /// <summary>
     /// Обновление сущности
     /// </summary>
     /// <param name="entity"></param>
     /// <returns>Сущность</returns>
-    public Task<bool> UpdateAsync(T entity);
+    public Task UpdateAsync(T entity);
 }

@@ -30,9 +30,9 @@ public class LotRepository : ILotRepository
     /// </summary>
     /// <param name="entity">Лот</param>
     /// <returns>True или False</returns>
-    public async Task<bool> CreateAsync(Lot entity)
+    public async Task CreateAsync(Lot entity)
     {
-        await _pgsqlHandler.ExecuteAsync("InsertLot",
+        await _pgsqlHandler.ExecuteAsync("Lot.InsertLot",
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name),
             new KeyValuePair<string, object>("description", entity.Description),
@@ -43,13 +43,11 @@ public class LotRepository : ILotRepository
 
         foreach (var image in entity.Images)
         {
-            await _pgsqlHandler.ExecuteAsync("InsertImage",
+            await _pgsqlHandler.ExecuteAsync("Image.InsertImage",
                 new KeyValuePair<string, object>("id", image.Id),
                 new KeyValuePair<string, object>("lotId", image.LotId),
                 new KeyValuePair<string, object>("path", image.Path!));
         }
-
-        return true;
     }
 
     /// <summary>
@@ -60,7 +58,7 @@ public class LotRepository : ILotRepository
     public async Task<Lot> SelectAsync(Guid id)
     {
         var lot = await _pgsqlHandler.ReadAsync<Lot>(
-            "SelectLot",
+            "Lot.SelectLot",
             "id",
             id,
             dataReader => new Lot(
@@ -74,7 +72,7 @@ public class LotRepository : ILotRepository
                 (State)dataReader.GetInt32("state")));
 
         var bets = await _pgsqlHandler.ReadManyByParameterAsync(
-            "SelectBetsByLot",
+            "Bet.SelectBetsByLot",
             dataReader => new Bet
             {
                 Id = dataReader.GetGuid("id"),
@@ -86,7 +84,7 @@ public class LotRepository : ILotRepository
             new KeyValuePair<string, object>("lotId", lot.Id));
 
         var images = await _pgsqlHandler.ReadManyByParameterAsync(
-            "SelectImagesByLot",
+            "Image.SelectImagesByLot",
             dataReader => new Image
             {
                 Id = dataReader.GetGuid("id"),
@@ -107,7 +105,7 @@ public class LotRepository : ILotRepository
     /// <returns>Список лотов</returns>
     public async Task<IReadOnlyCollection<Lot>> SelectManyAsync()
     {
-        var lots = await _pgsqlHandler.ReadManyAsync<Lot>("SelectLots",
+        var lots = await _pgsqlHandler.ReadManyAsync<Lot>("Lot.SelectLots",
             dataReader => new Lot(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -123,7 +121,7 @@ public class LotRepository : ILotRepository
         foreach (var lot in lots)
         {
             var bets = await _pgsqlHandler.ReadManyByParameterAsync(
-                "SelectBetsByLot",
+                "Bet.SelectBetsByLot",
                 dataReader => new Bet
                 {
                     Id = dataReader.GetGuid("id"),
@@ -135,7 +133,7 @@ public class LotRepository : ILotRepository
                 new KeyValuePair<string, object>("lotId", lot.Id));
 
             var images = await _pgsqlHandler.ReadManyByParameterAsync(
-                "SelectImagesByLot",
+                "Image.SelectImagesByLot",
                 dataReader => new Image
                 {
                     Id = dataReader.GetGuid("id"),
@@ -158,26 +156,24 @@ public class LotRepository : ILotRepository
     /// </summary>
     /// <param name="entity">Лот</param>
     /// <returns>Лот</returns>
-    public async Task<bool> UpdateAsync(Lot entity)
+    public async Task UpdateAsync(Lot entity)
     {
-        await _pgsqlHandler.ExecuteAsync("UpdateLot",
+        await _pgsqlHandler.ExecuteAsync("Lot.UpdateLot",
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name),
             new KeyValuePair<string, object>("description", entity.Description),
             new KeyValuePair<string, object>("betStep", entity.BetStep));
 
-        await _pgsqlHandler.ExecuteAsync("DeleteImage",
+        await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
             new KeyValuePair<string, object>("lotId", entity.Id));
 
         foreach (var image in entity.Images)
         {
-            await _pgsqlHandler.ExecuteAsync("InsertImage",
+            await _pgsqlHandler.ExecuteAsync("Image.InsertImage",
                 new KeyValuePair<string, object>("id", image.Id),
                 new KeyValuePair<string, object>("lotId", image.LotId),
                 new KeyValuePair<string, object>("path", image.Path!));
         }
-
-        return true;
     }
 
     /// <summary>
@@ -185,17 +181,15 @@ public class LotRepository : ILotRepository
     /// </summary>
     /// <param name="id">Уникальный идентификатор лота</param>
     /// <returns>True или False</returns>
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        await _pgsqlHandler.ExecuteAsync("DeleteLot",
+        await _pgsqlHandler.ExecuteAsync("Lot.DeleteLot",
             new KeyValuePair<string, object>("id", id));
 
-        await _pgsqlHandler.ExecuteAsync("DeleteImage",
+        await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
             new KeyValuePair<string, object>("lotId", id));
 
-        await _pgsqlHandler.ExecuteAsync("DeleteBet",
+        await _pgsqlHandler.ExecuteAsync("Bet.DeleteBet",
             new KeyValuePair<string, object>("lotId", id));
-
-        return true;
     }
 }
