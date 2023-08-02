@@ -1,0 +1,35 @@
+.App {
+  background-color: rgba(119, 136, 255, 0.3);
+  backdrop-filter: blur(25px);
+
+  padding: 20px;
+  height: 100%;
+}
+
+.main {
+  width: 50%;
+
+  margin: 20px auto;
+  padding: 30px;
+
+  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+
+  background-color: rgba(172, 210, 248, 0.3);
+  backdrop-filter: blur(100px);
+
+  border-radius: 15px;
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+@media screen and (max-width: 800px) {
+  .main {
+    width: 100%;
+
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
