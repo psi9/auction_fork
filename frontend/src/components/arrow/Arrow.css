@@ -27,9 +27,9 @@
   background-image: url("./assets/arrow.png");
 }
 
-/* .btn-up_hide {
-  display: none;
-} */
+.btn_up_show {
+  display: block;
+}
 
 @media (hover: hover) and (pointer: fine) {
   .btn_up:hover {

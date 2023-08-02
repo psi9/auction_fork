@@ -1,5 +1,30 @@
+import React, { useEffect, useState } from "react";
 import "./Arrow.css";
 
 export default function Arrow() {
-  return <div className="btn_up btn_up_hide"></div>;
+  const [showArrow, setShowArrow] = useState(false);
+
+  useEffect(() => {
+    function handleScroll() {
+      const scrollY = window.scrollY;
+      setShowArrow(scrollY >= 400);
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  return (
+    <div
+      className={`btn_up ${showArrow ? "btn_up_show" : ""}`}
+      onClick={() => { window.scrollTo({ top: 0, behavior: "smooth" })}}
+    ></div>
+  );
 }
+

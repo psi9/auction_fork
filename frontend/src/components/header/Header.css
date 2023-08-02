@@ -5,9 +5,19 @@
   border-radius: 10px;
   box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
 
-  width: 50%;
+  width: 1200px;
 
   margin: 0 auto;
+}
+
+.header.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  backdrop-filter: none;
 }
 
 .header_container {
@@ -53,7 +63,7 @@
   position: static;
 }
 
-.content_item {
+/* .content_item {
   padding: 5px 10px;
   width: 100px;
 
@@ -66,9 +76,9 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 700;
   color: rgb(75, 97, 119);
-}
+} */
 
-.content_item:hover {
+/* .content_item:hover {
   background-color: rgba(200, 225, 250, 0.7);
 
   box-shadow: 10px 5px 15px rgba(0, 0, 0, 0.2);
@@ -76,7 +86,7 @@
   cursor: pointer;
 
   transition: all 0.2s;
-}
+} */
 
 .container_tools {
   display: flex;
