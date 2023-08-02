@@ -1,22 +1,30 @@
-import "./Header.css"
+import "./Header.css";
 
 export default function Header() {
-    return (
-        <header className="header">
-            <div className="container">
-                <div className="logo">
-                    <img src="./assets/logo.svg" alt="Логотип" />
-                </div>
-                <div className="content">
-                    <button>Аукционы</button>
-                    <button>Лоты</button>
-                    <button>Участники</button>
-                </div>
-                <div className="tools">
-                    <img src="./assets/search.svg" alt="Поиск" />
-                    <img src="./assets/user.svg" alt="Профиль" />
-                </div>
-            </div>
-        </header>
-    );
+  const user = require("./assets/user.png");
+  const search = require("./assets/search.png");
+  const logo = require("./assets/logo.png");
+  return (
+    <header className="header">
+      <div className="header_container">
+        <div className="container_logo">
+          <img className="logo" src={logo} alt="Логотип" />
+          <div className="logo_text">Auctions</div>
+        </div>
+        <div className="container_content">
+          <button className="content_item">Аукционы</button>
+          <button className="content_item">Лоты</button>
+          <button className="content_item">Участники</button>
+        </div>
+        <div className="container_tools">
+          <button className="tool_item">
+            <img className="item_img" src={user} alt="Профиль" />
+          </button>
+          <button className="tool_item">
+            <img className="item_img" src={search} alt="Поиск" />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
 }
