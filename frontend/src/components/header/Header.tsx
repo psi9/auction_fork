@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { Outlet, Link } from "react-router-dom";
 
-import Button from "../button/Button"
+import Button from "../button/Button";
 
 import "./Header.css";
 
@@ -25,6 +26,7 @@ export default function Header() {
     }
 
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -38,9 +40,9 @@ export default function Header() {
           <div className="logo_text">Auctions</div>
         </div>
         <div className="container_content">
-          <Button width="100px" text="Аукционы"/>
-          <Button width="100px" text="Лоты"/>
-          <Button width="100px" text="Участники"/>
+          <Button width="100px" text="Аукционы" />
+          <Button width="100px" text="Лоты" />
+          <Button width="100px" text="Участники" />
         </div>
         <div className="container_tools">
           <button className="tool_item">

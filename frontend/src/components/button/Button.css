@@ -15,7 +15,9 @@
   font-size: 15px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 700;
-  color: rgb(75, 97, 119);
+  color: rgb(218, 254, 255);
+
+  transition: all 0.2s;
 }
 
 .custom_button:hover {
@@ -24,4 +26,6 @@
 
   cursor: pointer;
   transition: all 0.2s;
+
+  color: rgb(80, 91, 92);
 }
