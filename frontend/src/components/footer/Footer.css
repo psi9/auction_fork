@@ -12,8 +12,13 @@
   position: fixed;
 
   margin-bottom: 2%;
-  right: 0;
+  left: calc(100% - 30px);
   bottom: 0;
+}
+
+.footer:hover {
+  left: calc(100% - 200px);
+  transition: all 0.2s;
 }
 
 .footer_container {

@@ -8,7 +8,7 @@
 
   background-color: rgba(25, 138, 252, 0.2);
   box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(50px);
+  backdrop-filter: blur(5px);
 
   display: grid;
   row-gap: 15px;
@@ -27,7 +27,6 @@
 .description {
   font-size: 15px;
   font-weight: 700;
-  color: rgb(190, 222, 255);
   
   hyphens: auto;
   overflow-wrap: break-word;
@@ -42,11 +41,35 @@
   text-indent: 20px;
 }
 
+.state {
+  font-weight: 500;
+}
+
 .container_info {
   margin: 20px 0;
 
   display: grid;
   row-gap: 10px;
+
+  font-size: small;
 }
 
+.info_date {
+  font-weight: 700;
+}
 
+.date_text {
+  text-indent: 20px;
+  font-weight: 500;
+}
+
+.author {
+  font-weight: 700;
+  text-align: end;
+  
+  margin-top: 20px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
