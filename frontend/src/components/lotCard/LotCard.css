@@ -1,0 +1,89 @@
+.card_container {
+    width: 100%;
+  
+    padding: 20px;
+    border-radius: 15px;
+  
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  
+    background-color: rgba(120, 185, 250, 0.2);
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(100px);
+  
+    display: grid;
+    row-gap: 15px;
+  }
+  
+  .title {
+    font-size: 20px;
+    font-weight: 800;
+  
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .description {
+    margin-top: 10px;
+  
+    font-size: 15px;
+    font-weight: 700;
+    color: rgb(225, 240, 255);
+  
+    hyphens: auto;
+    overflow-wrap: break-word;
+  
+    text-align: justify;
+  
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  
+    text-indent: 20px;
+  }
+  
+  .state {
+    font-weight: 500;
+  }
+  
+  .container_info {
+    margin: 20px 0;
+  
+    display: grid;
+    row-gap: 10px;
+  
+    font-size: small;
+  }
+  
+  .info_price {
+    font-weight: 700;
+    color: rgb(225, 240, 255);
+  }
+  
+  .price_text {
+    text-indent: 20px;
+    font-weight: 500;
+  }
+
+  .card_footer {
+    display: flex;
+  }
+  
+  .bet_step {
+    font-weight: 700;
+    text-align: end;
+    color: rgb(225, 240, 255);
+  
+    margin-top: 20px;
+  
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .step {
+    font-weight: 500;
+    text-align: end;
+  }
+  

@@ -1,0 +1,42 @@
+.btn_up {
+  position: sticky;
+
+  left: 40px;
+  bottom: 40px;
+
+  cursor: pointer;
+
+  border-radius: 100%;
+
+  display: block;
+  align-items: center;
+  justify-content: center;
+
+  width: 60px;
+  height: 50px;
+
+  transition: all 0.2s;
+}
+
+.btn_up::before {
+  content: "";
+
+  width: 40px;
+  height: 40px;
+
+  background: transparent no-repeat center center;
+  background-size: 100% 100%;
+  background-image: url("./assets/arrow.png");
+}
+
+.btn_up_show {
+  display: flex;
+
+  transition: all 0.2s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn_up:hover {
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+  }
+}
