@@ -8,16 +8,24 @@
   width: 1200px;
 
   margin: 0 auto;
+
+  transition: all 0.3s;
 }
 
 .header.fixed {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
+
   z-index: 100;
 
   backdrop-filter: none;
+  background-color: rgb(124, 144, 165);
+
+  width: 100%;
+
+  transition: all 0.3s;
 }
 
 .header_container {
@@ -91,7 +99,7 @@
   .header {
     width: 100%;
   }
-  
+
   .header_container {
     display: grid;
 

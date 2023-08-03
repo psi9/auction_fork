@@ -6,9 +6,9 @@
 
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
-  background-color: rgba(25, 138, 252, 0.2);
+  background-color: rgba(120, 185, 250, 0.2);
   box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(100px);
 
   display: grid;
   row-gap: 15px;
@@ -17,7 +17,6 @@
 .title {
   font-size: 20px;
   font-weight: 800;
-  color: rgb(225, 240, 255);
 
   white-space: nowrap;
   overflow: hidden;
@@ -25,14 +24,17 @@
 }
 
 .description {
+  margin-top: 10px;
+
   font-size: 15px;
   font-weight: 700;
-  
+  color: rgb(225, 240, 255);
+
   hyphens: auto;
   overflow-wrap: break-word;
 
   text-align: justify;
-  
+
   display: -webkit-box;
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
@@ -56,6 +58,7 @@
 
 .info_date {
   font-weight: 700;
+  color: rgb(225, 240, 255);
 }
 
 .date_text {
@@ -66,7 +69,8 @@
 .author {
   font-weight: 700;
   text-align: end;
-  
+  color: rgb(225, 240, 255);
+
   margin-top: 20px;
 
   white-space: nowrap;

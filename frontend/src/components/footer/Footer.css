@@ -2,22 +2,16 @@
   background-color: rgba(172, 210, 248, 0.3);
   backdrop-filter: blur(20px);
 
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-radius: 10px;
 
   box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
 
   width: 200px;
 
-  position: fixed;
+  position: sticky;
+  left: 100vw; 
+  bottom: 2%;
 
-  margin-bottom: 2%;
-  left: calc(100% - 30px);
-  bottom: 0;
-}
-
-.footer:hover {
-  left: calc(100% - 200px);
   transition: all 0.2s;
 }
 

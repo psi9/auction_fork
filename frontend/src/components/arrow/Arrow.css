@@ -1,5 +1,5 @@
 .btn_up {
-  position: fixed;
+  position: sticky;
 
   left: 40px;
   bottom: 40px;
@@ -8,12 +8,14 @@
 
   border-radius: 100%;
 
-  display: flex;
+  display: block;
   align-items: center;
   justify-content: center;
 
   width: 60px;
   height: 50px;
+
+  transition: all 0.2s;
 }
 
 .btn_up::before {
@@ -28,7 +30,9 @@
 }
 
 .btn_up_show {
-  display: block;
+  display: flex;
+
+  transition: all 0.2s;
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -3,6 +3,11 @@
   width: 100px;
 
   background-color: rgba(192, 222, 252, 0.7);
+  background: linear-gradient(
+    to bottom right,
+    rgba(192, 222, 252, 0.7),
+    rgba(120, 185, 250, 0.2)
+  );
 
   border-radius: 5px;
   border-style: hidden;

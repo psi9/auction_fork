@@ -10,10 +10,6 @@ export default function Arrow() {
       setShowArrow(scrollY >= 400);
     }
 
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
