@@ -8,7 +8,7 @@ namespace Backend.Controllers;
 /// Контроллер пользователя
 /// </summary>
 [ApiController]
-[Route("api/user/UserController")]
+[Route("api/user/")]
 public class UserController : ControllerBase
 {
     /// <summary>

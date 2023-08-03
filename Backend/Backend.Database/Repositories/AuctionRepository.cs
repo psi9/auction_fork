@@ -36,7 +36,7 @@ public class AuctionRepository : IAuctionRepository
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name!),
             new KeyValuePair<string, object>("description", entity.Description!),
-            new KeyValuePair<string, object>("state", entity.State),
+            new KeyValuePair<string, object>("state", (int)entity.State),
             new KeyValuePair<string, object>("authorId", entity.AuthorId));
     }
 
@@ -55,8 +55,8 @@ public class AuctionRepository : IAuctionRepository
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
                 dataReader.GetString("description"),
-                dataReader.GetDateTime("dataStart"),
-                dataReader.GetDateTime("dataEnd"),
+                dataReader.GetDateTime("dateStart"),
+                dataReader.GetDateTime("dateEnd"),
                 dataReader.GetGuid("authorId"),
                 (State)dataReader.GetInt32("state")));
 
@@ -114,8 +114,8 @@ public class AuctionRepository : IAuctionRepository
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
                 dataReader.GetString("description"),
-                dataReader.GetDateTime("dataStart"),
-                dataReader.GetDateTime("dataEnd"),
+                dataReader.GetDateTime("dateStart"),
+                dataReader.GetDateTime("dateEnd"),
                 dataReader.GetGuid("authorId"),
                 (State)dataReader.GetInt32("state")));
 
@@ -135,6 +135,8 @@ public class AuctionRepository : IAuctionRepository
                     dataReader.GetDecimal("betStep"),
                     (State)dataReader.GetInt32("state")),
                 new KeyValuePair<string, object>("auctionId", auction.Id));
+
+            if (lots.Count == 0) return auctions;
 
             foreach (var lot in lots)
             {
@@ -161,7 +163,7 @@ public class AuctionRepository : IAuctionRepository
                     new KeyValuePair<string, object>("lotId", lot.Id));
 
                 auction.AddLot(lot, images, bets);
-                newAuctions.Add(auction);
+                newAuctions.Add(auction);       
             }
         }
 
@@ -224,16 +226,16 @@ public class AuctionRepository : IAuctionRepository
                 (State)dataReader.GetInt32("state")),
             new KeyValuePair<string, object>("auctionId", id));
 
-        foreach (var lot in lots)
-        {
-            await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
-                new KeyValuePair<string, object>("lotId", lot.Id));
-
-            await _pgsqlHandler.ExecuteAsync("Bet.DeleteBet",
-                new KeyValuePair<string, object>("lotId", lot.Id));
-        }
-
-        await _pgsqlHandler.ExecuteAsync("Lot.DeleteLot",
-            new KeyValuePair<string, object>("auctionId", id));
+        // foreach (var lot in lots)
+        // {
+        //     await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
+        //         new KeyValuePair<string, object>("lotId", lot.Id));
+        //
+        //     await _pgsqlHandler.ExecuteAsync("Bet.DeleteBet",
+        //         new KeyValuePair<string, object>("lotId", lot.Id));
+        // }
+        //
+        // await _pgsqlHandler.ExecuteAsync("Lot.DeleteLot",
+        //     new KeyValuePair<string, object>("auctionId", id));
     }
 }

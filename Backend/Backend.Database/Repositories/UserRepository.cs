@@ -111,8 +111,5 @@ public class UserRepository : IUserRepository
     {
         await _pgsqlHandler.ExecuteAsync("User.DeleteUser",
             new KeyValuePair<string, object>("id", id));
-
-        await _pgsqlHandler.ExecuteAsync("Bet.DeleteBet",
-            new KeyValuePair<string, object>("userId", id));
     }
 }
