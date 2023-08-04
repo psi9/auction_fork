@@ -8,7 +8,7 @@ import * as Entities from "../../domain/Entities";
 import "./AuctionsPage.css";
 import { AxiosInstance } from "axios";
 
-export default function Auctions(props: { client: AxiosInstance }) {
+export default function AuctionsPage(props: { client: AxiosInstance }) {
   const [auctions, setAuctions] = useState<Entities.Auction[]>([]);
   const [users, setUsers] = useState<Entities.User[]>([]);
 

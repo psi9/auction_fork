@@ -34,7 +34,7 @@ export default function Card(props: { auction: Auction; author: User }) {
         <div>
           <div className="info_date">Дата начала:</div>
           <div className="date_text">
-            {new Date(props.auction.dateStart).toLocaleDateString()}
+            {new Date(props.auction.dateStart).toLocaleString()}
           </div>
         </div>
         <div>
