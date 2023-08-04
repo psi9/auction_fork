@@ -1,9 +1,8 @@
 .header {
-  background-color: rgba(172, 210, 248, 0.6);
   backdrop-filter: blur(70px);
 
   border-radius: 10px;
-  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 10px 5px 30px rgba(0, 0, 0, 0.2);
 
   width: 1200px;
 
@@ -20,8 +19,7 @@
 
   z-index: 100;
 
-  backdrop-filter: none;
-  background-color: rgb(124, 144, 165);
+  backdrop-filter: blur(1000px);
 
   width: 100%;
 
@@ -58,7 +56,7 @@
   font-family: sans-serif;
   font-size: 40px;
   font-weight: 700;
-  color: rgb(225, 240, 255);
+  color: rgb(255, 255, 255);
 
   text-shadow: 10px 5px 15px rgba(0, 0, 0, 0.2);
 }

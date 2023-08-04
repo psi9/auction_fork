@@ -6,6 +6,7 @@ import Footer from "./components/footer/Footer";
 import Arrow from "./components/arrow/Arrow";
 
 import AuctionsPage from "./pages/AuctionsPage/AuctionsPage";
+import AuthorityPage from "./pages/AuthorityPage/AuthorityPage";
 import LotsPage from "./pages/LotsPage/LotsPage";
 import UsersPage from "./pages/UsersPage/UsersPage";
 
@@ -16,14 +17,14 @@ const client = axios.create({
 });
 
 function App() {
-
   return (
     <div className="App">
       <Header />
       <Router>
         <Routes>
+          <Route index element={<AuthorityPage />}></Route>
           <Route
-            index
+            path="/auctions"
             element={<AuctionsPage client={client} />}
           ></Route>
           <Route path="/lots" element={<LotsPage />}></Route>

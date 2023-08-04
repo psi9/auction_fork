@@ -14,7 +14,7 @@
   row-gap: 15px;
 }
 
-.title {
+.auction_title {
   font-size: 20px;
   font-weight: 800;
 
@@ -28,7 +28,7 @@
 
   font-size: 15px;
   font-weight: 700;
-  color: rgb(225, 240, 255);
+  color: rgb(255, 255, 255);
 
   hyphens: auto;
   overflow-wrap: break-word;
@@ -58,7 +58,7 @@
 
 .info_date {
   font-weight: 700;
-  color: rgb(225, 240, 255);
+  color: rgb(255, 255, 255);
 }
 
 .date_text {
@@ -69,7 +69,6 @@
 .author {
   font-weight: 700;
   text-align: end;
-  color: rgb(225, 240, 255);
 
   margin-top: 20px;
 

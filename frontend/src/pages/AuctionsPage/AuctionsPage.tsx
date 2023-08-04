@@ -8,7 +8,7 @@ import * as Entities from "../../domain/Entities";
 import "./AuctionsPage.css";
 import { AxiosInstance } from "axios";
 
-export default function Auctions(props: {client: AxiosInstance}) {
+export default function Auctions(props: { client: AxiosInstance }) {
   const [auctions, setAuctions] = useState<Entities.Auction[]>([]);
   const [users, setUsers] = useState<Entities.User[]>([]);
 
@@ -28,7 +28,7 @@ export default function Auctions(props: {client: AxiosInstance}) {
   }, [props.client]);
 
   return (
-    <div className="main">
+    <div className="main_container">
       {!auctions.length ? (
         <div className="main_empty">
           <div className="empty">

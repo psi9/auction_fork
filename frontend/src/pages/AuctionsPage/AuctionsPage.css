@@ -1,11 +1,10 @@
-.main {
+.main_container {
   width: 1200px;
 
   margin: 20px auto;
   padding: 30px;
 
-  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
-  background-color: rgba(172, 210, 248, 0.3);
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(15px);
 
   border-radius: 15px;
@@ -28,4 +27,12 @@
   margin: auto;
 
   font-size: 20px;
+}
+
+@media screen and (max-width: 800px) {
+  .main {
+    width: 100%;
+
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom";
 
 import Button from "../button/Button";
 

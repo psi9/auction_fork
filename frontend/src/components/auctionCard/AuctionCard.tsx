@@ -27,17 +27,21 @@ export default function Card(props: { auction: Auction; author: User }) {
 
   return (
     <div className="card_container">
-      <div className="title">{props.auction.name}</div>
+      <div className="auction_title">{props.auction.name}</div>
       <div className="state">Статус: {getState(props.auction.state)}</div>
       <div className="description">{props.auction.description}</div>
       <div className="container_info">
         <div>
           <div className="info_date">Дата начала:</div>
-          <div className="date_text">{new Date(props.auction.dateStart).toLocaleDateString()}</div>
+          <div className="date_text">
+            {new Date(props.auction.dateStart).toLocaleDateString()}
+          </div>
         </div>
         <div>
           <div className="info_date">Дата конца:</div>
-          <div className="date_text">{new Date(props.auction.dateEnd).toLocaleDateString()}</div>
+          <div className="date_text">
+            {new Date(props.auction.dateEnd).toLocaleDateString()}
+          </div>
         </div>
         <div className="author">{props.author.name}</div>
       </div>
