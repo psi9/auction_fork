@@ -1,0 +1,71 @@
+.authority_container {
+  display: grid;
+  row-gap: 20px;
+
+  border-radius: 15px;
+
+  padding: 20px 30px;
+
+  background-color: rgba(120, 185, 250, 0.2);
+  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(50px);
+
+  margin: 0 auto;
+
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container_buttons {
+  margin: 0 auto;
+
+  display: flex;
+
+  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(50px);
+
+  border-radius: 15px;
+}
+
+.type {
+  color: rgb(255, 255, 255);
+  font-size: 15px;
+  font-weight: 700;
+
+  width: 150px;
+  height: 100%;
+
+  padding: 10px 15px;
+
+  border-radius: 15px;
+  border: none;
+
+  background-color: rgba(243, 233, 220, 0.3);
+
+  cursor: pointer;
+
+  transition: all 0.2s;
+}
+
+.type.active {
+  background: none;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.container_inputs {
+  display: grid;
+  row-gap: 10px;
+}
+
+.input_item {
+  border-radius: 15px;
+  border: none;
+  outline: none;
+
+  padding: 10px 15px;
+
+  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+
+  font-weight: 500;
+  font-size: 15px;
+}
