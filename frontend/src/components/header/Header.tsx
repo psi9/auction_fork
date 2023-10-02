@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 import Button from "../button/Button";
 
@@ -32,26 +33,38 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
-      <div className="header_container">
-        <div className="container_logo">
-          <img className="logo" src={logo} alt="Логотип" />
-          <div className="logo_text">Auctions</div>
+    <Router>
+      <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
+        <div className="header_container">
+          <div className="container_logo">
+            <img className="logo" src={logo} alt="Логотип" />
+            <div className="logo_text">Auctions</div>
+          </div>
+          <div className="container_content">
+            <Link to="/auctions">
+              <Button width="100px" text="Аукционы" />
+            </Link>
+            <Link to="/lots">
+              <Button width="100px" text="Лоты" />
+            </Link>
+            <Link to="/users">
+              <Button width="100px" text="Участники" />
+            </Link>
+          </div>
+          <div className="container_tools">
+            <Link to="/profile">
+              <button className="tool_item">
+                <img className="item_img" src={user} alt="Профиль" />
+              </button>
+            </Link>
+            <Link to="/search">
+              <button className="tool_item">
+                <img className="item_img" src={search} alt="Поиск" />
+              </button>
+            </Link>
+          </div>
         </div>
-        <div className="container_content">
-          <Button width="100px" text="Аукционы" />
-          <Button width="100px" text="Лоты" />
-          <Button width="100px" text="Участники" />
-        </div>
-        <div className="container_tools">
-          <button className="tool_item">
-            <img className="item_img" src={user} alt="Профиль" />
-          </button>
-          <button className="tool_item">
-            <img className="item_img" src={search} alt="Поиск" />
-          </button>
-        </div>
-      </div>
-    </header>
+      </header>
+    </Router>
   );
 }
