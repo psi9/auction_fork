@@ -39,17 +39,17 @@
   border-radius: 15px;
   border: none;
 
-  background-color: rgba(243, 233, 220, 0.3);
+  background: none;
 
   cursor: pointer;
 
-  transition: all 0.2s;
+  transition: all 0.5s;
 }
 
 .type.active {
-  background: none;
+  background-color: rgba(243, 233, 220, 0.3);
   cursor: default;
-  transition: all 0.2s;
+  transition: all 0.5s;
 }
 
 .container_inputs {

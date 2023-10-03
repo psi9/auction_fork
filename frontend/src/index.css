@@ -13,10 +13,14 @@ body {
   background-attachment: fixed;
 
   overflow-x: hidden;
+
+  height: 100%;
 }
 
 html {
   scrollbar-width: thin;
+
+  height: 100%;
 
   color-scheme: dark light;
   &[data-theme="light"] {

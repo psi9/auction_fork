@@ -1,6 +1,6 @@
-import Button from "../button/Button";
-import { Auction, User } from "../../domain/Entities";
-import { State } from "../../domain/Enums";
+import Button from "../../button/Button";
+import { Auction, User } from "../../../domain/Entities";
+import { State } from "../../../domain/Enums";
 
 import "./AuctionCard.css";
 

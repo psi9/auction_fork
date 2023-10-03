@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Button from "../../components/button/Button";
-import AuctionCard from "../../components/auctionCard/AuctionCard";
+import AuctionCard from "../../components/cards/auctionCard/AuctionCard";
 
 import * as Entities from "../../domain/Entities";
 

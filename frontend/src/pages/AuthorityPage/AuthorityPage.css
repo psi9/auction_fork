@@ -1,14 +1,14 @@
 .main {
-  width: 1200px;
-
   margin: 20px auto;
   padding: 30px;
 
   display: flex;
+
+  background-size: 100% 100%;
 }
 
 @media screen and (max-width: 800px) {
-    .main {
-      width: 100%;
-    }
+  .main {
+    width: 100%;
   }
+}

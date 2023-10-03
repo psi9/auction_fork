@@ -1,5 +1,5 @@
-import axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -10,13 +10,14 @@ import AuthorityPage from "./pages/AuthorityPage/AuthorityPage";
 import LotsPage from "./pages/LotsPage/LotsPage";
 import UsersPage from "./pages/UsersPage/UsersPage";
 
+import { Auction, User } from "./domain/Entities";
+
 import "./App.css";
 
-const client = axios.create({
-  baseURL: "https://localhost:7132",
-});
-
 function App() {
+  const [auctions, setAuctions] = useState<Auction[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+
   return (
     <div className="App">
       <Header />

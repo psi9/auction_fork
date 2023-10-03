@@ -1,4 +1,4 @@
-import AuthorityCard from "../../components/authorityCard/AuthorityCard";
+import AuthorityCard from "../../components/cards/authorityCard/AuthorityCard";
 
 import "./AuthorityPage.css";
 
