@@ -10,13 +10,9 @@ import AuthorityPage from "./pages/AuthorityPage/AuthorityPage";
 import LotsPage from "./pages/LotsPage/LotsPage";
 import UsersPage from "./pages/UsersPage/UsersPage";
 
-import { Auction, User } from "./domain/Entities";
-
 import "./App.css";
 
 function App() {
-  const [auctions, setAuctions] = useState<Auction[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
 
   return (
     <div className="App">
