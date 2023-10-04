@@ -1,7 +1,25 @@
-import { createContext, useContext } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 
-import { User } from "../domain/Entities";
+export const UserContext = createContext({});
 
-export const UserContext = createContext<User[]>([]);
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const initialUsers = [
+    {
+      id: "",
+      name: "",
+      email: "",
+      password: "",
+      token: "",
+    },
+  ];
+
+  const [users, setUsers] = useState(initialUsers);
+
+  return (
+    <UserContext.Provider value={{ users, setUsers }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
 
 export const useUserContext = () => useContext(UserContext);
