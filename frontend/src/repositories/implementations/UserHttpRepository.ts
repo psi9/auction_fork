@@ -8,19 +8,60 @@ export default class UserHttpRepository implements IUserHttpRepository {
     this.baseURL = baseURL;
   }
 
-  getAsync(): User[] {
-    throw new Error("Method not implemented.");
+  async getAsync(): Promise<User[]> {
+    try {
+      const response = await fetch(`${this.baseURL}/api/user/get_list`);
+      if (!response.ok) throw new Error("Пользователи не получены");
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      throw new Error("Ошибка получения пользователей, что-пошло не так");
+    }
   }
 
-  postAsync(entity: User): void {
-    throw new Error("Method not implemented.");
+  async postAsync(entity: User): Promise<void> {
+    try {
+      const response = await fetch(`${this.baseURL}/api/user/sign_up`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset: UTF-8;",
+        },
+        body: JSON.stringify(entity),
+      });
+
+      if (!response.ok) throw new Error("Пользователь не создан");
+    } catch (error) {
+      throw new Error("Ошибка создания пользователя, что-пошло не так");
+    }
   }
 
-  putAsync(entity: User): void {
-    throw new Error("Method not implemented.");
+  async putAsync(entity: User): Promise<void> {
+    try {
+      const response = await fetch(`${this.baseURL}/api/user/update`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json; charset: UTF-8;",
+        },
+        body: JSON.stringify(entity),
+      });
+
+      if (!response.ok) throw new Error("Пользователь не изменен");
+    } catch (error) {
+      throw new Error("Ошибка изменения пользователя, что-пошло не так");
+    }
   }
-  
-  deleteAsync(id: number): void {
-    throw new Error("Method not implemented.");
+
+  async deleteAsync(id: number): Promise<void> {
+    try {
+      const response = await fetch(`${this.baseURL}/api/user/delete/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) throw new Error("Пользователь не удален");
+    } catch (error) {
+      throw new Error("Ошибка удаления пользователя, что-пошло не так");
+    }
   }
 }

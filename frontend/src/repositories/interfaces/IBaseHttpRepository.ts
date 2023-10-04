@@ -1,9 +1,9 @@
 export default interface IBaseHttpRepository<T> {
-    getAsync(): T[],
+    getAsync(): Promise<T[]>,
 
-    postAsync(entity: T): void,
+    postAsync(entity: T): Promise<void>,
 
-    putAsync(entity: T): void,
+    putAsync(entity: T): Promise<void>,
 
-    deleteAsync(id: number): void
+    deleteAsync(id: number): Promise<void>
 }
