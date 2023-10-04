@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
 
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -22,7 +21,7 @@ function App() {
           <Route index element={<AuthorityPage />}></Route>
           <Route
             path="/auctions"
-            element={<AuctionsPage client={client} />}
+            element={<AuctionsPage />}
           ></Route>
           <Route path="/lots" element={<LotsPage />}></Route>
           <Route path="/users" element={<UsersPage />}></Route>

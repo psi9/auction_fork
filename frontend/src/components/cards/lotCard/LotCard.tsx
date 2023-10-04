@@ -4,10 +4,10 @@ import { Lot } from "../../../domain/Entities";
 
 import "./LotCard.css";
 
-export default function LotCard(props: { lot: Lot }) {
+export default function LotCard() {
   return (
     <div className="card_container">
-      <div className="title">{props.lot.name}</div>
+      {/* <div className="title">{props.lot.name}</div>
       <div className="state">{props.lot.state}</div>
       <div className="description">{props.lot.description}</div>
       <div className="container_info">
@@ -22,7 +22,7 @@ export default function LotCard(props: { lot: Lot }) {
         <div className="bet_step">Шаг ставки:</div>
         <div className="step">{props.lot.betStep}p.</div>
       </div>
-      <Button width="100%" text="Сделать ставку" />
+      <Button width="100%" text="Сделать ставку" /> */}
     </div>
   );
 }
