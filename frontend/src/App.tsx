@@ -12,17 +12,13 @@ import UsersPage from "./pages/UsersPage/UsersPage";
 import "./App.css";
 
 function App() {
-
   return (
     <div className="App">
       <Header />
       <Router>
         <Routes>
           <Route index element={<AuthorityPage />}></Route>
-          <Route
-            path="/auctions"
-            element={<AuctionsPage />}
-          ></Route>
+          <Route path="/auctions" element={<AuctionsPage />}></Route>
           <Route path="/lots" element={<LotsPage />}></Route>
           <Route path="/users" element={<UsersPage />}></Route>
         </Routes>

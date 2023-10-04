@@ -15,13 +15,13 @@ export default function LotsPage() {
       {!lots.length ? (
         <div className="main_empty">
           <div className="empty">
-            <div>Аукционов пока нет.</div>
+            <div>Лотов пока нет.</div>
             <div>Будьте первым и создайте свой!</div>
           </div>
           <Button width="100%" text="Создать аукцион" />
         </div>
       ) : (
-        <LotCard />
+        lots.map((auction) => <LotCard key={auction.id} />)
       )}
     </div>
   );
