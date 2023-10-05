@@ -1,4 +1,4 @@
-import { Auction } from "../../domain/Entities";
+import { Auction } from "../../objects/Entities";
 import IAuctionHttpRepository from "../interfaces/IAuctionHttpRepository";
 
 export default class AuctionHttpRepository implements IAuctionHttpRepository {
@@ -10,7 +10,7 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async getAsync(): Promise<Auction[]> {
     try {
-      const response = await fetch(`${this.baseURL}/api/auction/get_list`);
+      const response = await fetch(`${this.baseURL}api/auction/get_list`);
       if (!response.ok) throw new Error("Аукционы не получены");
 
       const data = await response.json();
@@ -23,7 +23,7 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async postAsync(entity: Auction): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/auction/create`, {
+      const response = await fetch(`${this.baseURL}api/auction/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
@@ -39,7 +39,7 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async putAsync(entity: Auction): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/auction/update`, {
+      const response = await fetch(`${this.baseURL}api/auction/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
@@ -55,8 +55,8 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async deleteAsync(id: number): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/auction/delete/${id}`, {
-        method: "DELETE"
+      const response = await fetch(`${this.baseURL}api/auction/delete/${id}`, {
+        method: "DELETE",
       });
 
       if (!response.ok) throw new Error("Аукцион не удален");

@@ -1,0 +1,47 @@
+.container_title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user_img {
+  width: 50px;
+}
+
+.name {
+  margin-left: 10px;
+
+  font-size: 20px;
+  font-weight: 600;
+
+  hyphens: auto;
+  overflow-wrap: break-word;
+
+  text-align: start;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.info_auctions {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.auction_name {
+  font-size: 15px;
+  font-weight: 700;
+
+  hyphens: auto;
+  overflow-wrap: break-word;
+  overflow: hidden;
+
+  margin-left: 10px;
+}
+
+.container_info_user {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}

@@ -12,6 +12,7 @@ import UsersPage from "./pages/UsersPage/UsersPage";
 import "./App.css";
 import { AuctionProvider } from "./contexts/AuctionContext";
 import { UserProvider } from "./contexts/UserContext";
+import { LotProvider } from "./contexts/LotContext";
 
 function App() {
   return (
@@ -19,14 +20,16 @@ function App() {
       <Router>
         <Header />
         <AuctionProvider>
-          <UserProvider>
-            <Routes>
-              <Route index element={<AuthorityPage />}></Route>
-              <Route path="/auctions" element={<AuctionsPage />}></Route>
-              <Route path="/lots" element={<LotsPage />}></Route>
-              <Route path="/users" element={<UsersPage />}></Route>
-            </Routes>
-          </UserProvider>
+          <LotProvider>
+            <UserProvider>
+              <Routes>
+                <Route index element={<AuthorityPage />}></Route>
+                <Route path="/auctions" element={<AuctionsPage />}></Route>
+                <Route path="/lots" element={<LotsPage />}></Route>
+                <Route path="/users" element={<UsersPage />}></Route>
+              </Routes>
+            </UserProvider>
+          </LotProvider>
         </AuctionProvider>
       </Router>
       <Arrow />

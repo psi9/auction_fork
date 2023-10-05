@@ -33,16 +33,16 @@ public class SignInUserHandler
     /// <summary>
     /// Авторизовать пользователя
     /// </summary>
-    /// <param name="username">Имя пользователя</param>
+    /// <param name="email">Почта пользователя</param>
     /// <param name="password"></param>
-    public async Task<UserDto> SignInUserAsync(string username, string password)
+    public async Task<UserDto> SignInUserAsync(string email, string password)
     {
-        var user = await _userRepository.SelectByNameAsync(username);
+        var user = await _userRepository.SelectByNameAsync(email);
 
-        if (!_authorityHandler.VerifyUserData(username, password, user))
+        if (!_authorityHandler.VerifyUserData(email, password, user))
             return new UserDto();
 
-        var token = _authorityHandler.CreateToken(username);
+        var token = _authorityHandler.CreateToken(email);
 
         return new UserDto
         {

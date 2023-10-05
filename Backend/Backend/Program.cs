@@ -43,6 +43,7 @@ builder.Services.AddSingleton<UpdateAuctionHandler>();
 builder.Services.AddSingleton<BuyoutLotHandler>();
 builder.Services.AddSingleton<ChangeLotStatusHandler>();
 builder.Services.AddSingleton<DoBetHandler>();
+builder.Services.AddSingleton<GetLotsHandler>();
 
 builder.Services.AddSingleton<CreateLotHandler>();
 builder.Services.AddSingleton<DeleteLotHandler>();

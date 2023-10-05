@@ -53,10 +53,10 @@ public class AuthorityHandler
     /// Валидация входа пользователя
     /// </summary>
     /// <param name="password">Пароль</param>
-    /// <param name="username">Имя пользователя</param>
+    /// <param name="email">Почта пользователя</param>
     /// <param name="user">Пользователь</param>
     /// <returns>True или False</returns>
-    public bool VerifyUserData(string username, string password, User user)
+    public bool VerifyUserData(string email, string password, User user)
     {
         var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(
             Encoding.ASCII.GetBytes(password),
@@ -69,7 +69,7 @@ public class AuthorityHandler
                 hashToCompare, Convert.FromHexString(user.Password)))
             return false;
 
-        if (username != user.Name)
+        if (email != user.Email)
             return false;
 
         return true;
@@ -78,9 +78,9 @@ public class AuthorityHandler
     /// <summary>
     /// Создать JWT токен
     /// </summary>
-    /// <param name="username">Имя пользователя</param>
+    /// <param name="email">Почта пользователя</param>
     /// <returns>Токен</returns>
-    public string CreateToken(string username)
+    public string CreateToken(string email)
     {
         var symmetricKey = Encoding.ASCII.GetBytes(Secret);
         var tokenHandler = new JwtSecurityTokenHandler();
@@ -91,7 +91,7 @@ public class AuthorityHandler
         {
             Subject = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Name, username)
+                new Claim(ClaimTypes.Name, email)
             }),
 
             Expires = now.AddDays(7),

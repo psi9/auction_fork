@@ -163,7 +163,7 @@ public class AuctionRepository : IAuctionRepository
                     new KeyValuePair<string, object>("lotId", lot.Id));
 
                 auction.AddLot(lot, images, bets);
-                newAuctions.Add(auction);       
+                newAuctions.Add(auction);
             }
         }
 

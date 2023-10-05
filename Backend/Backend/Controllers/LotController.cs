@@ -44,6 +44,11 @@ public class LotController : ControllerBase
     private readonly UpdateLotHandler _updateHandler;
 
     /// <summary>
+    /// Обработчик получения списка лотов
+    /// </summary>
+    private readonly GetLotsHandler _getLotsHandler;
+
+    /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="deleteHandler">Обработчик удаления лота</param>
@@ -52,8 +57,10 @@ public class LotController : ControllerBase
     /// <param name="changeStatusHandler">Обработчик изменения статуса лота</param>
     /// <param name="doBetHandler">Обработчик ставки</param>
     /// <param name="updateHandler">Обработчик обновления лота</param>
+    /// <param name="getLotsHandler">Обработчик получения списка лотов</param>
     public LotController(DeleteLotHandler deleteHandler, CreateLotHandler createHandler, BuyoutLotHandler buyoutHandler,
-        ChangeLotStatusHandler changeStatusHandler, DoBetHandler doBetHandler, UpdateLotHandler updateHandler)
+        ChangeLotStatusHandler changeStatusHandler, DoBetHandler doBetHandler, UpdateLotHandler updateHandler,
+        GetLotsHandler getLotsHandler)
     {
         _deleteHandler = deleteHandler;
         _createHandler = createHandler;
@@ -61,6 +68,7 @@ public class LotController : ControllerBase
         _changeStatusHandler = changeStatusHandler;
         _doBetHandler = doBetHandler;
         _updateHandler = updateHandler;
+        _getLotsHandler = getLotsHandler;
     }
 
     /// <summary>
@@ -126,5 +134,15 @@ public class LotController : ControllerBase
     public async Task UpdateLotAsync([FromBody] LotDto lot)
     {
         await _updateHandler.UpdateLotAsync(lot);
+    }
+
+    /// <summary>
+    /// Запрос на получение списка лотов
+    /// </summary>
+    /// <returns>список лотов</returns>
+    [HttpGet("get_list/")]
+    public async Task<IReadOnlyCollection<LotDto>> GetLotsAsync()
+    {
+        return await _getLotsHandler.GetLots();
     }
 }

@@ -1,10 +1,10 @@
 import Button from "../../button/Button";
-import { Auction, User } from "../../../domain/Entities";
-import { State } from "../../../domain/Enums";
+import { Auction, User } from "../../../objects/Entities";
+import { State } from "../../../objects/Enums";
 
 import "./AuctionCard.css";
 
-export default function Card(props: { auction: Auction; author: User }) {
+export default function AuctionCard(props: { auction: Auction; author: User }) {
   function getState(state: State): string {
     switch (state) {
       case State.awaiting: {

@@ -27,15 +27,15 @@ export default function AuthorityCard() {
         <div className="container_inputs">
           <input
             className="input_item"
-            type="text"
-            name="login"
-            placeholder="Введите логин"
-          ></input>
-          <input
-            className="input_item"
             type="email"
             name="email"
             placeholder="example@mail.ru"
+          ></input>
+          <input
+            className="input_item"
+            type="password"
+            name="password"
+            placeholder="Введите пароль"
           ></input>
         </div>
       ) : (
@@ -66,7 +66,6 @@ export default function AuthorityCard() {
           ></input>
         </div>
       )}
-
       <Button width="100%" text="Подтвердить" />
     </div>
   );

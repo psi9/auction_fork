@@ -96,13 +96,13 @@ public class UserController : ControllerBase
     /// <summary>
     /// Запрос на аутентификацию пользователя
     /// </summary>
-    /// <param name="username">Имя пользователя</param>
+    /// <param name="email">Почта пользователя</param>
     /// <param name="password">Пароль</param>
     /// <returns>Пользователь</returns>
-    [HttpGet("sign_in/{username}/{password}")]
-    public async Task<UserDto> SignInUserAsync(string username, string password)
+    [HttpGet("sign_in/{email}/{password}")]
+    public async Task<UserDto> SignInUserAsync(string email, string password)
     {
-        return await _signInHandler.SignInUserAsync(username, password);
+        return await _signInHandler.SignInUserAsync(email, password);
     }
 
     /// <summary>

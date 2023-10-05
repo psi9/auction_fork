@@ -1,42 +1,42 @@
 .footer {
-  background-color: rgb(129, 129, 129);
-  backdrop-filter: blur(20px);
+    background-color: rgb(129, 129, 129);
+    backdrop-filter: blur(20px);
 
-  border-radius: 10px;
+    border-radius: 10px;
 
-  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
 
-  width: 200px;
+    width: 200px;
 
-  position: sticky;
-  left: 100vw; 
-  bottom: 2%;
+    position: sticky;
+    left: 100vw;
+    bottom: 2%;
 
-  transition: all 0.2s;
+    transition: all 0.2s;
 }
 
 .footer_container {
-  padding: 10px;
+    padding: 10px;
 }
 
 .container_sources {
-  display: flex;
+    display: flex;
 
-  align-items: center;
-  grid-gap: 5px;
+    align-items: center;
+    grid-gap: 5px;
 }
 
 .source_github {
-  display: flex;
+    display: flex;
 }
 
 .github {
-  height: 40px;
+    height: 40px;
 }
 
 .source_text {
-  font-size: 15px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 700;
-  color: rgb(51, 51, 51);
+    font-size: 15px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 700;
+    color: rgb(51, 51, 51);
 }

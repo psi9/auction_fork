@@ -1,14 +1,12 @@
-import { useEffect, useState } from "react";
-
 import LotCard from "../../components/cards/lotCard/LotCard";
-
-import { Lot } from "../../domain/Entities";
 
 import "./LotsPage.css";
 import Button from "../../components/button/Button";
 
+import { useLotContext } from "../../contexts/LotContext";
+
 export default function LotsPage() {
-  const [lots, setLots] = useState<Lot[]>([]);
+  const lots = useLotContext();
 
   return (
     <div className="main_container">
@@ -18,10 +16,10 @@ export default function LotsPage() {
             <div>Лотов пока нет.</div>
             <div>Будьте первым и создайте свой!</div>
           </div>
-          <Button width="100%" text="Создать аукцион" />
+          <Button width="100%" text="Создать лот" />
         </div>
       ) : (
-        lots.map((auction) => <LotCard key={auction.id} />)
+        lots.map((lot) => <LotCard key={lot.id} lot={lot} />)
       )}
     </div>
   );

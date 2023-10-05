@@ -1,4 +1,4 @@
-import { User } from "../../domain/Entities";
+import { User } from "../../objects/Entities";
 import IUserHttpRepository from "../interfaces/IUserHttpRepository";
 
 export default class UserHttpRepository implements IUserHttpRepository {
@@ -10,7 +10,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async getAsync(): Promise<User[]> {
     try {
-      const response = await fetch(`${this.baseURL}/api/user/get_list`);
+      const response = await fetch(`${this.baseURL}api/user/get_list`);
       if (!response.ok) throw new Error("Пользователи не получены");
 
       const data = await response.json();
@@ -23,7 +23,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async postAsync(entity: User): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/user/sign_up`, {
+      const response = await fetch(`${this.baseURL}api/user/sign_up`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
@@ -39,7 +39,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async putAsync(entity: User): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/user/update`, {
+      const response = await fetch(`${this.baseURL}api/user/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
@@ -55,7 +55,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async deleteAsync(id: number): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/user/delete/${id}`, {
+      const response = await fetch(`${this.baseURL}api/user/delete/${id}`, {
         method: "DELETE",
       });
 

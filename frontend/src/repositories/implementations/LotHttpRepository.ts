@@ -1,4 +1,4 @@
-import { Lot } from "../../domain/Entities";
+import { Lot } from "../../objects/Entities";
 import ILotHttpRepository from "../interfaces/ILotHttpRepository";
 
 export default class LotHttpRepository implements ILotHttpRepository {
@@ -7,8 +7,18 @@ export default class LotHttpRepository implements ILotHttpRepository {
   constructor(baseURL: string) {
     this.baseURL = baseURL;
   }
+
   async getAsync(): Promise<Lot[]> {
-    throw new Error("Метод не имплементирован");
+    try {
+      const response = await fetch(`${this.baseURL}api/lot/get_list`);
+      if (!response.ok) throw new Error("Лоты не получены");
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      throw new Error("Ошибка получения лотов, что-пошло не так");
+    }
   }
 
   async postAsync(entity: Lot): Promise<void> {
@@ -46,7 +56,7 @@ export default class LotHttpRepository implements ILotHttpRepository {
   async deleteAsync(id: number): Promise<void> {
     try {
       const response = await fetch(`${this.baseURL}/api/lot/delete/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
       });
 
       if (!response.ok) throw new Error("Лот не удален");

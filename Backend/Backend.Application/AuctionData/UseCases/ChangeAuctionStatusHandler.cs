@@ -12,7 +12,7 @@ public class ChangeAuctionStatusHandler
     /// Репозиторий аукциона
     /// </summary>
     private readonly IAuctionRepository _auctionRepository;
-    
+
     /// <summary>
     /// Обработчик уведомлений
     /// </summary>

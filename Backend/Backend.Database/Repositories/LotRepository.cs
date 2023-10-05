@@ -38,8 +38,7 @@ public class LotRepository : ILotRepository
             new KeyValuePair<string, object>("description", entity.Description),
             new KeyValuePair<string, object>("auctionId", entity.AuctionId),
             new KeyValuePair<string, object>("startPrice", entity.StartPrice),
-            new KeyValuePair<string, object>("betStep", entity.BetStep),
-            new KeyValuePair<string, object>("images", entity.Images));
+            new KeyValuePair<string, object>("betStep", entity.BetStep));
 
         foreach (var image in entity.Images)
         {
