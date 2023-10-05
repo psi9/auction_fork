@@ -1,9 +1,19 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-export const UserContext = createContext({});
+import { User } from "../objects/Entities";
+
+import UserHttpRepository from "../repositories/implementations/UserHttpRepository";
+
+export const UserContext = createContext<User[]>([]);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const initialUsers = [
+  const initialUsers: User[] = [
     {
       id: "",
       name: "",
@@ -13,13 +23,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     },
   ];
 
-  const [users, setUsers] = useState(initialUsers);
+  const userRepository = new UserHttpRepository("https://localhost:7132/");
+  const [users, setUsers] = useState<User[]>(initialUsers);
 
-  return (
-    <UserContext.Provider value={{ users, setUsers }}>
-      {children}
-    </UserContext.Provider>
-  );
+  useEffect(() => {
+    async function fetchUsers() {
+      setUsers(await userRepository.getAsync());
+    }
+
+    fetchUsers();
+  });
+
+  return <UserContext.Provider value={users}>{children}</UserContext.Provider>;
 };
 
 export const useUserContext = () => useContext(UserContext);
