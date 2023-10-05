@@ -13,12 +13,14 @@ import "./App.css";
 import { AuctionProvider } from "./contexts/AuctionContext";
 import { UserProvider } from "./contexts/UserContext";
 import { LotProvider } from "./contexts/LotContext";
+import Breadcrumbs from "./components/breadcrumbs/Breadcrumbs";
 
 function App() {
   return (
     <div className="App">
       <Router>
         <Header />
+        <Breadcrumbs separator=">"/>
         <AuctionProvider>
           <LotProvider>
             <UserProvider>
