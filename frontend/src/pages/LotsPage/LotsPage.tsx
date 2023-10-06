@@ -4,8 +4,18 @@ import "./LotsPage.css";
 import Button from "../../components/button/Button";
 
 import { useLotContext } from "../../contexts/LotContext";
+import { useNavigate } from "react-router-dom";
+import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
+import { useEffect } from "react";
 
 export default function LotsPage() {
+  const userAuthorityContext = useUserAuthorityContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userAuthorityContext?.checkAccess()) navigate("/authority");
+  });
+
   const lots = useLotContext();
 
   return (
