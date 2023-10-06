@@ -8,6 +8,21 @@ export default class UserHttpRepository implements IUserHttpRepository {
     this.baseURL = baseURL;
   }
 
+  async signinAsync(email: string, password: string): Promise<User> {
+    try {
+      const response = await fetch(
+        `${this.baseURL}api/user/sign_in/${email}/${password}`
+      );
+      if (!response.ok) throw new Error("Пользователи не получены");
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      throw new Error("Ошибка получения пользователей, что-пошло не так");
+    }
+  }
+
   async getAsync(): Promise<User[]> {
     try {
       const response = await fetch(`${this.baseURL}api/user/get_list`);
