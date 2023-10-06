@@ -1,75 +1,75 @@
 .card_container {
-  width: 100%;
+    width: 100%;
 
-  padding: 20px;
-  border-radius: 15px;
+    padding: 20px;
+    border-radius: 15px;
 
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 
-  background-color: rgba(120, 185, 250, 0.2);
-  box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(100px);
+    background-color: rgba(120, 185, 250, 0.2);
+    box-shadow: 10px 5px 10px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(100px);
 
-  display: grid;
-  row-gap: 15px;
+    display: grid;
+    row-gap: 15px;
 }
 
 .auction_title {
-  font-size: 20px;
-  font-weight: 700;
+    font-size: 20px;
+    font-weight: 700;
 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .description {
-  margin-top: 10px;
+    margin-top: 10px;
 
-  font-size: 15px;
-  font-weight: 700;
-  color: rgb(177, 46, 46);
+    font-size: 15px;
+    font-weight: 700;
+    color: rgb(177, 46, 46);
 
-  overflow-wrap: break-word;
+    overflow-wrap: break-word;
 
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 
-  text-indent: 20px;
+    text-indent: 20px;
 }
 
 .state {
-  font-weight: 500;
+    font-weight: 500;
 }
 
 .container_info {
-  margin: 20px 0;
+    margin: 20px 0;
 
-  display: grid;
-  row-gap: 10px;
+    display: grid;
+    row-gap: 10px;
 
-  font-size: small;
+    font-size: small;
 }
 
 .info_date {
-  font-weight: 700;
-  color: rgb(255, 255, 255);
+    font-weight: 700;
+    color: rgb(255, 255, 255);
 }
 
 .date_text {
-  text-indent: 20px;
-  font-weight: 500;
+    text-indent: 20px;
+    font-weight: 500;
 }
 
 .author {
-  font-weight: 700;
-  text-align: end;
+    font-weight: 700;
+    text-align: end;
 
-  margin-top: 20px;
+    margin-top: 20px;
 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }

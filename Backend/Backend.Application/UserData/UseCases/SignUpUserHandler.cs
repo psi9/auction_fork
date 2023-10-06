@@ -40,7 +40,7 @@ public class SignUpUserHandler
         var password = _authorityHandler.HashAndSaltPassword(entity.Password);
 
         await _userRepository.CreateAsync(new User(
-            entity.Id,
+            Guid.NewGuid(),
             entity.Name,
             entity.Email,
             password));

@@ -40,7 +40,7 @@ export default function Header() {
           <div className="logo_text">Auctions</div>
         </div>
         <div className="container_content">
-          <Link to="/auctions">
+          <Link to="/">
             <Button width="100px" text="Аукционы" />
           </Link>
           <Link to="/lots">

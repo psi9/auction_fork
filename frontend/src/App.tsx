@@ -14,25 +14,28 @@ import { AuctionProvider } from "./contexts/AuctionContext";
 import { UserProvider } from "./contexts/UserContext";
 import { LotProvider } from "./contexts/LotContext";
 import Breadcrumbs from "./components/breadcrumbs/Breadcrumbs";
+import { UserAuthorityProvider } from "./contexts/UserAuthorityContext";
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <Header />
-        <Breadcrumbs separator=">"/>
-        <AuctionProvider>
-          <LotProvider>
-            <UserProvider>
-              <Routes>
-                <Route index element={<AuthorityPage />}></Route>
-                <Route path="/auctions" element={<AuctionsPage />}></Route>
-                <Route path="/lots" element={<LotsPage />}></Route>
-                <Route path="/users" element={<UsersPage />}></Route>
-              </Routes>
-            </UserProvider>
-          </LotProvider>
-        </AuctionProvider>
+        <UserAuthorityProvider>
+          <Header />
+          <Breadcrumbs separator=">" />
+          <AuctionProvider>
+            <LotProvider>
+              <UserProvider>
+                <Routes>
+                  <Route index element={<AuctionsPage />}></Route>
+                  <Route path="/authority" element={<AuthorityPage />}></Route>
+                  <Route path="/lots" element={<LotsPage />}></Route>
+                  <Route path="/users" element={<UsersPage />}></Route>
+                </Routes>
+              </UserProvider>
+            </LotProvider>
+          </AuctionProvider>
+        </UserAuthorityProvider>
       </Router>
       <Arrow />
       <Footer />
