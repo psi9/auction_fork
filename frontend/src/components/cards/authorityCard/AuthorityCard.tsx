@@ -14,52 +14,46 @@ export default function AuthorityCard() {
   const [password, setPassword] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
 
-  const loginValidation = (login: string): boolean => {
-    if (!login) {
-      setError("Поле логин должно быть заполнено!");
+  const validateField = (
+    value: string,
+    validationRegex: RegExp,
+    errorMessage: string
+  ): boolean => {
+    if (!value) {
+      setError("Поле должно быть заполнено!");
       return false;
     }
 
-    // const expression = /^.*[~!@#$%^*\-_=+[{\]}\/;:,.?]{3}$/m;
-
-    // if (!expression.test(login)) {
-    //   setError("Логин не должен содержать специальных знаков!");
-    //   return false;
-    // }
+    if (!validationRegex.test(value)) {
+      setError(errorMessage);
+      return false;
+    }
 
     return true;
+  };
+
+  const loginValidation = (login: string): boolean => {
+    return validateField(
+      login,
+      /^[a-zA-Z0-9_ ]*$/,
+      "Логин не должен содержать специальных знаков!"
+    );
   };
 
   const emailValidation = (email: string): boolean => {
-    if (!email) {
-      setError("Поле почты должно быть заполнено!");
-      return false;
-    }
-
-    const expression = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-
-    if (!expression.test(email)) {
-      setError("Введите корретную электронную почту!");
-      return false;
-    }
-
-    return true;
+    return validateField(
+      email,
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+      "Введите корректный email"
+    );
   };
 
   const passwordValidation = (pwd: string): boolean => {
-    if (!pwd) {
-      setError("Поле пароля должно быть заполнено!");
-      return false;
-    }
-
-    const expression = /^\S{8,30}$/m;
-
-    if (!expression.test(pwd)) {
-      setError("Пароль должен быть не короче 8 символов!");
-      return false;
-    }
-
-    return true;
+    return validateField(
+      pwd,
+      /^\S{8,30}$/m,
+      "Пароль должен быть не короче 8 символов"
+    );
   };
 
   const repeatPasswordValidation = (pwd1: string, pwd2: string): boolean => {
@@ -68,7 +62,7 @@ export default function AuthorityCard() {
       return false;
     }
 
-    if (!(pwd1 === pwd2)) {
+    if (pwd1 !== pwd2) {
       setError("Пароли не совпадают!");
       return false;
     }
@@ -79,14 +73,19 @@ export default function AuthorityCard() {
   const signin = () => {
     if (!emailValidation(email) || !passwordValidation(password)) return;
 
-    userAuthorityContext?.signin(email, password);  
+    userAuthorityContext?.signin(email, password);
   };
 
   const signup = () => {
-    if (!emailValidation(email) || !passwordValidation(password) || !
-    repeatPasswordValidation(password, repeatPassword) || !loginValidation(login)) return;
+    if (
+      !emailValidation(email) ||
+      !passwordValidation(password) ||
+      !repeatPasswordValidation(password, repeatPassword) ||
+      !loginValidation(login)
+    )
+      return;
 
-    userAuthorityContext?.signup(login, email, password);  
+    userAuthorityContext?.signup(login, email, password);
   };
 
   return (
