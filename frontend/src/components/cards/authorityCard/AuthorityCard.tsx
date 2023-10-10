@@ -20,40 +20,16 @@ export default function AuthorityCard() {
     errorMessage: string
   ): boolean => {
     if (!value) {
-      setError("Поле должно быть заполнено!");
+      setError("Все поля должны быть заполнены!");
       return false;
     }
 
-    if (!validationRegex.test(value)) {
+    if (!validationRegex?.test(value)) {
       setError(errorMessage);
       return false;
     }
 
     return true;
-  };
-
-  const loginValidation = (login: string): boolean => {
-    return validateField(
-      login,
-      /^[a-zA-Z0-9_ ]*$/,
-      "Логин не должен содержать специальных знаков!"
-    );
-  };
-
-  const emailValidation = (email: string): boolean => {
-    return validateField(
-      email,
-      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-      "Введите корректный email"
-    );
-  };
-
-  const passwordValidation = (pwd: string): boolean => {
-    return validateField(
-      pwd,
-      /^\S{8,30}$/m,
-      "Пароль должен быть не короче 8 символов"
-    );
   };
 
   const repeatPasswordValidation = (pwd1: string, pwd2: string): boolean => {
@@ -70,20 +46,58 @@ export default function AuthorityCard() {
     return true;
   };
 
+  const commonValidation = (email: string, password: string): boolean => {
+    if (
+      !validateField(
+        email,
+        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+        "Введите корректный email"
+      )
+    )
+      return false;
+
+    if (
+      !validateField(
+        password,
+        /^\S{8,30}$/m,
+        "Пароль должен быть не короче 8 символов"
+      )
+    )
+      return false;
+
+    return true;
+  };
+
+  const signupValidation = (
+    login: string,
+    email: string,
+    password: string,
+    repeatPassword: string
+  ): boolean => {
+    if (
+      !validateField(
+        login,
+        /^\S{8,30}$/m,
+        "Логин не должен содержать специальных знаков!"
+      )
+    )
+      return false;
+
+    if (!commonValidation(email, password)) return false;
+
+    if (!repeatPasswordValidation(password, repeatPassword)) return false;
+
+    return true;
+  };
+
   const signin = () => {
-    if (!emailValidation(email) || !passwordValidation(password)) return;
+    if (!commonValidation(email, password)) return;
 
     userAuthorityContext?.signin(email, password);
   };
 
   const signup = () => {
-    if (
-      !emailValidation(email) ||
-      !passwordValidation(password) ||
-      !repeatPasswordValidation(password, repeatPassword) ||
-      !loginValidation(login)
-    )
-      return;
+    if (!signupValidation(login, email, password, repeatPassword)) return;
 
     userAuthorityContext?.signup(login, email, password);
   };
@@ -122,7 +136,11 @@ export default function AuthorityCard() {
             onChange={(event) => setPassword(event.target.value)}
             placeholder="Введите пароль"
           ></input>
-          <button className="custom_button" onClick={() => signin()}>
+          <button
+            className="custom_button"
+            type="submit"
+            onClick={() => signin()}
+          >
             Подтвердить
           </button>
         </div>
@@ -160,7 +178,11 @@ export default function AuthorityCard() {
             onChange={(event) => setRepeatPassword(event.target.value)}
             placeholder="Повторите пароль"
           ></input>
-          <button className="custom_button" onClick={() => signup()}>
+          <button
+            className="custom_button"
+            type="submit"
+            onClick={() => signup()}
+          >
             Подтвердить
           </button>
         </div>

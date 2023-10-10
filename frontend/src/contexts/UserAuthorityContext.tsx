@@ -5,7 +5,7 @@ import { User } from "../objects/Entities";
 import UserHttpRepository from "../repositories/implementations/UserHttpRepository";
 import { useNavigate } from "react-router-dom";
 
-interface UserAuthorityContextType {
+interface IUserAuthorityContext {
   user: User | null;
 
   signup: (login: string, email: string, password: string) => void;
@@ -16,7 +16,7 @@ interface UserAuthorityContextType {
 }
 
 export const UserAuthorityContext = createContext<
-  UserAuthorityContextType | undefined
+  IUserAuthorityContext | undefined
 >(undefined);
 
 export const UserAuthorityProvider = ({
@@ -30,7 +30,7 @@ export const UserAuthorityProvider = ({
 
   async function signup(login: string, email: string, password: string) {
     const user: User = {
-      id: "",
+      id: "5D9871B2-C2E4-4DAF-945F-A1E78F8724EC",
       name: login,
       email: email,
       password: password,
@@ -45,12 +45,14 @@ export const UserAuthorityProvider = ({
   async function signin(email: string, password: string) {
     const user = await userHttpRepository.signinAsync(email, password);
 
+    if (!user) return;
+
     navigate("/auctions");
     setUser(user);
   }
 
   function signout() {
-    navigate("/");
+    navigate("/authority");
     setUser(null);
   }
 

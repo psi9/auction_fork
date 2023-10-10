@@ -15,7 +15,9 @@ export default function Auctions() {
   });
 
   const users = useUserContext();
-  const auctions = useAuctionContext();
+
+  const auctionContext = useAuctionContext();
+  const auctions = auctionContext?.auctions;
 
   return (
     <div className="main_container">
@@ -32,7 +34,7 @@ export default function Auctions() {
           <UserCard
             key={user.id}
             user={user}
-            auction={auctions.find((auction) => auction.authorId === user.id)}
+            auction={auctions?.find((auction) => auction.authorId === user.id)}
           />
         ))
       )}

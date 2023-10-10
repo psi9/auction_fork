@@ -26,6 +26,10 @@
   transition: all 0.3s;
 }
 
+.header.access {
+  display: none;
+}
+
 .header_container {
   padding: 5px 30px;
   margin: 0 auto;
@@ -72,6 +76,7 @@
 .container_tools {
   display: flex;
   grid-gap: 10px;
+  align-items: center;
 
   outline: none;
   border: 0;

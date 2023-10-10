@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import Button from "../button/Button";
-
 import "./Header.css";
+import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 
 export default function Header() {
+  const userAuthorityContext = useUserAuthorityContext();
+  const checkAccess = userAuthorityContext?.checkAccess;
+  const signout = userAuthorityContext?.signout;
+
   const user = require("./assets/user.png");
   const search = require("./assets/search.png");
   const logo = require("./assets/logo.png");
+  const signoutLogo = require("./assets/signout.png");
 
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
@@ -33,22 +37,15 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
+    <header
+      className={`header ${
+        checkAccess ? `${isHeaderFixed ? "fixed" : ""}` : "access"
+      }`}
+    >
       <div className="header_container">
         <div className="container_logo">
           <img className="logo" src={logo} alt="Логотип" />
           <div className="logo_text">Auctions</div>
-        </div>
-        <div className="container_content">
-          <Link to="/">
-            <Button width="100px" text="Аукционы" />
-          </Link>
-          <Link to="/lots">
-            <Button width="100px" text="Лоты" />
-          </Link>
-          <Link to="/users">
-            <Button width="100px" text="Участники" />
-          </Link>
         </div>
         <div className="container_tools">
           <Link to="/profile">
@@ -61,6 +58,9 @@ export default function Header() {
               <img className="item_img" src={search} alt="Поиск" />
             </button>
           </Link>
+          <button className="tool_item" onClick={signout}>
+            <img className="item_img" src={signoutLogo} alt="Поиск" />
+          </button>
         </div>
       </div>
     </header>

@@ -1,4 +1,4 @@
-import Button from "../../button/Button";
+import { Link } from "react-router-dom";
 import { Auction, User } from "../../../objects/Entities";
 import { State } from "../../../objects/Enums";
 
@@ -45,7 +45,9 @@ export default function AuctionCard(props: { auction: Auction; author: User }) {
         </div>
         <div className="author">{props.author.name}</div>
       </div>
-      <Button width="100%" text="Принять участие" />
+      <Link to="/auctions/lots">
+        <button className="invite_button">Принять участие</button>
+      </Link>
     </div>
   );
 }

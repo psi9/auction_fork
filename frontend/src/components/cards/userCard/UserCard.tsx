@@ -16,7 +16,9 @@ export default function UserCard(props: {
       </div>
       <div className="container_info_user">
         <div className="info_auctions">Организатор:</div>
-        <div className="auction_name">{props.auction?.name}</div>
+        <div className="auction_name">
+          {props.auction?.name ? props.auction?.name : "Участник"}
+        </div>
       </div>
     </div>
   );

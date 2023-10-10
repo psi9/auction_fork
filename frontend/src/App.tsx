@@ -15,6 +15,7 @@ import { UserProvider } from "./contexts/UserContext";
 import { LotProvider } from "./contexts/LotContext";
 import Breadcrumbs from "./components/breadcrumbs/Breadcrumbs";
 import { UserAuthorityProvider } from "./contexts/UserAuthorityContext";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 function App() {
   return (
@@ -27,10 +28,14 @@ function App() {
             <LotProvider>
               <UserProvider>
                 <Routes>
-                  <Route index element={<AuctionsPage />}></Route>
+                  <Route path="/auctions" element={<AuctionsPage />}></Route>
                   <Route path="/authority" element={<AuthorityPage />}></Route>
-                  <Route path="/lots" element={<LotsPage />}></Route>
-                  <Route path="/users" element={<UsersPage />}></Route>
+                  <Route path="/auctions/lots" element={<LotsPage />}></Route>
+                  <Route
+                    path="/auctions/user/profile"
+                    element={<UsersPage />}
+                  ></Route>
+                  <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </UserProvider>
             </LotProvider>

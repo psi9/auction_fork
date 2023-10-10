@@ -19,7 +19,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
       return data;
     } catch (error) {
-      throw new Error("Ошибка получения пользователей, что-пошло не так");
+      throw new Error("Ошибка авторизации, что-пошло не так");
     }
   }
 
