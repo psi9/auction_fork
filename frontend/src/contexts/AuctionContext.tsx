@@ -11,7 +11,18 @@ import { State } from "../objects/Enums";
 
 import AuctionHttpRepository from "../repositories/implementations/AuctionHttpRepository";
 
-export const AuctionContext = createContext<Auction[]>([]);
+interface IAuctionContext {
+  auctions: Auction[];
+  createAuction: (
+    title: string,
+    description: string,
+    authorId: string
+  ) => Promise<void>;
+}
+
+export const AuctionContext = createContext<IAuctionContext | undefined>(
+  undefined
+);
 
 export const AuctionProvider = ({ children }: { children: ReactNode }) => {
   const initialAuctions: Auction[] = [
@@ -41,8 +52,27 @@ export const AuctionProvider = ({ children }: { children: ReactNode }) => {
     fetchAuctions();
   });
 
+  async function createAuction(
+    title: string,
+    description: string,
+    authorId: string
+  ) {
+    const auction: Auction = {
+      id: "B5FEA3BD-F650-4D61-BE5F-0A1411809E4F",
+      name: title,
+      description: description,
+      dateStart: new Date(),
+      dateEnd: new Date(),
+      authorId: authorId,
+      state: State.awaiting,
+      lots: [],
+    };
+
+    await auctionRepository.postAsync(auction);
+  }
+
   return (
-    <AuctionContext.Provider value={auctions}>
+    <AuctionContext.Provider value={{ auctions, createAuction }}>
       {children}
     </AuctionContext.Provider>
   );

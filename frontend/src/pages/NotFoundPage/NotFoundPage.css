@@ -1,0 +1,16 @@
+.error_container {
+  text-align: center;
+
+  margin-top: 100px;
+}
+
+.error_title {
+  font-size: 70px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.error_description {
+  color: rgba(174, 214, 241, 0.5);
+  font-size: 20px;
+}
