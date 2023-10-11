@@ -48,17 +48,35 @@ export const UserAuthorityProvider = ({
 
     if (!user) return;
 
+    localStorage.setItem("authToken", user.token);
+    localStorage.setItem("id", user.id);
+    localStorage.setItem("username", user.name);
+    localStorage.setItem("email", user.email);
+    localStorage.setItem("password", user.password);
+
     navigate("/auctions");
     setUser(user);
   }
 
   function signout() {
-    navigate("/authority");
+    localStorage.clear();
     setUser(null);
+    navigate("/authority");
   }
 
   function checkAccess(): boolean {
-    return user && user?.token ? true : false;
+    if (!localStorage.getItem("authToken")) return false;
+
+    const token = localStorage.getItem("authToken")!;
+    const name = localStorage.getItem("username")!;
+    const email = localStorage.getItem("email")!;
+    const password = localStorage.getItem("password")!;
+    const id = localStorage.getItem("id")!;
+
+    const user: User = { id, name, email, password, token };
+    setUser(user);
+
+    return true;
   }
 
   return (
