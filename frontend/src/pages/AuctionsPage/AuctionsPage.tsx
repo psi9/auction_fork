@@ -29,21 +29,33 @@ export default function AuctionsPage() {
   const users = useUserContext();
 
   const validateCreation = (): boolean => {
+    if (!title.length || !description.length) {
+      setError("Заполните все поля");
+      return false;
+    }
+
+    if (title.length > 30 || description.length > 300) {
+      setError("Вы превысили количество символов");
+      return false;
+    }
+
     return true;
+  };
+
+  const resetState = () => {
+    setTitle("");
+    setDescription("");
+    setError("");
   };
 
   const createAuction = async () => {
     const curUser = userAuthorityContext?.user;
 
-    if (!validateCreation()) {
-      setError("Ошибка");
-      return;
-    }
+    if (!validateCreation()) return;
 
     await auctionContext?.createAuction(title, description, curUser?.id!);
 
-    setTitle("");
-    setDescription("");
+    resetState();
   };
 
   return (
@@ -78,13 +90,17 @@ export default function AuctionsPage() {
             </div>
           </div>
         ) : (
-          auctions.map((auction: Auction) => (
-            <AuctionCard
-              key={auction.id}
-              auction={auction}
-              author={users.find((user: User) => user.id === auction.authorId)!}
-            />
-          ))
+          auctions
+            .map((auction: Auction) => (
+              <AuctionCard
+                key={auction.id}
+                auction={auction}
+                author={
+                  users.find((user: User) => user.id === auction.authorId)!
+                }
+              />
+            ))
+            .reverse()
         )}
       </div>
     </div>
