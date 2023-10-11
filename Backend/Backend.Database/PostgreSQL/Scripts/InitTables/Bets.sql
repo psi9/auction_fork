@@ -1,7 +1,7 @@
 CREATE TABLE "Bets"
 (
     "id"       uuid PRIMARY KEY NOT NULL,
-    "value"    real             NOT NULL,
+    "value"    decimal          NOT NULL,
     "lotId"    uuid             NOT NULL,
     "userId"   uuid             NOT NULL,
     "dateTime" timestamp,

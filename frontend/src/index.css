@@ -7,22 +7,28 @@
 }
 
 body {
-  background-image: url("./assets/wallpaper.jpg");
+  background: rgba(33, 97, 140, 0.2);
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
 
   overflow-x: hidden;
+
+  height: 100%;
 }
 
 html {
   scrollbar-width: thin;
 
+  height: 100%;
+
   color-scheme: dark light;
-  &[data-theme="light"] {
+
+  & [data-theme="light"] {
     color-scheme: light;
   }
-  &[data-theme="dark"] {
+
+  & [data-theme="dark"] {
     color-scheme: dark;
   }
 }

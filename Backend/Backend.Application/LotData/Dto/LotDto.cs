@@ -21,7 +21,7 @@ public class LotDto
     /// Описание лота
     /// </summary>
     public string Description { get; set; } = string.Empty;
-    
+
     /// <summary>
     /// Уникальный идентификатор аукциона лота
     /// </summary>

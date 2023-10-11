@@ -11,6 +11,7 @@ export default function Arrow() {
     }
 
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -19,8 +20,9 @@ export default function Arrow() {
   return (
     <div
       className={`btn_up ${showArrow ? "btn_up_show" : ""}`}
-      onClick={() => { window.scrollTo({ top: 0, behavior: "smooth" })}}
+      onClick={() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
     ></div>
   );
 }
-

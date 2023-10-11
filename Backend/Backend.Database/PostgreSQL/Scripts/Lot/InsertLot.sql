@@ -1,2 +1,2 @@
-INSERT INTO "Lots" ("id", "name", "description", "startPrice", "betStep", "images")
-VALUES (@id, @name, @description, @startPrice, @betStep, @images);
+INSERT INTO "Lots" ("id", "name", "description", "auctionId", "startPrice", "betStep")
+VALUES (@id, @name, @description, @auctionId, @startPrice, @betStep);

@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-
-import Button from "../button/Button"
+import { Link } from "react-router-dom";
 
 import "./Header.css";
+import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 
 export default function Header() {
+  const userAuthorityContext = useUserAuthorityContext();
+  const checkAccess = userAuthorityContext?.checkAccess;
+
   const user = require("./assets/user.png");
   const search = require("./assets/search.png");
   const logo = require("./assets/logo.png");
@@ -25,30 +28,34 @@ export default function Header() {
     }
 
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
-    <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
+    <header
+      className={`header ${
+        checkAccess ? `${isHeaderFixed ? "fixed" : ""}` : "access"
+      }`}
+    >
       <div className="header_container">
         <div className="container_logo">
           <img className="logo" src={logo} alt="Логотип" />
           <div className="logo_text">Auctions</div>
         </div>
-        <div className="container_content">
-          <Button width="100px" text="Аукционы"/>
-          <Button width="100px" text="Лоты"/>
-          <Button width="100px" text="Участники"/>
-        </div>
         <div className="container_tools">
-          <button className="tool_item">
-            <img className="item_img" src={user} alt="Профиль" />
-          </button>
-          <button className="tool_item">
-            <img className="item_img" src={search} alt="Поиск" />
-          </button>
+          <Link to="/profile">
+            <button className="tool_item">
+              <img className="item_img" src={user} alt="Профиль" />
+            </button>
+          </Link>
+          <Link to="/search">
+            <button className="tool_item">
+              <img className="item_img" src={search} alt="Поиск" />
+            </button>
+          </Link>
         </div>
       </div>
     </header>

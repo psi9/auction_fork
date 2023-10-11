@@ -55,18 +55,18 @@ public class UserRepository : IUserRepository
                 dataReader.GetString("email"),
                 dataReader.GetString("password")));
     }
-    
+
     /// <summary>
     /// Запрос на получение пользователя по имени
     /// </summary>
-    /// <param name="name">Имя пользователя</param>
+    /// <param name="email">Почта пользователя</param>
     /// <returns>Пользователь</returns>
-    public async Task<User> SelectByNameAsync(string name)
+    public async Task<User> SelectByNameAsync(string email)
     {
         return await _pgsqlHandler.ReadAsync<User>(
             "User.SelectUserByName",
-            "name",
-            name,
+            "email",
+            email,
             dataReader => new User(
                 dataReader.GetGuid("id"),
                 dataReader.GetString("name"),
@@ -111,8 +111,5 @@ public class UserRepository : IUserRepository
     {
         await _pgsqlHandler.ExecuteAsync("User.DeleteUser",
             new KeyValuePair<string, object>("id", id));
-
-        await _pgsqlHandler.ExecuteAsync("Bet.DeleteBet",
-            new KeyValuePair<string, object>("userId", id));
     }
 }
