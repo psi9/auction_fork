@@ -6,6 +6,7 @@ import { useLotContext } from "../../contexts/LotContext";
 import { useNavigate } from "react-router-dom";
 import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 import { useEffect, useState } from "react";
+import { Lot } from "../../objects/Entities";
 
 export default function LotsPage() {
   const userAuthorityContext = useUserAuthorityContext();
@@ -15,9 +16,18 @@ export default function LotsPage() {
     if (!userAuthorityContext?.checkAccess()) navigate("/authority");
   });
 
-  const lots = useLotContext();
+  const lotContext = useLotContext();
+
+  useEffect(() => {
+    async function getLots() {
+      setLots(await lotContext?.getLotsByAuction()!);
+    }
+
+    getLots();
+  });
 
   const [error, setError] = useState<string>("");
+  const [lots, setLots] = useState<Lot[]>([]);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -44,7 +54,7 @@ export default function LotsPage() {
         <div className="error">{error}</div>
       </div>
       <div className="main_container">
-        {!lots.length ? (
+        {!lots?.length ? (
           <div className="main_empty">
             <div className="empty">
               <div>Лотов пока нет.</div>

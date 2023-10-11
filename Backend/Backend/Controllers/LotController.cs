@@ -1,4 +1,3 @@
-using Backend.Application;
 using Backend.Application.LotData.Dto;
 using Backend.Application.LotData.UseCases;
 using Backend.Domain.Enum;
@@ -49,6 +48,11 @@ public class LotController : ControllerBase
     private readonly GetLotsHandler _getLotsHandler;
 
     /// <summary>
+    /// Обработчик получения лотов по аукциону
+    /// </summary>
+    private readonly GetLotsByAuctionHandler _getLotsByAuctionHandler;
+
+    /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="deleteHandler">Обработчик удаления лота</param>
@@ -58,9 +62,10 @@ public class LotController : ControllerBase
     /// <param name="doBetHandler">Обработчик ставки</param>
     /// <param name="updateHandler">Обработчик обновления лота</param>
     /// <param name="getLotsHandler">Обработчик получения списка лотов</param>
+    /// <param name="getLotsByAuctionHandler">Обработчик получения лотов по аукциону</param>
     public LotController(DeleteLotHandler deleteHandler, CreateLotHandler createHandler, BuyoutLotHandler buyoutHandler,
         ChangeLotStatusHandler changeStatusHandler, DoBetHandler doBetHandler, UpdateLotHandler updateHandler,
-        GetLotsHandler getLotsHandler)
+        GetLotsHandler getLotsHandler, GetLotsByAuctionHandler getLotsByAuctionHandler)
     {
         _deleteHandler = deleteHandler;
         _createHandler = createHandler;
@@ -69,6 +74,7 @@ public class LotController : ControllerBase
         _doBetHandler = doBetHandler;
         _updateHandler = updateHandler;
         _getLotsHandler = getLotsHandler;
+        _getLotsByAuctionHandler = getLotsByAuctionHandler;
     }
 
     /// <summary>
@@ -109,9 +115,9 @@ public class LotController : ControllerBase
     /// <param name="lotId">Уникальный индентификатор лота</param>
     /// <param name="state">Новое состояние</param>
     [HttpPut("change_status/{auctionId:guid}/{lotId:guid}/{state:int}/")]
-    public async Task ChangeLotStatusAsync(Guid auctionId, Guid lotId, State state)
+    public async Task ChangeLotStatusAsync(Guid auctionId, Guid lotId, int state)
     {
-        await _changeStatusHandler.ChangeLotStatusAsync(auctionId, lotId, state);
+        await _changeStatusHandler.ChangeLotStatusAsync(auctionId, lotId, (State)state);
     }
 
     /// <summary>
@@ -144,5 +150,16 @@ public class LotController : ControllerBase
     public async Task<IReadOnlyCollection<LotDto>> GetLotsAsync()
     {
         return await _getLotsHandler.GetLots();
+    }
+
+    /// <summary>
+    /// Запрос на получение списка лотов по аукциону
+    /// </summary>
+    /// <param name="auctionId">Уникальный индентификатор аукциона</param>
+    /// <returns>список лотов</returns>
+    [HttpGet("get_list_by_auction/{auctionId:guid}")]
+    public async Task<IReadOnlyCollection<LotDto>> GetLotsByAuctionAsync(Guid auctionId)
+    {
+        return await _getLotsByAuctionHandler.GetLotsByAuction(auctionId);
     }
 }

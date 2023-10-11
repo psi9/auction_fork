@@ -48,6 +48,7 @@ builder.Services.AddSingleton<GetLotsHandler>();
 builder.Services.AddSingleton<CreateLotHandler>();
 builder.Services.AddSingleton<DeleteLotHandler>();
 builder.Services.AddSingleton<UpdateLotHandler>();
+builder.Services.AddSingleton<GetLotsByAuctionHandler>();
 
 builder.Services.AddSingleton<SignUpUserHandler>();
 builder.Services.AddSingleton<SignInUserHandler>();
