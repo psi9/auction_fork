@@ -8,10 +8,6 @@ export default function Header() {
   const userAuthorityContext = useUserAuthorityContext();
   const checkAccess = userAuthorityContext?.checkAccess;
 
-  const user = require("./assets/user.png");
-  const search = require("./assets/search.png");
-  const logo = require("./assets/logo.png");
-
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
   useEffect(() => {
@@ -34,12 +30,14 @@ export default function Header() {
     };
   }, []);
 
+  if (!checkAccess) return;
+
+  const user = require("./assets/user.png");
+  const search = require("./assets/search.png");
+  const logo = require("./assets/logo.png");
+
   return (
-    <header
-      className={`header ${
-        checkAccess ? `${isHeaderFixed ? "fixed" : ""}` : "access"
-      }`}
-    >
+    <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
       <div className="header_container">
         <div className="container_logo">
           <img className="logo" src={logo} alt="Логотип" />
