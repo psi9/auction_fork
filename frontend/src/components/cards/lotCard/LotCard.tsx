@@ -1,5 +1,3 @@
-import Button from "../../button/Button";
-
 import { Lot } from "../../../objects/Entities";
 
 import "./LotCard.css";
@@ -46,7 +44,7 @@ export default function LotCard(props: { lot: Lot }) {
         <div className="bet_step">Шаг ставки:</div>
         <div className="step">{props.lot.betStep}p.</div>
       </div>
-      <Button width="100%" text="Сделать ставку" />
+      <button className="do_bet_button">Сделать ставку</button>
     </div>
   );
 }

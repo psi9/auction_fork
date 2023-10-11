@@ -137,7 +137,7 @@ export default function AuthorityCard() {
             placeholder="Введите пароль"
           ></input>
           <button
-            className="custom_button"
+            className="authority_button"
             type="submit"
             onClick={() => signin()}
           >
@@ -179,7 +179,7 @@ export default function AuthorityCard() {
             placeholder="Повторите пароль"
           ></input>
           <button
-            className="custom_button"
+            className="authority_button"
             type="submit"
             onClick={() => signup()}
           >

@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Auction, User } from "../../../objects/Entities";
 import { State } from "../../../objects/Enums";
 
 import "./AuctionCard.css";
+import { useLotContext } from "../../../contexts/LotContext";
 
 export default function AuctionCard(props: { auction: Auction; author: User }) {
   function getState(state: State): string {
@@ -25,6 +26,14 @@ export default function AuctionCard(props: { auction: Auction; author: User }) {
     }
   }
 
+  const navigate = useNavigate();
+  const lotContext = useLotContext();
+
+  function invite() {
+    lotContext?.setAuctionId(props.auction.id);
+    navigate("/auctions/lots");
+  }
+
   return (
     <div className="card_container">
       <div className="auction_title">{props.auction.name}</div>
@@ -45,9 +54,9 @@ export default function AuctionCard(props: { auction: Auction; author: User }) {
         </div>
         <div className="author">{props.author.name}</div>
       </div>
-      <Link to="/auctions/lots">
-        <button className="invite_button">Принять участие</button>
-      </Link>
+      <button className="invite_button" onClick={invite}>
+        Принять участие
+      </button>
     </div>
   );
 }

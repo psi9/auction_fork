@@ -26,6 +26,7 @@ export const UserAuthorityProvider = ({
 }) => {
   const userHttpRepository = new UserHttpRepository("https://localhost:7132/");
   const navigate = useNavigate();
+
   const [user, setUser] = useState<User | null>(null);
 
   async function signup(login: string, email: string, password: string) {
@@ -62,7 +63,13 @@ export const UserAuthorityProvider = ({
 
   return (
     <UserAuthorityContext.Provider
-      value={{ user, signup, signin, signout, checkAccess }}
+      value={{
+        user,
+        signup,
+        signin,
+        signout,
+        checkAccess,
+      }}
     >
       {children}
     </UserAuthorityContext.Provider>

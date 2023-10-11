@@ -13,6 +13,7 @@ import AuctionHttpRepository from "../repositories/implementations/AuctionHttpRe
 
 interface IAuctionContext {
   auctions: Auction[];
+
   createAuction: (
     title: string,
     description: string,
@@ -38,11 +39,11 @@ export const AuctionProvider = ({ children }: { children: ReactNode }) => {
     },
   ];
 
+  const [auctions, setAuctions] = useState<Auction[]>(initialAuctions);
+
   const auctionRepository = new AuctionHttpRepository(
     "https://localhost:7132/"
   );
-
-  const [auctions, setAuctions] = useState<Auction[]>(initialAuctions);
 
   useEffect(() => {
     async function fetchAuctions() {

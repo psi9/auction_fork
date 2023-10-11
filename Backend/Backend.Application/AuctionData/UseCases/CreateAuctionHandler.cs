@@ -30,7 +30,7 @@ public class CreateAuctionHandler
     public async Task CreateAuctionAsync(AuctionDto entity)
     {
         await _auctionRepository.CreateAsync(new Auction(
-            Guid.NewGuid(), 
+            Guid.NewGuid(),
             entity.Name,
             entity.Description,
             entity.DateStart,

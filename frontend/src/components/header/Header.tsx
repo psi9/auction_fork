@@ -7,12 +7,10 @@ import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 export default function Header() {
   const userAuthorityContext = useUserAuthorityContext();
   const checkAccess = userAuthorityContext?.checkAccess;
-  const signout = userAuthorityContext?.signout;
 
   const user = require("./assets/user.png");
   const search = require("./assets/search.png");
   const logo = require("./assets/logo.png");
-  const signoutLogo = require("./assets/signout.png");
 
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
@@ -58,9 +56,6 @@ export default function Header() {
               <img className="item_img" src={search} alt="Поиск" />
             </button>
           </Link>
-          <button className="tool_item" onClick={signout}>
-            <img className="item_img" src={signoutLogo} alt="Поиск" />
-          </button>
         </div>
       </div>
     </header>

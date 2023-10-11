@@ -23,9 +23,9 @@ public class GetLotsHandler
     }
 
     /// <summary>
-    /// Получение списка аукционов
+    /// Получение списка лотов
     /// </summary>
-    /// <returns>список аукционов</returns>
+    /// <returns>список лотов</returns>
     public async Task<IReadOnlyCollection<LotDto>> GetLots()
     {
         var lots = await _lotRepository.SelectManyAsync();

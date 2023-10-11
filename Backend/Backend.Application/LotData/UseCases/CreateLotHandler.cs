@@ -40,13 +40,13 @@ public class CreateLotHandler
 
         var images = imagesDto.Select(imageDto => new Image
         {
-            Id = imageDto.Id,
+            Id = Guid.NewGuid(),
             LotId = imageDto.LotId,
             Path = imageDto.Path
         });
 
         var lot = new Lot(
-            entity.Id,
+            Guid.NewGuid(),
             entity.Name,
             entity.Description,
             entity.AuctionId,
