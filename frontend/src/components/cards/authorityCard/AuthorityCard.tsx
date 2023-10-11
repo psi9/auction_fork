@@ -107,13 +107,19 @@ export default function AuthorityCard() {
       <div className="container_buttons">
         <button
           className={`type ${isSignin ? "active" : ""}`}
-          onClick={() => setIsSignin(true)}
+          onClick={() => {
+            setIsSignin(true);
+            setError("");
+          }}
         >
           Авторизация
         </button>
         <button
           className={`type ${!isSignin ? "active" : ""}`}
-          onClick={() => setIsSignin(false)}
+          onClick={() => {
+            setIsSignin(false);
+            setError("");
+          }}
         >
           Регистрация
         </button>

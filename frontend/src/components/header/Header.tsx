@@ -35,11 +35,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header
-      className={`header ${
-        checkAccess ? `${isHeaderFixed ? "fixed" : ""}` : "access"
-      }`}
-    >
+    <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
       <div className="header_container">
         <div className="container_logo">
           <img className="logo" src={logo} alt="Логотип" />
