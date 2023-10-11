@@ -21,6 +21,21 @@ export default class LotHttpRepository implements ILotHttpRepository {
     }
   }
 
+  async getByAuctionAsync(auctionId: string): Promise<Lot[]> {
+    try {
+      const response = await fetch(
+        `${this.baseURL}api/lot/get_list_by_auction/${auctionId}`
+      );
+      if (!response.ok) throw new Error("Лоты не получены");
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      throw new Error("Ошибка получения лотов, что-пошло не так");
+    }
+  }
+
   async postAsync(entity: Lot): Promise<void> {
     try {
       const response = await fetch(`${this.baseURL}/api/lot/create`, {
