@@ -103,7 +103,7 @@ export default function AuthorityCard() {
   };
 
   return (
-    <form className="authority_container">
+    <div className="authority_container">
       <div className="container_buttons">
         <button
           className={`type ${isSignin ? "active" : ""}`}
@@ -194,6 +194,6 @@ export default function AuthorityCard() {
         </div>
       )}
       <div className="error">{error}</div>
-    </form>
+    </div>
   );
 }

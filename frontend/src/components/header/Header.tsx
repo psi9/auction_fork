@@ -10,6 +10,10 @@ export default function Header() {
 
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
+  const user = require("./assets/user.png");
+  const search = require("./assets/search.png");
+  const logo = require("./assets/logo.png");
+
   useEffect(() => {
     function handleScroll() {
       const scrollY = window.scrollY;
@@ -30,11 +34,7 @@ export default function Header() {
     };
   }, []);
 
-  if (!checkAccess) return;
-
-  const user = require("./assets/user.png");
-  const search = require("./assets/search.png");
-  const logo = require("./assets/logo.png");
+  if (!checkAccess) return null;
 
   return (
     <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
