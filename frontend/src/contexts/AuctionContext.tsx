@@ -25,25 +25,10 @@ export const AuctionContext = createContext<IAuctionContext | undefined>(
   undefined
 );
 
+const auctionRepository = new AuctionHttpRepository("https://localhost:7132/");
+
 export const AuctionProvider = ({ children }: { children: ReactNode }) => {
-  const initialAuctions: Auction[] = [
-    {
-      id: "",
-      name: "",
-      description: "",
-      dateStart: new Date(),
-      dateEnd: new Date(),
-      authorId: "",
-      state: State.awaiting,
-      lots: [],
-    },
-  ];
-
-  const [auctions, setAuctions] = useState<Auction[]>(initialAuctions);
-
-  const auctionRepository = new AuctionHttpRepository(
-    "https://localhost:7132/"
-  );
+  const [auctions, setAuctions] = useState<Auction[]>([]);
 
   useEffect(() => {
     async function fetchAuctions() {
@@ -51,7 +36,7 @@ export const AuctionProvider = ({ children }: { children: ReactNode }) => {
     }
 
     fetchAuctions();
-  });
+  }, []);
 
   async function createAuction(
     title: string,

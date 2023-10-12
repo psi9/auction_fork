@@ -1,5 +1,4 @@
-import { useNavigate } from "react-router-dom";
-
+import { useState } from "react";
 import AuctionCard from "../../components/cards/auctionCard/AuctionCard";
 
 import { useAuctionContext } from "../../contexts/AuctionContext";
@@ -8,15 +7,9 @@ import { useUserContext } from "../../contexts/UserContext";
 import { Auction, User } from "../../objects/Entities";
 
 import "./AuctionsPage.css";
-import { useEffect, useState } from "react";
 
 export default function AuctionsPage() {
   const userAuthorityContext = useUserAuthorityContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!userAuthorityContext?.checkAccess()) navigate("/authority");
-  });
 
   const [error, setError] = useState<string>("");
 

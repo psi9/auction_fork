@@ -7,7 +7,6 @@ import {
 } from "react";
 
 import { Lot } from "../objects/Entities";
-import { State } from "../objects/Enums";
 
 import LotHttpRepository from "../repositories/implementations/LotHttpRepository";
 
@@ -16,29 +15,16 @@ interface ILotContext {
 
   getLotsByAuction: () => Promise<Lot[]>;
   setAuctionId: (auctionId: string) => void;
+
+  createLot: (lot: Lot) => void;
 }
 
 export const LotContext = createContext<ILotContext | undefined>(undefined);
 
+const lotRepository = new LotHttpRepository("https://localhost:7132/");
+
 export const LotProvider = ({ children }: { children: ReactNode }) => {
-  const initialLots: Lot[] = [
-    {
-      id: "564BBF8E-3B61-4EAD-AF62-05F72A4654E5",
-      name: "",
-      description: "",
-      auctionId: "564BBF8E-3B61-4EAD-AF62-05F72A4654E5",
-      startPrice: 0,
-      buyoutPrice: 0,
-      betStep: 0,
-      state: State.awaiting,
-      bets: [],
-      images: [],
-    },
-  ];
-
-  const lotRepository = new LotHttpRepository("https://localhost:7132/");
-
-  const [lots, setLots] = useState<Lot[]>(initialLots);
+  const [lots, setLots] = useState<Lot[]>([]);
   const [curAuctionId, setCurAuctionId] = useState<string>("");
 
   useEffect(() => {
@@ -47,10 +33,15 @@ export const LotProvider = ({ children }: { children: ReactNode }) => {
     }
 
     fetchLots();
-  });
+  }, []);
 
   async function getLotsByAuction(): Promise<Lot[]> {
+    if (!curAuctionId) return [];
     return await lotRepository.getByAuctionAsync(curAuctionId);
+  }
+
+  async function createLot(lot: Lot) {
+    await lotRepository.postAsync(lot);
   }
 
   function setAuctionId(auctionId: string) {
@@ -58,7 +49,9 @@ export const LotProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <LotContext.Provider value={{ lots, getLotsByAuction, setAuctionId }}>
+    <LotContext.Provider
+      value={{ lots, getLotsByAuction, setAuctionId, createLot }}
+    >
       {children}
     </LotContext.Provider>
   );

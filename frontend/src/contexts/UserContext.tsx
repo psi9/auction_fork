@@ -12,19 +12,10 @@ import UserHttpRepository from "../repositories/implementations/UserHttpReposito
 
 export const UserContext = createContext<User[]>([]);
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const initialUsers: User[] = [
-    {
-      id: "",
-      name: "",
-      email: "",
-      password: "",
-      token: "",
-    },
-  ];
+const userRepository = new UserHttpRepository("https://localhost:7132/");
 
-  const userRepository = new UserHttpRepository("https://localhost:7132/");
-  const [users, setUsers] = useState<User[]>(initialUsers);
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -32,7 +23,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
 
     fetchUsers();
-  });
+  }, []);
 
   return <UserContext.Provider value={users}>{children}</UserContext.Provider>;
 };

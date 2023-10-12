@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 import "./ProfilePage.css";
-import { useEffect } from "react";
 import { useLotContext } from "../../contexts/LotContext";
 import LotCard from "../../components/cards/lotCard/LotCard";
 import { useAuctionContext } from "../../contexts/AuctionContext";
@@ -11,11 +9,6 @@ import { useUserContext } from "../../contexts/UserContext";
 
 export default function ProfilePage() {
   const userAuthorityContext = useUserAuthorityContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!userAuthorityContext?.checkAccess()) navigate("/authority");
-  });
 
   const signout = userAuthorityContext?.signout;
   const user = userAuthorityContext?.user;
@@ -47,6 +40,29 @@ export default function ProfilePage() {
           </button>
         </div>
       </div>
+      <div className="activity_box">
+        <div className="box_title">Ваши аукционы</div>
+        <div className="box_items">
+          {!auctions?.length ? (
+            <div className="main_empty">
+              <div className="empty">
+                <div>Вы пока не организовывали аукционы</div>
+                <div>Пора начинать!</div>
+              </div>
+            </div>
+          ) : (
+            auctions.map((auction: Auction) => (
+              <AuctionCard
+                key={auction.id}
+                auction={auction}
+                author={
+                  users.find((user: User) => user.id === auction.authorId)!
+                }
+              />
+            ))
+          )}
+        </div>
+      </div>
       <div className="activity">
         <div className="activity_box">
           <div className="box_title">Ваше участие</div>
@@ -59,29 +75,6 @@ export default function ProfilePage() {
               </div>
             ) : (
               lots.map((lot) => <LotCard key={lot.id} lot={lot} />)
-            )}
-          </div>
-        </div>
-        <div className="activity_box">
-          <div className="box_title">Ваши аукционы</div>
-          <div className="box_items">
-            {!auctions?.length ? (
-              <div className="main_empty">
-                <div className="empty">
-                  <div>Вы пока не организовывали аукционы</div>
-                  <div>Пора начинать!</div>
-                </div>
-              </div>
-            ) : (
-              auctions.map((auction: Auction) => (
-                <AuctionCard
-                  key={auction.id}
-                  auction={auction}
-                  author={
-                    users.find((user: User) => user.id === auction.authorId)!
-                  }
-                />
-              ))
             )}
           </div>
         </div>

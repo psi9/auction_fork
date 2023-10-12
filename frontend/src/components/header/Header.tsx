@@ -2,17 +2,9 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./Header.css";
-import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 
 export default function Header() {
-  const userAuthorityContext = useUserAuthorityContext();
-  const checkAccess = userAuthorityContext?.checkAccess;
-
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
-
-  const user = require("./assets/user.png");
-  const search = require("./assets/search.png");
-  const logo = require("./assets/logo.png");
 
   useEffect(() => {
     function handleScroll() {
@@ -34,24 +26,22 @@ export default function Header() {
     };
   }, []);
 
-  if (!checkAccess) return null;
-
   return (
     <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
       <div className="header_container">
         <div className="container_logo">
-          <img className="logo" src={logo} alt="Логотип" />
+          <img className="logo" alt="Логотип" />
           <div className="logo_text">Auctions</div>
         </div>
         <div className="container_tools">
           <Link to="/profile">
             <button className="tool_item">
-              <img className="item_img" src={user} alt="Профиль" />
+              <img className="item_img user" alt="Профиль" />
             </button>
           </Link>
           <Link to="/search">
             <button className="tool_item">
-              <img className="item_img" src={search} alt="Поиск" />
+              <img className="item_img search" alt="Поиск" />
             </button>
           </Link>
         </div>

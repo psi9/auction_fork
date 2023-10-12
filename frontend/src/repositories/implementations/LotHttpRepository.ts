@@ -32,13 +32,13 @@ export default class LotHttpRepository implements ILotHttpRepository {
 
       return data;
     } catch (error) {
-      throw new Error("Ошибка получения лотов, что-пошло не так");
+      throw new Error("Ошибка получения лотов по аукциону, что-пошло не так");
     }
   }
 
   async postAsync(entity: Lot): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/lot/create`, {
+      const response = await fetch(`${this.baseURL}api/lot/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
@@ -54,7 +54,7 @@ export default class LotHttpRepository implements ILotHttpRepository {
 
   async putAsync(entity: Lot): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/lot/update`, {
+      const response = await fetch(`${this.baseURL}api/lot/update`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
@@ -70,7 +70,7 @@ export default class LotHttpRepository implements ILotHttpRepository {
 
   async deleteAsync(id: number): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}/api/lot/delete/${id}`, {
+      const response = await fetch(`${this.baseURL}api/lot/delete/${id}`, {
         method: "DELETE",
       });
 
