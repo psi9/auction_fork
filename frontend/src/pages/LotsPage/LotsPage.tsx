@@ -3,20 +3,19 @@ import LotCard from "../../components/cards/lotCard/LotCard";
 import "./LotsPage.css";
 
 import { useLotContext } from "../../contexts/LotContext";
-import { useNavigate } from "react-router-dom";
-import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 import { useEffect, useState } from "react";
 import { Lot } from "../../objects/Entities";
 
 export default function LotsPage() {
-  const userAuthorityContext = useUserAuthorityContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!userAuthorityContext?.checkAccess()) navigate("/authority");
-  });
-
   const lotContext = useLotContext();
+
+  const [error, setError] = useState<string>("");
+  const [lots, setLots] = useState<Lot[]>([]);
+
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [startPrice, setStartPrice] = useState<number>(100);
+  const [betStep, setBetStep] = useState<number>(100);
 
   useEffect(() => {
     async function getLots() {
@@ -24,13 +23,9 @@ export default function LotsPage() {
     }
 
     getLots();
-  });
+  }, [lotContext]);
 
-  const [error, setError] = useState<string>("");
-  const [lots, setLots] = useState<Lot[]>([]);
-
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const createLot = () => {};
 
   return (
     <div className="main_box">
@@ -50,7 +45,55 @@ export default function LotsPage() {
           onChange={(event) => setDescription(event.target.value)}
           placeholder="Введите описание лота (до 300 символов)"
         ></textarea>
-        <button className="submit_create">Создать</button>
+        <div className="box_inner">
+          <input
+            className="inner_item"
+            type="text"
+            value={startPrice}
+            onChange={(event) => {
+              const value = event.target.value;
+
+              if (isNaN(+value)) {
+                setError("Поле должно содержать только числовое значение");
+                return;
+              }
+
+              if (+value > 1000000000) {
+                setError("Слишком большое значение");
+                return;
+              }
+
+              setError("");
+              setStartPrice(+value);
+            }}
+            placeholder="Введите стартовую цену"
+          />
+          <input
+            className="inner_item"
+            type="number"
+            value={betStep}
+            onChange={(event) => {
+              const value = event.target.value;
+
+              if (isNaN(+value)) {
+                setError("Поле должно содержать только числовое значение");
+                return;
+              }
+
+              if (+value > 1000000000) {
+                setError("Слишком большое значение");
+                return;
+              }
+
+              setError("");
+              setBetStep(+value);
+            }}
+            placeholder="Введите шаг ставки лота"
+          />
+        </div>
+        <button className="submit_create" onClick={createLot}>
+          Создать
+        </button>
         <div className="error">{error}</div>
       </div>
       <div className="main_container">
