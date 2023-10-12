@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./Backend/Dockerfile
+    ports:
+      - "5000:80"
+    depends_on:
+      - database
+
+  frontend:
+    build:
+      context: ./frontend/Dockerfile
+    ports:
+      - "3000:3000"
+
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: AuctionDB
+      POSTGRES_USER: AuctionUser
+      POSTGRES_PASSWORD: AuctionPassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./Backend/Backend.Database/PostgreSQL/Scripts/InitTables:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mail.ru
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8080:80"
