@@ -24,7 +24,7 @@ export const UserAuthorityProvider = ({
 }: {
   children: ReactNode;
 }) => {
-  const userHttpRepository = new UserHttpRepository("https://localhost:7132/");
+  const userHttpRepository = new UserHttpRepository("backend");
   const navigate = useNavigate();
 
   const [user, setUser] = useState<User | null>(null);

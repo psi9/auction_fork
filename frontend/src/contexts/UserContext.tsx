@@ -12,7 +12,7 @@ import UserHttpRepository from "../repositories/implementations/UserHttpReposito
 
 export const UserContext = createContext<User[]>([]);
 
-const userRepository = new UserHttpRepository("https://localhost:7132/");
+const userRepository = new UserHttpRepository("backend");
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [users, setUsers] = useState<User[]>([]);
