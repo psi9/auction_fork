@@ -18,7 +18,7 @@ services:
       - "3000:3000"
 
   database:
-    image: postgres:latest
+    image: postgres:13
     container_name: auction-database
     environment:
       POSTGRES_DB: AuctionDB
