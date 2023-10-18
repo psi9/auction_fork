@@ -25,7 +25,7 @@ export const AuctionContext = createContext<IAuctionContext | undefined>(
   undefined
 );
 
-const auctionRepository = new AuctionHttpRepository("http://localhost:5000/");
+const auctionRepository = new AuctionHttpRepository("https://localhost:7132/");
 
 export const AuctionProvider = ({ children }: { children: ReactNode }) => {
   const [auctions, setAuctions] = useState<Auction[]>([]);
