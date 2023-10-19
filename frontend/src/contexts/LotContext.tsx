@@ -21,7 +21,7 @@ interface ILotContext {
 
 export const LotContext = createContext<ILotContext | undefined>(undefined);
 
-const lotRepository = new LotHttpRepository("http://localhost:5000/");
+const lotRepository = new LotHttpRepository("http://localhost:7132/");
 
 export const LotProvider = ({ children }: { children: ReactNode }) => {
   const [lots, setLots] = useState<Lot[]>([]);
