@@ -94,7 +94,7 @@ public class AuthorityHandler
                 new Claim(ClaimTypes.Name, email)
             }),
 
-            Expires = now.AddDays(7),
+            Expires = DateTime.Now.AddMinutes(30),
 
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(symmetricKey),

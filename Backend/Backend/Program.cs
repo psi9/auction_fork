@@ -1,3 +1,4 @@
+using System.Text;
 using Backend.Application;
 using Backend.Application.AuctionData.IRepository;
 using Backend.Application.AuctionData.UseCases;
@@ -10,7 +11,9 @@ using Backend.Database.PostgreSQL;
 using Backend.Database.Repositories;
 using Backend.Hubs;
 using Backend.Notifications;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +27,27 @@ builder.Services.AddOptions<PgsqlConnection>()
 
 builder.Services.AddOptions<AuthorityHandler>()
     .Bind(builder.Configuration.GetSection("Config:AuthorityHandler"));
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+    {
+        options.RequireHttpsMetadata = true;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateLifetime = true,
+
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.ASCII.GetBytes("ASdkjhikuj98210as2l3kai32io4i0")
+            ),
+            ValidateIssuerSigningKey = true,
+        };
+    });
 
 builder.Services.AddSingleton<IAuctionRepository, AuctionRepository>();
 builder.Services.AddSingleton<ILotRepository, LotRepository>();
@@ -65,6 +89,8 @@ builder.Services.AddSingleton<AuctionController>();
 builder.Services.AddSingleton<LotController>();
 builder.Services.AddSingleton<UserController>();
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -79,7 +105,24 @@ app.UseCors(x => x
     .SetIsOriginAllowed(origin => true)
     .AllowCredentials());
 
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always
+});
+
+app.Use(async (context, next) =>
+{
+    var token = context.Request.Cookies[".AspNet.Application.Id"];
+    if (!string.IsNullOrEmpty(token))
+        context.Request.Headers.Add("Authorization", "Bearer " + token);
+
+    await next();
+});
+
 app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

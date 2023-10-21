@@ -8,6 +8,7 @@ namespace Backend.Controllers;
 /// <summary>
 /// Контроллер аукциона
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("api/auction/")]
 public class AuctionController : ControllerBase
@@ -74,7 +75,6 @@ public class AuctionController : ControllerBase
     /// Запрос на удаление аукциона
     /// </summary>
     /// <param name="id">Уникальный идентификатор аукциона</param>
-    [Authorize]
     [HttpDelete("delete/{id:guid}/")]
     public async Task DeleteAuctionAsync(Guid id)
     {
@@ -85,7 +85,6 @@ public class AuctionController : ControllerBase
     /// Запрос на получение аукциона по уникальному идентификатору
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [Authorize]
     [HttpGet("get_by_id/{id:guid}/")]
     public async Task<AuctionDto> GetAuctionByIdAsync(Guid id)
     {
@@ -96,7 +95,7 @@ public class AuctionController : ControllerBase
     /// Запрос на получение списка аукционов
     /// </summary>
     /// <returns>Список аукционов</returns>
-    [Authorize]
+    [AllowAnonymous]
     [HttpGet("get_list/")]
     public async Task<IEnumerable<AuctionDto>> GetAuctionsAsync()
     {
@@ -107,7 +106,6 @@ public class AuctionController : ControllerBase
     /// Запрос на создание аукциона
     /// </summary>
     /// <param name="entity">Аукцион</param>
-    [Authorize]
     [HttpPost("create/")]
     public async Task CreateAuctionAsync([FromBody] AuctionDto entity)
     {
@@ -118,7 +116,6 @@ public class AuctionController : ControllerBase
     /// Запрос на установку даты завершения аукциона
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [Authorize]
     [HttpPut("date_end/{id:guid}/")]
     public async Task SetDateEndAsync(Guid id)
     {
@@ -129,7 +126,6 @@ public class AuctionController : ControllerBase
     /// Запрос на установку даты начала аукциона
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [Authorize]
     [HttpPut("date_start/{id:guid}/")]
     public async Task SetDateStartAsync(Guid id)
     {
@@ -140,7 +136,6 @@ public class AuctionController : ControllerBase
     /// Запрос на обновление аукциона
     /// </summary>
     /// <param name="entity">Аукцион</param>
-    [Authorize]
     [HttpPut("update/")]
     public async Task UpdateAsync([FromBody] AuctionDto entity)
     {

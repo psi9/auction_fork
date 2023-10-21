@@ -10,9 +10,14 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async signinAsync(email: string, password: string): Promise<User> {
     try {
-      const response = await fetch(
-        `${this.baseURL}api/user/sign_in/${email}/${password}`
-      );
+      const response = await fetch(`${this.baseURL}api/user/sign_in`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset: UTF-8;",
+        },
+        body: JSON.stringify({email, password}),
+      });
+      
       if (!response.ok) throw new Error("Пользователи не получены");
 
       const data = await response.json();

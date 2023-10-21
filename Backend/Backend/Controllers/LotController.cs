@@ -9,6 +9,7 @@ namespace Backend.Controllers;
 /// <summary>
 /// Контроллер лота
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("api/lot/")]
 public class LotController : ControllerBase
@@ -82,7 +83,6 @@ public class LotController : ControllerBase
     /// Запрос на удаление лота
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [Authorize]
     [HttpDelete("delete/{id:guid}/")]
     public async Task DeleteLotAsync(Guid id)
     {
@@ -93,7 +93,6 @@ public class LotController : ControllerBase
     /// Запрос на создание лота
     /// </summary>
     /// <param name="lot">Лот</param>
-    [Authorize]
     [HttpPost("create/")]
     public async Task CreateLotASync([FromBody] LotDto lot)
     {
@@ -105,7 +104,6 @@ public class LotController : ControllerBase
     /// </summary>
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <param name="lotId">Уникальный индентификатор лота</param>
-    [Authorize]
     [HttpPut("buyout/{auctionId:guid}/{lotId:guid}/")]
     public async Task BuyoutLotAsync(Guid auctionId, Guid lotId)
     {
@@ -118,7 +116,6 @@ public class LotController : ControllerBase
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <param name="lotId">Уникальный индентификатор лота</param>
     /// <param name="state">Новое состояние</param>
-    [Authorize]
     [HttpPut("change_status/{auctionId:guid}/{lotId:guid}/{state:int}/")]
     public async Task ChangeLotStatusAsync(Guid auctionId, Guid lotId, int state)
     {
@@ -131,7 +128,6 @@ public class LotController : ControllerBase
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <param name="lotId">Уникальный индентификатор лота</param>
     /// <param name="userId">Уникальный индентификатор пользователя</param>
-    [Authorize]
     [HttpPut("do_bet/{auctionId:guid}/{lotId:guid}/{userId:guid}/")]
     public async Task DoBetAsync(Guid auctionId, Guid lotId, Guid userId)
     {
@@ -142,7 +138,6 @@ public class LotController : ControllerBase
     ///  Запрос на обновление лота
     /// </summary>
     /// <param name="lot"></param>
-    [Authorize]
     [HttpPut("update/")]
     public async Task UpdateLotAsync([FromBody] LotDto lot)
     {
@@ -153,7 +148,7 @@ public class LotController : ControllerBase
     /// Запрос на получение списка лотов
     /// </summary>
     /// <returns>список лотов</returns>
-    [Authorize]
+    [AllowAnonymous]
     [HttpGet("get_list/")]
     public async Task<IReadOnlyCollection<LotDto>> GetLotsAsync()
     {
@@ -165,7 +160,6 @@ public class LotController : ControllerBase
     /// </summary>
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <returns>список лотов</returns>
-    [Authorize]
     [HttpGet("get_list_by_auction/{auctionId:guid}")]
     public async Task<IReadOnlyCollection<LotDto>> GetLotsByAuctionAsync(Guid auctionId)
     {

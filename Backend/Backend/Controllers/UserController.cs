@@ -1,5 +1,6 @@
 using Backend.Application.UserData.Dto;
 using Backend.Application.UserData.UseCases;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers;
@@ -7,6 +8,7 @@ namespace Backend.Controllers;
 /// <summary>
 /// Контроллер пользователя
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("api/user/")]
 public class UserController : ControllerBase
@@ -87,6 +89,7 @@ public class UserController : ControllerBase
     /// Запрос на получение списка пользователей
     /// </summary>
     /// <returns>Список пользователей</returns>
+    [AllowAnonymous]
     [HttpGet("get_list/")]
     public async Task<IEnumerable<UserDto>> GetUsersAsync()
     {
@@ -96,19 +99,20 @@ public class UserController : ControllerBase
     /// <summary>
     /// Запрос на аутентификацию пользователя
     /// </summary>
-    /// <param name="email">Почта пользователя</param>
-    /// <param name="password">Пароль</param>
+    /// <param name="user">Пользователь</param>
     /// <returns>Пользователь</returns>
-    [HttpGet("sign_in/{email}/{password}")]
-    public async Task<UserDto> SignInUserAsync(string email, string password)
+    [AllowAnonymous]
+    [HttpPost("sign_in/")]
+    public async Task<UserDto> SignInUserAsync([FromBody] UserSignInDto user)
     {
-        return await _signInHandler.SignInUserAsync(email, password);
+        return await _signInHandler.SignInUserAsync(user.Email, user.Password);
     }
 
     /// <summary>
     /// Запрос на регистрацию пользователя
     /// </summary>
     /// <param name="user">Пользователь</param>
+    [AllowAnonymous]
     [HttpPost("sign_up/")]
     public async Task SignUpUserAsync([FromBody] UserDto user)
     {
