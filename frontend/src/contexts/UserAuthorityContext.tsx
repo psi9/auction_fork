@@ -12,7 +12,7 @@ interface IUserAuthorityContext {
   signin: (email: string, password: string) => void;
   signout: () => void;
 
-  checkAccess: () => boolean;
+  reloadUserData: () => void;
 }
 
 export const UserAuthorityContext = createContext<
@@ -35,7 +35,6 @@ export const UserAuthorityProvider = ({
       name: login,
       email: email,
       password: password,
-      token: "",
     };
 
     await userHttpRepository.postAsync(user);
@@ -48,13 +47,11 @@ export const UserAuthorityProvider = ({
 
     if (!user) return;
 
-    localStorage.setItem("authToken", user.token);
     localStorage.setItem("id", user.id);
     localStorage.setItem("username", user.name);
     localStorage.setItem("email", user.email);
-    localStorage.setItem("password", user.password);
 
-    navigate("/auctions");
+    navigate("/");
     setUser(user);
   }
 
@@ -64,19 +61,18 @@ export const UserAuthorityProvider = ({
     navigate("/authority");
   }
 
-  function checkAccess(): boolean {
-    if (!localStorage.getItem("authToken")) return false;
-
-    const token = localStorage.getItem("authToken")!;
+  function reloadUserData() {
     const name = localStorage.getItem("username")!;
     const email = localStorage.getItem("email")!;
-    const password = localStorage.getItem("password")!;
     const id = localStorage.getItem("id")!;
 
-    const user: User = { id, name, email, password, token };
-    setUser(user);
+    if (!id) {
+      navigate("/authority");
+      return;
+    }
 
-    return true;
+    const user: User = { id, name, email, password: "" };
+    setUser(user);
   }
 
   return (
@@ -86,7 +82,7 @@ export const UserAuthorityProvider = ({
         signup,
         signin,
         signout,
-        checkAccess,
+        reloadUserData,
       }}
     >
       {children}

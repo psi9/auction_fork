@@ -29,9 +29,9 @@ function App() {
             <LotProvider>
               <UserProvider>
                 <Routes>
-                  <Route path="/auctions" element={<AuctionsPage />}></Route>
+                  <Route index element={<AuctionsPage />}></Route>
                   <Route path="/authority" element={<AuthorityPage />}></Route>
-                  <Route path="/auctions/lots" element={<LotsPage />}></Route>
+                  <Route path="/lots" element={<LotsPage />}></Route>
                   <Route path="/profile" element={<ProfilePage />}></Route>
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
