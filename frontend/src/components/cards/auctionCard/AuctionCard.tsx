@@ -3,7 +3,8 @@ import { Auction, User } from "../../../objects/Entities";
 import { State } from "../../../objects/Enums";
 
 import "./AuctionCard.css";
-import { useLotContext } from "../../../contexts/LotContext";
+import { LotContext } from "../../../contexts/LotContext";
+import { useContext } from "react";
 
 export default function AuctionCard(props: { auction: Auction; author: User }) {
   function getState(state: State): string {
@@ -27,10 +28,10 @@ export default function AuctionCard(props: { auction: Auction; author: User }) {
   }
 
   const navigate = useNavigate();
-  const lotContext = useLotContext();
+  const { setAuctionId } = useContext(LotContext);
 
   function invite() {
-    lotContext?.setAuctionId(props.auction.id);
+    setAuctionId(props.auction.id);
     navigate("/auctions/lots");
   }
 

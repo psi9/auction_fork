@@ -1,25 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import AuctionCard from "../../components/cards/auctionCard/AuctionCard";
 
-import { useAuctionContext } from "../../contexts/AuctionContext";
-import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
-import { useUserContext } from "../../contexts/UserContext";
 import { Auction, User } from "../../objects/Entities";
 
 import "./AuctionsPage.css";
+import { UserAuthorityContext } from "../../contexts/UserAuthorityContext";
+import { AuctionContext } from "../../contexts/AuctionContext";
 
 export default function AuctionsPage() {
-  const userAuthorityContext = useUserAuthorityContext();
-
+  const { user } = useContext(UserAuthorityContext);
   const [error, setError] = useState<string>("");
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
-  const auctionContext = useAuctionContext();
-  const auctions = auctionContext?.auctions;
-
-  const users = useUserContext();
+  const { auctions, createAuction: createAuctionContext } =
+    useContext(AuctionContext);
 
   const validateCreation = (): boolean => {
     if (!title.length || !description.length) {
@@ -42,11 +38,9 @@ export default function AuctionsPage() {
   };
 
   const createAuction = async () => {
-    const curUser = userAuthorityContext?.user;
-
     if (!validateCreation()) return;
 
-    await auctionContext?.createAuction(title, description, curUser?.id!);
+    await createAuctionContext(title, description, user?.id!);
 
     resetState();
   };
@@ -88,9 +82,7 @@ export default function AuctionsPage() {
               <AuctionCard
                 key={auction.id}
                 auction={auction}
-                author={
-                  users.find((user: User) => user.id === auction.authorId)!
-                }
+                author={{ name: "123" } as User}
               />
             ))
             .reverse()

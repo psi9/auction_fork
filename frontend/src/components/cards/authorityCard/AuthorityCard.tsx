@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 
 import "./AuthorityCard.css";
-import { useUserAuthorityContext } from "../../../contexts/UserAuthorityContext";
+import { UserAuthorityContext } from "../../../contexts/UserAuthorityContext";
 
 export default function AuthorityCard() {
-  const userAuthorityContext = useUserAuthorityContext();
+  const {signin: signinFromContext, signup: signupFromContext} = useContext(UserAuthorityContext)
 
   const [isSignin, setIsSignin] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,6 +13,12 @@ export default function AuthorityCard() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [repeatPassword, setRepeatPassword] = useState<string>("");
+
+  const resetState = (): void => {
+    setError("");
+    setLogin("");
+    setRepeatPassword("");
+  };
 
   const validateField = (
     value: string,
@@ -93,13 +99,16 @@ export default function AuthorityCard() {
   const signin = () => {
     if (!commonValidation(email, password)) return;
 
-    userAuthorityContext?.signin(email, password);
+    signinFromContext(email, password);
   };
 
   const signup = () => {
     if (!signupValidation(login, email, password, repeatPassword)) return;
 
-    userAuthorityContext?.signup(login, email, password);
+    signupFromContext(login, email, password);
+
+    setIsSignin(true);
+    resetState();
   };
 
   return (

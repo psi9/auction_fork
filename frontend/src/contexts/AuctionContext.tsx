@@ -1,5 +1,5 @@
 import {
-  ReactNode,
+  PropsWithChildren,
   createContext,
   useContext,
   useEffect,
@@ -10,9 +10,10 @@ import { Auction } from "../objects/Entities";
 import { State } from "../objects/Enums";
 
 import AuctionHttpRepository from "../repositories/implementations/AuctionHttpRepository";
+import { UserAuthorityContext } from "./UserAuthorityContext";
 
 interface IAuctionContext {
-  auctions: Auction[];
+  auctions: Auction[] | undefined;
 
   createAuction: (
     title: string,
@@ -21,22 +22,25 @@ interface IAuctionContext {
   ) => Promise<void>;
 }
 
-export const AuctionContext = createContext<IAuctionContext | undefined>(
-  undefined
+export const AuctionContext = createContext<IAuctionContext>(
+  {} as IAuctionContext
 );
 
-const auctionRepository = new AuctionHttpRepository("http://localhost:7132/");
+const auctionRepository = new AuctionHttpRepository("https://adm-webbase-66.partner.ru:7132/");
 
-export const AuctionProvider = ({ children }: { children: ReactNode }) => {
-  const [auctions, setAuctions] = useState<Auction[]>([]);
+export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const [auctions, setAuctions] = useState<Auction[] | undefined>([]);
+  const { user } = useContext(UserAuthorityContext);
 
   useEffect(() => {
     async function fetchAuctions() {
-      setAuctions(await auctionRepository.getAsync());
+      if (!user) return;
+
+      setAuctions((await auctionRepository.getAsync()).data);
     }
 
     fetchAuctions();
-  }, []);
+  }, [user]);
 
   async function createAuction(
     title: string,
@@ -63,5 +67,3 @@ export const AuctionProvider = ({ children }: { children: ReactNode }) => {
     </AuctionContext.Provider>
   );
 };
-
-export const useAuctionContext = () => useContext(AuctionContext);

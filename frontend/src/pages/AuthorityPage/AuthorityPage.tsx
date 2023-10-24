@@ -4,8 +4,10 @@ import "./AuthorityPage.css";
 
 export default function AuthorityPage() {
   return (
-    <div className="main">
-      <AuthorityCard />
+    <div>
+      <div className="main">
+        <AuthorityCard />
+      </div>
     </div>
   );
 }

@@ -1,33 +1,34 @@
-import { ReactNode, createContext, useContext, useState } from "react";
+import { createContext, useEffect, useState, PropsWithChildren } from "react";
 
 import { User } from "../objects/Entities";
 
 import UserHttpRepository from "../repositories/implementations/UserHttpRepository";
 import { useNavigate } from "react-router-dom";
+import { sendSuccessNotice } from "../components/notification/Notification";
 
-interface IUserAuthorityContext {
+export interface IUserAuthorityContext {
   user: User | null;
-
   signup: (login: string, email: string, password: string) => void;
   signin: (email: string, password: string) => void;
   signout: () => void;
-
   reloadUserData: () => void;
 }
 
-export const UserAuthorityContext = createContext<
-  IUserAuthorityContext | undefined
->(undefined);
+export const UserAuthorityContext = createContext<IUserAuthorityContext>(
+  {} as IUserAuthorityContext
+);
 
-export const UserAuthorityProvider = ({
+export const UserAuthorityProvider: React.FC<PropsWithChildren> = ({
   children,
-}: {
-  children: ReactNode;
 }) => {
-  const userHttpRepository = new UserHttpRepository("http://localhost:7132/");
+  const userHttpRepository = new UserHttpRepository("https://adm-webbase-66.partner.ru:7132/");
   const navigate = useNavigate();
 
   const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    reloadUserData();
+  }, []);
 
   async function signup(login: string, email: string, password: string) {
     const user: User = {
@@ -37,9 +38,9 @@ export const UserAuthorityProvider = ({
       password: password,
     };
 
-    await userHttpRepository.postAsync(user);
+    if (!(await userHttpRepository.postAsync(user))) return;
 
-    navigate("/");
+    navigate("/authority");
   }
 
   async function signin(email: string, password: string) {
@@ -47,38 +48,43 @@ export const UserAuthorityProvider = ({
 
     if (!user) return;
 
+    setUser(user);
     localStorage.setItem("id", user.id);
-    localStorage.setItem("username", user.name);
-    localStorage.setItem("email", user.email);
 
     navigate("/");
-    setUser(user);
+
+    sendSuccessNotice("Вы вошли успешно");
   }
 
   function signout() {
     localStorage.clear();
     setUser(null);
     navigate("/authority");
+    sendSuccessNotice("Вы вышли успешно");
   }
 
-  function reloadUserData() {
-    const name = localStorage.getItem("username")!;
-    const email = localStorage.getItem("email")!;
-    const id = localStorage.getItem("id")!;
+  async function reloadUserData() {
+    const id = localStorage.getItem("id");
 
     if (!id) {
       navigate("/authority");
       return;
     }
 
-    const user: User = { id, name, email, password: "" };
+    const user = await userHttpRepository.getByIdAsync(id);
+
+    if (!user) {
+      navigate("/authority");
+      return;
+    }
+
     setUser(user);
   }
 
   return (
     <UserAuthorityContext.Provider
       value={{
-        user,
+        user: user,
         signup,
         signin,
         signout,
@@ -89,5 +95,3 @@ export const UserAuthorityProvider = ({
     </UserAuthorityContext.Provider>
   );
 };
-
-export const useUserAuthorityContext = () => useContext(UserAuthorityContext);
