@@ -148,7 +148,6 @@ public class LotController : ControllerBase
     /// Запрос на получение списка лотов
     /// </summary>
     /// <returns>список лотов</returns>
-    [AllowAnonymous]
     [HttpGet("get_list/")]
     public async Task<IReadOnlyCollection<LotDto>> GetLotsAsync()
     {
