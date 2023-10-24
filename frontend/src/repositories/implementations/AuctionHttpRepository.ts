@@ -1,4 +1,5 @@
-import { Auction } from "../../objects/Entities";
+import { sendErrorNotice, sendWarnNotice } from "../../components/notification/Notification";
+import { Auction, Result } from "../../objects/Entities";
 import IAuctionHttpRepository from "../interfaces/IAuctionHttpRepository";
 
 export default class AuctionHttpRepository implements IAuctionHttpRepository {
@@ -8,20 +9,24 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
     this.baseURL = baseURL;
   }
 
-  async getAsync(): Promise<Auction[]> {
+  async getAsync(): Promise<Result<Auction>> {
     try {
       const response = await fetch(`${this.baseURL}api/auction/get_list`);
-      if (!response.ok) throw new Error("Аукционы не получены");
+      
+      if (response.status === 401) {
+        return {data: [], flag: false}
+      }
 
       const data = await response.json();
 
-      return data;
+      return {data, flag: true};
     } catch (error) {
-      throw new Error("Ошибка получения аукицонов, что-пошло не так");
+      sendErrorNotice("Не удалось получить аукционы, попробуйте снова");
+      return {data: [], flag: false}
     }
   }
 
-  async postAsync(entity: Auction): Promise<void> {
+  async postAsync(entity: Auction): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/auction/create`, {
         method: "POST",
@@ -31,13 +36,19 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
         body: JSON.stringify(entity),
       });
 
-      if (!response.ok) throw new Error("Аукцион не создан");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необхожимо зарегистрироваться")
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      throw new Error("Ошибка создания аукицона, что-пошло не так");
+      sendErrorNotice("Не удалось создать аукцион, попробуйте снова");
+      return false;
     }
   }
 
-  async putAsync(entity: Auction): Promise<void> {
+  async putAsync(entity: Auction): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/auction/update`, {
         method: "PUT",
@@ -47,21 +58,33 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
         body: JSON.stringify(entity),
       });
 
-      if (!response.ok) throw new Error("Аукцион не изменен");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необходимо зарегистрироваться")
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      throw new Error("Ошибка изменения аукицона, что-пошло не так");
+      sendErrorNotice("Не удалось изменить аукцион, попробуйте снова");
+      return false;
     }
   }
 
-  async deleteAsync(id: number): Promise<void> {
+  async deleteAsync(id: number): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/auction/delete/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) throw new Error("Аукцион не удален");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необхожимо зарегистрироваться")
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      throw new Error("Ошибка удаления аукицона, что-пошло не так");
+      sendErrorNotice("Не удалось удалить аукцион, попробуйте снова");
+      return false;
     }
   }
 }

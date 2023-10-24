@@ -1,4 +1,8 @@
-import { User } from "../../objects/Entities";
+import {
+  sendErrorNotice,
+  sendWarnNotice,
+} from "../../components/notification/Notification";
+import { Result, User } from "../../objects/Entities";
 import IUserHttpRepository from "../interfaces/IUserHttpRepository";
 
 export default class UserHttpRepository implements IUserHttpRepository {
@@ -8,42 +12,66 @@ export default class UserHttpRepository implements IUserHttpRepository {
     this.baseURL = baseURL;
   }
 
-  async signinAsync(email: string, password: string): Promise<User> {
+  async signinAsync(
+    email: string,
+    password: string
+  ): Promise<User | undefined> {
     try {
       const response = await fetch(`${this.baseURL}api/user/sign_in`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
         },
-        body: JSON.stringify({email, password}),
+        body: JSON.stringify({ email, password }),
       });
-      
-      if (!response.ok) throw new Error("Пользователи не получены");
+
+      if (!response.ok) {
+        sendWarnNotice("Вероятно, вы не зарегистрированы");
+        return;
+      }
 
       const data = await response.json();
 
       return data;
     } catch (error) {
-      throw new Error("Ошибка авторизации, что-пошло не так");
+      sendErrorNotice("Не удалось авторизоваться, попробуйте снова");
     }
   }
 
-  async getAsync(): Promise<User[]> {
+  async getAsync(): Promise<Result<User>> {
     try {
       const response = await fetch(`${this.baseURL}api/user/get_list`);
-      if (!response.ok) throw new Error("Пользователи не получены");
+
+      if (response.status === 401) {
+        return { data: [], flag: false };
+      }
+
+      const data = await response.json();
+
+      return { data, flag: false };
+    } catch (error) {
+      sendErrorNotice("Не удалось получить пользователей, попробуйте снова");
+      return { data: [], flag: false };
+    }
+  }
+
+  async getByIdAsync(id: string): Promise<User | undefined> {
+    try {
+      const response = await fetch(`${this.baseURL}api/user/get_by_id/${id}`);
+
+      if (response.status === 401) return;
 
       const data = await response.json();
 
       return data;
     } catch (error) {
-      throw new Error("Ошибка получения пользователей, что-пошло не так");
+      sendErrorNotice("Не удалось получить пользователей, попробуйте снова");
     }
   }
 
-  async postAsync(entity: User): Promise<void> {
+  async postAsync(entity: User): Promise<boolean> {
     try {
-      const response = await fetch(`${this.baseURL}api/user/sign_up`, {
+      await fetch(`${this.baseURL}api/user/sign_up`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset: UTF-8;",
@@ -51,13 +79,14 @@ export default class UserHttpRepository implements IUserHttpRepository {
         body: JSON.stringify(entity),
       });
 
-      if (!response.ok) throw new Error("Пользователь не создан");
+      return true;
     } catch (error) {
-      throw new Error("Ошибка создания пользователя, что-пошло не так");
+      sendErrorNotice("Не удалось зарегистрироваться, попробуйте снова");
+      return false;
     }
   }
 
-  async putAsync(entity: User): Promise<void> {
+  async putAsync(entity: User): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/user/update`, {
         method: "PUT",
@@ -67,21 +96,37 @@ export default class UserHttpRepository implements IUserHttpRepository {
         body: JSON.stringify(entity),
       });
 
-      if (!response.ok) throw new Error("Пользователь не изменен");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необхожимо зарегистрироваться");
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      throw new Error("Ошибка изменения пользователя, что-пошло не так");
+      sendErrorNotice(
+        "Пользователь не был изменен, попробуйте снова, попробуйте снова"
+      );
+      return false;
     }
   }
 
-  async deleteAsync(id: number): Promise<void> {
+  async deleteAsync(id: number): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/user/delete/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) throw new Error("Пользователь не удален");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необхожимо зарегистрироваться");
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      throw new Error("Ошибка удаления пользователя, что-пошло не так");
+      sendErrorNotice(
+        "Пользователь не был удален, попробуйте снова, попробуйте снова"
+      );
+      return false;
     }
   }
 }

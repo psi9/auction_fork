@@ -1,9 +1,11 @@
+import { Result } from "../../objects/Entities";
+
 export default interface IBaseHttpRepository<T> {
-  getAsync(): Promise<T[]>;
+  getAsync(): Promise<Result<T>>;
 
-  postAsync(entity: T): Promise<void>;
+  postAsync(entity: T): Promise<boolean>;
 
-  putAsync(entity: T): Promise<void>;
+  putAsync(entity: T): Promise<boolean>;
 
-  deleteAsync(id: number): Promise<void>;
+  deleteAsync(id: number): Promise<boolean>;
 }

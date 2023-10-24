@@ -1,4 +1,5 @@
-import { Lot } from "../../objects/Entities";
+import { sendErrorNotice, sendWarnNotice } from "../../components/notification/Notification";
+import { Lot, Result } from "../../objects/Entities";
 import ILotHttpRepository from "../interfaces/ILotHttpRepository";
 
 export default class LotHttpRepository implements ILotHttpRepository {
@@ -8,35 +9,44 @@ export default class LotHttpRepository implements ILotHttpRepository {
     this.baseURL = baseURL;
   }
 
-  async getAsync(): Promise<Lot[]> {
+  async getAsync(): Promise<Result<Lot>> {
     try {
       const response = await fetch(`${this.baseURL}api/lot/get_list`);
-      if (!response.ok) throw new Error("Лоты не получены");
+     
+      if (response.status === 401) {
+        return {data: [], flag: false};
+      }
 
       const data = await response.json();
 
-      return data;
+      return {data, flag: true}
     } catch (error) {
-      throw new Error("Ошибка получения лотов, что-пошло не так");
+      sendErrorNotice("Не удалось получить лоты, попробуйте снова");
+      return {data: [], flag: false};
     }
   }
 
-  async getByAuctionAsync(auctionId: string): Promise<Lot[]> {
+  async getByAuctionAsync(auctionId: string): Promise<Result<Lot>> {
     try {
       const response = await fetch(
         `${this.baseURL}api/lot/get_list_by_auction/${auctionId}`
       );
-      if (!response.ok) throw new Error("Лоты не получены");
+      
+      if (response.status === 401) {
+        sendWarnNotice("Вам необходимо зарегистрироваться")
+        return {data: [], flag: false};
+      }
 
       const data = await response.json();
 
-      return data;
+      return {data, flag: true};
     } catch (error) {
-      throw new Error("Ошибка получения лотов по аукциону, что-пошло не так");
+      sendErrorNotice("Не удалось получить лоты по аукциону, попробуйте снова");
+      return {data: [], flag: false};
     }
   }
 
-  async postAsync(entity: Lot): Promise<void> {
+  async postAsync(entity: Lot): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/lot/create`, {
         method: "POST",
@@ -46,13 +56,19 @@ export default class LotHttpRepository implements ILotHttpRepository {
         body: JSON.stringify(entity),
       });
 
-      if (!response.ok) throw new Error("Лот не создан");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необходимо зарегистрироваться")
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      throw new Error("Ошибка создания лота, что-пошло не так");
+      sendErrorNotice("Не удалось создать лот, попробуйте снова");
+      return false;
     }
   }
 
-  async putAsync(entity: Lot): Promise<void> {
+  async putAsync(entity: Lot): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/lot/update`, {
         method: "PUT",
@@ -62,21 +78,32 @@ export default class LotHttpRepository implements ILotHttpRepository {
         body: JSON.stringify(entity),
       });
 
-      if (!response.ok) throw new Error("Лот не изменен");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необходимо зарегистрироваться")
+        return false;
+      }
+      return true;
     } catch (error) {
-      throw new Error("Ошибка изменения лота, что-пошло не так");
+      sendErrorNotice("Не удалось изменить лот, попробуйте снова");
+      return true;
     }
   }
 
-  async deleteAsync(id: number): Promise<void> {
+  async deleteAsync(id: number): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/lot/delete/${id}`, {
         method: "DELETE",
       });
 
-      if (!response.ok) throw new Error("Лот не удален");
+      if (response.status === 401) {
+        sendWarnNotice("Вам необходимо зарегистрироваться")
+        return false;
+      }
+
+      return true;
     } catch (error) {
-      throw new Error("Ошибка удаления лота, что-пошло не так");
+      sendErrorNotice("Не удалось удалить лот, попробуйте снова");
+      return false;
     }
   }
 }
