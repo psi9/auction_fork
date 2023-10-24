@@ -89,7 +89,6 @@ public class UserController : ControllerBase
     /// Запрос на получение списка пользователей
     /// </summary>
     /// <returns>Список пользователей</returns>
-    [AllowAnonymous]
     [HttpGet("get_list/")]
     public async Task<IEnumerable<UserDto>> GetUsersAsync()
     {

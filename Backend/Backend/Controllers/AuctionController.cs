@@ -95,7 +95,6 @@ public class AuctionController : ControllerBase
     /// Запрос на получение списка аукционов
     /// </summary>
     /// <returns>Список аукционов</returns>
-    [AllowAnonymous]
     [HttpGet("get_list/")]
     public async Task<IEnumerable<AuctionDto>> GetAuctionsAsync()
     {

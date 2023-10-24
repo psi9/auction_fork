@@ -12,7 +12,6 @@ using Backend.Database.Repositories;
 using Backend.Hubs;
 using Backend.Notifications;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -101,16 +100,17 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(x => x
     .AllowAnyMethod()
+    .WithOrigins("adm-webbase-66.partner.ru", "adm-webbase-66.partner.ru:3000")
     .AllowAnyHeader()
-    .SetIsOriginAllowed(origin => true)
-    .AllowCredentials());
+    .AllowCredentials()
+    .SetIsOriginAllowed(_ => true));
 
-app.UseCookiePolicy(new CookiePolicyOptions
-{
-    MinimumSameSitePolicy = SameSiteMode.Strict,
-    HttpOnly = HttpOnlyPolicy.Always,
-    Secure = CookieSecurePolicy.Always
-});
+// app.UseCookiePolicy(new CookiePolicyOptions
+// {
+//     // MinimumSameSitePolicy = SameSiteMode.Strict,
+//     // HttpOnly = HttpOnlyPolicy.Always,
+//     // Secure = CookieSecurePolicy.Always
+// });
 
 app.Use(async (context, next) =>
 {
