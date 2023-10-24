@@ -1,24 +1,22 @@
-import { useUserAuthorityContext } from "../../contexts/UserAuthorityContext";
 import "./ProfilePage.css";
-import { useLotContext } from "../../contexts/LotContext";
 import LotCard from "../../components/cards/lotCard/LotCard";
-import { useAuctionContext } from "../../contexts/AuctionContext";
 import AuctionCard from "../../components/cards/auctionCard/AuctionCard";
 import { Auction, User } from "../../objects/Entities";
-import { useUserContext } from "../../contexts/UserContext";
+import { UserAuthorityContext } from "../../contexts/UserAuthorityContext";
+import { useContext } from "react";
+import { LotContext } from "../../contexts/LotContext";
+import { AuctionContext } from "../../contexts/AuctionContext";
 
 export default function ProfilePage() {
-  const userAuthorityContext = useUserAuthorityContext();
+  const { user, signout } = useContext(UserAuthorityContext);
 
-  const signout = userAuthorityContext?.signout;
-  const user = userAuthorityContext?.user;
-  const lots = useLotContext()?.lots;
+  const { lots } = useContext(LotContext);
 
-  const auctions = useAuctionContext()?.auctions.filter(
+  const { auctions } = useContext(AuctionContext);
+
+  const filteredAuctions = auctions?.filter(
     (auction) => auction.authorId === user?.id
   );
-
-  const users = useUserContext();
 
   const userImage = require("../../components/header/assets/user.png");
 
@@ -43,7 +41,7 @@ export default function ProfilePage() {
       <div className="activity_box">
         <div className="box_title">Ваши аукционы</div>
         <div className="box_items">
-          {!auctions?.length ? (
+          {!filteredAuctions?.length ? (
             <div className="main_empty">
               <div className="empty">
                 <div>Вы пока не организовывали аукционы</div>
@@ -51,13 +49,11 @@ export default function ProfilePage() {
               </div>
             </div>
           ) : (
-            auctions.map((auction: Auction) => (
+            filteredAuctions?.map((auction: Auction) => (
               <AuctionCard
                 key={auction.id}
                 auction={auction}
-                author={
-                  users.find((user: User) => user.id === auction.authorId)!
-                }
+                author={{ name: "privet" } as User}
               />
             ))
           )}

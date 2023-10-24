@@ -2,7 +2,7 @@ import * as signalR from "@microsoft/signalr";
 
 class Connector {
   private connection: signalR.HubConnection;
-  private URL = process.env.HUB_ADDRESS ?? "https://localhost:7132/auction";
+  private URL = process.env.HUB_ADDRESS ?? "https://adm-webbase-66.partner.ru:7132/auction";
 
   static instance: Connector;
 
@@ -12,7 +12,7 @@ class Connector {
       .withAutomaticReconnect()
       .build();
 
-    this.connection.start().catch((err) => document.write(err));
+    this.connection.start();
   }
 
   public static getInstance(): Connector {

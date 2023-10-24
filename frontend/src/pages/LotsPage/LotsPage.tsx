@@ -2,15 +2,15 @@ import LotCard from "../../components/cards/lotCard/LotCard";
 
 import "./LotsPage.css";
 
-import { useLotContext } from "../../contexts/LotContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Lot } from "../../objects/Entities";
+import { LotContext } from "../../contexts/LotContext";
 
 export default function LotsPage() {
-  const lotContext = useLotContext();
+  const { getLotsByAuction } = useContext(LotContext);
 
   const [error, setError] = useState<string>("");
-  const [lots, setLots] = useState<Lot[]>([]);
+  const [lots, setLots] = useState<Lot[] | undefined>([]);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -19,11 +19,11 @@ export default function LotsPage() {
 
   useEffect(() => {
     async function getLots() {
-      setLots(await lotContext?.getLotsByAuction()!);
+      setLots(await getLotsByAuction());
     }
 
     getLots();
-  }, [lotContext]);
+  }, []);
 
   const createLot = () => {};
 
