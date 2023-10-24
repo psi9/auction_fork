@@ -10,7 +10,6 @@ import LotsPage from "./pages/LotsPage/LotsPage";
 
 import "./App.css";
 import { AuctionProvider } from "./contexts/AuctionContext";
-import { UserProvider } from "./contexts/UserContext";
 import { LotProvider } from "./contexts/LotContext";
 import Breadcrumbs from "./components/breadcrumbs/Breadcrumbs";
 import { UserAuthorityProvider } from "./contexts/UserAuthorityContext";
@@ -27,7 +26,6 @@ function App() {
           <Breadcrumbs separator=">" />
           <AuctionProvider>
             <LotProvider>
-              <UserProvider>
                 <Routes>
                   <Route index element={<AuctionsPage />}></Route>
                   <Route path="/authority" element={<AuthorityPage />}></Route>
@@ -35,13 +33,13 @@ function App() {
                   <Route path="/profile" element={<ProfilePage />}></Route>
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
-              </UserProvider>
             </LotProvider>
           </AuctionProvider>
         </UserAuthorityProvider>
       </Router>
       <Arrow />
       <Footer />
+      {/* <ToastContainer /> */}
     </div>
   );
 }
