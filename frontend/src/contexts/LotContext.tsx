@@ -22,9 +22,7 @@ interface ILotContext {
 
 export const LotContext = createContext<ILotContext>({} as ILotContext);
 
-const lotRepository = new LotHttpRepository(
-  "https://adm-webbase-66.partner.ru:7132/"
-);
+const lotRepository = new LotHttpRepository("https://localhost:7132/");
 
 export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [lots, setLots] = useState<Lot[] | undefined>([]);

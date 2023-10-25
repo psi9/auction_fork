@@ -12,6 +12,7 @@ using Backend.Database.Repositories;
 using Backend.Hubs;
 using Backend.Notifications;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,22 +28,20 @@ builder.Services.AddOptions<PgsqlConnection>()
 builder.Services.AddOptions<AuthorityHandler>()
     .Bind(builder.Configuration.GetSection("Config:AuthorityHandler"));
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
         options.RequireHttpsMetadata = true;
-        options.SaveToken = true;
+        // options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateLifetime = true,
+            
+            ValidateAudience = false,
+            ValidateIssuer = false,
 
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.ASCII.GetBytes("ASdkjhikuj98210as2l3kai32io4i0")
+                Encoding.ASCII.GetBytes("db3OIsj+BXE9NZDy0t8W3TcNekrF+2")
             ),
             ValidateIssuerSigningKey = true,
         };
@@ -100,17 +99,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors(x => x
     .AllowAnyMethod()
-    .WithOrigins("adm-webbase-66.partner.ru", "adm-webbase-66.partner.ru:3000")
+    .WithOrigins(
+        "localhost",
+        "localhost:3000")
     .AllowAnyHeader()
     .AllowCredentials()
     .SetIsOriginAllowed(_ => true));
 
-// app.UseCookiePolicy(new CookiePolicyOptions
-// {
-//     // MinimumSameSitePolicy = SameSiteMode.Strict,
-//     // HttpOnly = HttpOnlyPolicy.Always,
-//     // Secure = CookieSecurePolicy.Always
-// });
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always
+});
 
 app.Use(async (context, next) =>
 {

@@ -23,6 +23,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
           "Content-Type": "application/json; charset: UTF-8;",
         },
         body: JSON.stringify({ email, password }),
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -40,7 +41,9 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async getAsync(): Promise<Result<User>> {
     try {
-      const response = await fetch(`${this.baseURL}api/user/get_list`);
+      const response = await fetch(`${this.baseURL}api/user/get_list`, {
+        credentials: "include",
+      });
 
       if (response.status === 401) {
         return { data: [], flag: false };
@@ -57,7 +60,9 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async getByIdAsync(id: string): Promise<User | undefined> {
     try {
-      const response = await fetch(`${this.baseURL}api/user/get_by_id/${id}`);
+      const response = await fetch(`${this.baseURL}api/user/get_by_id/${id}`, {
+        credentials: "include",
+      });
 
       if (response.status === 401) return;
 
@@ -77,6 +82,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
           "Content-Type": "application/json; charset: UTF-8;",
         },
         body: JSON.stringify(entity),
+        credentials: "include",
       });
 
       return true;
@@ -94,6 +100,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
           "Content-Type": "application/json; charset: UTF-8;",
         },
         body: JSON.stringify(entity),
+        credentials: "include",
       });
 
       if (response.status === 401) {
@@ -114,6 +121,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
     try {
       const response = await fetch(`${this.baseURL}api/user/delete/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (response.status === 401) {

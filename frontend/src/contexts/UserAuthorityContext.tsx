@@ -21,7 +21,7 @@ export const UserAuthorityContext = createContext<IUserAuthorityContext>(
 export const UserAuthorityProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
-  const userHttpRepository = new UserHttpRepository("https://adm-webbase-66.partner.ru:7132/");
+  const userHttpRepository = new UserHttpRepository("https://localhost:7132/");
   const navigate = useNavigate();
 
   const [user, setUser] = useState<User | null>(null);

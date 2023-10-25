@@ -1,4 +1,7 @@
-import { sendErrorNotice, sendWarnNotice } from "../../components/notification/Notification";
+import {
+  sendErrorNotice,
+  sendWarnNotice,
+} from "../../components/notification/Notification";
 import { Lot, Result } from "../../objects/Entities";
 import ILotHttpRepository from "../interfaces/ILotHttpRepository";
 
@@ -11,38 +14,43 @@ export default class LotHttpRepository implements ILotHttpRepository {
 
   async getAsync(): Promise<Result<Lot>> {
     try {
-      const response = await fetch(`${this.baseURL}api/lot/get_list`);
-     
+      const response = await fetch(`${this.baseURL}api/lot/get_list`, {
+        credentials: "include",
+      });
+
       if (response.status === 401) {
-        return {data: [], flag: false};
+        return { data: [], flag: false };
       }
 
       const data = await response.json();
 
-      return {data, flag: true}
+      return { data, flag: true };
     } catch (error) {
       sendErrorNotice("Не удалось получить лоты, попробуйте снова");
-      return {data: [], flag: false};
+      return { data: [], flag: false };
     }
   }
 
   async getByAuctionAsync(auctionId: string): Promise<Result<Lot>> {
     try {
       const response = await fetch(
-        `${this.baseURL}api/lot/get_list_by_auction/${auctionId}`
+        `${this.baseURL}api/lot/get_list_by_auction/${auctionId}`,
+        {
+          credentials: "include",
+        }
       );
-      
+
       if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться")
-        return {data: [], flag: false};
+        sendWarnNotice("Вам необходимо зарегистрироваться");
+        return { data: [], flag: false };
       }
 
       const data = await response.json();
 
-      return {data, flag: true};
+      return { data, flag: true };
     } catch (error) {
       sendErrorNotice("Не удалось получить лоты по аукциону, попробуйте снова");
-      return {data: [], flag: false};
+      return { data: [], flag: false };
     }
   }
 
@@ -54,10 +62,11 @@ export default class LotHttpRepository implements ILotHttpRepository {
           "Content-Type": "application/json; charset: UTF-8;",
         },
         body: JSON.stringify(entity),
+        credentials: "include",
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться")
+        sendWarnNotice("Вам необходимо зарегистрироваться");
         return false;
       }
 
@@ -76,10 +85,11 @@ export default class LotHttpRepository implements ILotHttpRepository {
           "Content-Type": "application/json; charset: UTF-8;",
         },
         body: JSON.stringify(entity),
+        credentials: "include",
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться")
+        sendWarnNotice("Вам необходимо зарегистрироваться");
         return false;
       }
       return true;
@@ -93,10 +103,11 @@ export default class LotHttpRepository implements ILotHttpRepository {
     try {
       const response = await fetch(`${this.baseURL}api/lot/delete/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться")
+        sendWarnNotice("Вам необходимо зарегистрироваться");
         return false;
       }
 

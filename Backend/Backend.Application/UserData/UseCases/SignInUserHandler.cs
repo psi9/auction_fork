@@ -56,7 +56,9 @@ public class SignInUserHandler
         _httpContextAccessor.HttpContext?.Response.Cookies.Append(".AspNet.Application.Id", token,
             new CookieOptions
             {
-                MaxAge = TimeSpan.FromMinutes(60)
+                MaxAge = TimeSpan.FromMinutes(60),
+                HttpOnly = true,
+                Secure = true
             });
 
         return new UserDto

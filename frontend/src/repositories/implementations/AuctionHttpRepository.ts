@@ -1,4 +1,7 @@
-import { sendErrorNotice, sendWarnNotice } from "../../components/notification/Notification";
+import {
+  sendErrorNotice,
+  sendWarnNotice,
+} from "../../components/notification/Notification";
 import { Auction, Result } from "../../objects/Entities";
 import IAuctionHttpRepository from "../interfaces/IAuctionHttpRepository";
 
@@ -11,18 +14,20 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async getAsync(): Promise<Result<Auction>> {
     try {
-      const response = await fetch(`${this.baseURL}api/auction/get_list`);
-      
+      const response = await fetch(`${this.baseURL}api/auction/get_list`, {
+        credentials: "include",
+      });
+
       if (response.status === 401) {
-        return {data: [], flag: false}
+        return { data: [], flag: false };
       }
 
       const data = await response.json();
 
-      return {data, flag: true};
+      return { data, flag: true };
     } catch (error) {
       sendErrorNotice("Не удалось получить аукционы, попробуйте снова");
-      return {data: [], flag: false}
+      return { data: [], flag: false };
     }
   }
 
@@ -34,10 +39,11 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
           "Content-Type": "application/json; charset: UTF-8;",
         },
         body: JSON.stringify(entity),
+        credentials: "include",
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необхожимо зарегистрироваться")
+        sendWarnNotice("Вам необхожимо зарегистрироваться");
         return false;
       }
 
@@ -56,10 +62,11 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
           "Content-Type": "application/json; charset: UTF-8;",
         },
         body: JSON.stringify(entity),
+        credentials: "include",
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться")
+        sendWarnNotice("Вам необходимо зарегистрироваться");
         return false;
       }
 
@@ -74,10 +81,11 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
     try {
       const response = await fetch(`${this.baseURL}api/auction/delete/${id}`, {
         method: "DELETE",
+        credentials: "include",
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необхожимо зарегистрироваться")
+        sendWarnNotice("Вам необхожимо зарегистрироваться");
         return false;
       }
 
