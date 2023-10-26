@@ -9,15 +9,17 @@ import {
 import { Lot } from "../objects/Entities";
 
 import LotHttpRepository from "../repositories/implementations/LotHttpRepository";
-import { UserAuthorityContext } from "./UserAuthorityContext";
+import { UserAuthorizationContext } from "./UserAuthorizationContext";
 
 interface ILotContext {
   lots: Lot[] | undefined;
 
+  curAuctionId: string;
+
   getLotsByAuction: () => Promise<Lot[] | undefined>;
   setAuctionId: (auctionId: string) => void;
 
-  createLot: (lot: Lot) => void;
+  createLot: (formData: FormData) => void;
 }
 
 export const LotContext = createContext<ILotContext>({} as ILotContext);
@@ -27,7 +29,7 @@ const lotRepository = new LotHttpRepository("https://localhost:7132/");
 export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [lots, setLots] = useState<Lot[] | undefined>([]);
   const [curAuctionId, setCurAuctionId] = useState<string>("");
-  const { user } = useContext(UserAuthorityContext);
+  const { user } = useContext(UserAuthorizationContext);
 
   useEffect(() => {
     async function fetchLots() {
@@ -44,8 +46,8 @@ export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
     return (await lotRepository.getByAuctionAsync(curAuctionId)).data;
   }
 
-  async function createLot(lot: Lot) {
-    await lotRepository.postAsync(lot);
+  async function createLot(formData: FormData) {
+    await lotRepository.postFormDataAsync(formData);
   }
 
   function setAuctionId(auctionId: string) {
@@ -54,7 +56,7 @@ export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <LotContext.Provider
-      value={{ lots, getLotsByAuction, setAuctionId, createLot }}
+      value={{ lots, curAuctionId, getLotsByAuction, setAuctionId, createLot }}
     >
       {children}
     </LotContext.Provider>

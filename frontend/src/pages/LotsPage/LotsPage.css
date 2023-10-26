@@ -58,6 +58,145 @@
   font-weight: 700;
 }
 
+.about_box {
+  margin: auto 0;
+
+  width: 1200px;
+
+  margin: 20px auto;
+  padding: 30px;
+
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(15px);
+
+  border-radius: 15px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.main_information {
+  display: grid;
+  row-gap: 20px;
+
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.adding_info {
+  display: grid;
+  row-gap: 10px;
+
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.about_title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.about_description {
+  font-weight: 500;
+
+  overflow-wrap: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.wrapper {
+  display: flex;
+  margin-left: 10px;
+
+  justify-content: space-between;
+}
+
+.sub_title {
+  font-weight: 600;
+}
+
+.image_wrapper {
+  display: flex;
+  margin: 20px 0;
+}
+
+.image {
+  width: 100px;
+}
+
+.about_image {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.input__wrapper {
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.photo_box {
+  display: grid;
+  align-items: center;
+}
+
+.input__file {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+}
+
+.input__file-icon-wrapper {
+  height: 30px;
+  width: 30px;
+
+  content: url("./assets/file_save.png");
+
+  margin: 15px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+
+  justify-content: center;
+}
+
+.input__file-button {
+  width: 290px;
+  height: 50px;
+
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
+  background-color: rgba(120, 185, 250, 0.2);
+  color: #ffffff98;
+
+  font-size: 1.125rem;
+  font-weight: 700;
+
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+
+  justify-content: flex-start;
+
+  border-radius: 15px;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
 input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;

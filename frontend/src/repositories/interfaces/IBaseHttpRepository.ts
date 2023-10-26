@@ -7,5 +7,5 @@ export default interface IBaseHttpRepository<T> {
 
   putAsync(entity: T): Promise<boolean>;
 
-  deleteAsync(id: number): Promise<boolean>;
+  deleteAsync(id: string): Promise<boolean>;
 }

@@ -10,7 +10,7 @@ import { Auction } from "../objects/Entities";
 import { State } from "../objects/Enums";
 
 import AuctionHttpRepository from "../repositories/implementations/AuctionHttpRepository";
-import { UserAuthorityContext } from "./UserAuthorityContext";
+import { UserAuthorizationContext } from "./UserAuthorizationContext";
 
 interface IAuctionContext {
   auctions: Auction[] | undefined;
@@ -20,6 +20,8 @@ interface IAuctionContext {
     description: string,
     authorId: string
   ) => Promise<void>;
+  getAuction: (id: string) => Promise<Auction | undefined>;
+  deleteAuction: (auctionId: string) => Promise<void>;
 }
 
 export const AuctionContext = createContext<IAuctionContext>(
@@ -30,7 +32,7 @@ const auctionRepository = new AuctionHttpRepository("https://localhost:7132/");
 
 export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [auctions, setAuctions] = useState<Auction[] | undefined>([]);
-  const { user } = useContext(UserAuthorityContext);
+  const { user } = useContext(UserAuthorizationContext);
 
   useEffect(() => {
     async function fetchAuctions() {
@@ -61,8 +63,20 @@ export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     await auctionRepository.postAsync(auction);
   }
 
+  async function getAuction(id: string): Promise<Auction | undefined> {
+    const auction = await auctionRepository.getByIdAsync(id);
+    if (!auction) return;
+    return auction;
+  }
+
+  async function deleteAuction(auctionId: string) {
+    await auctionRepository.deleteAsync(auctionId);
+  }
+
   return (
-    <AuctionContext.Provider value={{ auctions, createAuction }}>
+    <AuctionContext.Provider
+      value={{ auctions, createAuction, getAuction, deleteAuction }}
+    >
       {children}
     </AuctionContext.Provider>
   );

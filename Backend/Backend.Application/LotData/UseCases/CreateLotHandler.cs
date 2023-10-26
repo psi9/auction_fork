@@ -38,27 +38,27 @@ public class CreateLotHandler
     {
         var imagesDto = entity.Images;
 
-        var images = imagesDto.Select(imageDto => new Image
-        {
-            Id = Guid.NewGuid(),
-            LotId = imageDto.LotId,
-            Path = imageDto.Path
-        });
-
-        var lot = new Lot(
-            Guid.NewGuid(),
-            entity.Name,
-            entity.Description,
-            entity.AuctionId,
-            entity.StartPrice,
-            entity.BuyoutPrice,
-            entity.BetStep,
-            entity.State);
-
-        lot.SetImages(images);
-
-        await _lotRepository.CreateAsync(lot);
-
-        await _notificationHandler.CreatedLotNoticeAsync();
+        // var images = imagesDto.Select(imageDto => new Image
+        // {
+        //     Id = Guid.NewGuid(),
+        //     LotId = imageDto.LotId,
+        //     Path = imageDto.Path
+        // });
+        //
+        // var lot = new Lot(
+        //     Guid.NewGuid(),
+        //     entity.Name,
+        //     entity.Description,
+        //     entity.AuctionId,
+        //     entity.StartPrice,
+        //     entity.BuyoutPrice,
+        //     entity.BetStep,
+        //     entity.State);
+        //
+        // lot.SetImages(images);
+        //
+        // await _lotRepository.CreateAsync(lot);
+        //
+        // await _notificationHandler.CreatedLotNoticeAsync();
     }
 }

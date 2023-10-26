@@ -1,36 +1,16 @@
 import { Lot } from "../../../objects/Entities";
 
 import "./LotCard.css";
-import { State } from "../../../objects/Enums";
+import { State, getStateFromEnum } from "../../../objects/Enums";
 
 export default function LotCard(props: { lot: Lot }) {
   const buyoutLot =
     props.lot.buyoutPrice === 0 ? "Не выкуплен" : `${props.lot.buyoutPrice}р.`;
 
-  function getState(state: State): string {
-    switch (state) {
-      case State.awaiting: {
-        return "Ожидание";
-      }
-      case State.editing: {
-        return "Редактирование";
-      }
-      case State.running: {
-        return "Запушен";
-      }
-      case State.completed: {
-        return "Завершен";
-      }
-      case State.canceled: {
-        return "Отменен";
-      }
-    }
-  }
-
   return (
     <div className="card_container">
       <div className="title">{props.lot.name}</div>
-      <div className="state">Статус: {getState(props.lot.state)}</div>
+      <div className="state">Статус: {getStateFromEnum(props.lot.state)}</div>
       <div className="description">{props.lot.description}</div>
       <div className="container_info">
         <div>

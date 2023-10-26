@@ -2,17 +2,17 @@ import "./ProfilePage.css";
 import LotCard from "../../components/cards/lotCard/LotCard";
 import AuctionCard from "../../components/cards/auctionCard/AuctionCard";
 import { Auction, User } from "../../objects/Entities";
-import { UserAuthorityContext } from "../../contexts/UserAuthorityContext";
+import { UserAuthorizationContext } from "../../contexts/UserAuthorizationContext";
 import { useContext } from "react";
 import { LotContext } from "../../contexts/LotContext";
 import { AuctionContext } from "../../contexts/AuctionContext";
 
 export default function ProfilePage() {
-  const { user, signout } = useContext(UserAuthorityContext);
+  const { user, signout } = useContext(UserAuthorizationContext);
 
   const { lots } = useContext(LotContext);
-
   const { auctions } = useContext(AuctionContext);
+  const { members } = useContext(UserAuthorizationContext);
 
   const filteredAuctions = auctions?.filter(
     (auction) => auction.authorId === user?.id
@@ -49,13 +49,19 @@ export default function ProfilePage() {
               </div>
             </div>
           ) : (
-            filteredAuctions?.map((auction: Auction) => (
-              <AuctionCard
-                key={auction.id}
-                auction={auction}
-                author={{ name: "privet" } as User}
-              />
-            ))
+            filteredAuctions
+              ?.map((auction: Auction) => (
+                <AuctionCard
+                  key={auction.id}
+                  auction={auction}
+                  author={
+                    members?.find(
+                      (member: User) => member.id === auction.authorId
+                    )!
+                  }
+                />
+              ))
+              .reverse()
           )}
         </div>
       </div>

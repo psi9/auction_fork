@@ -3,32 +3,46 @@ import { createContext, useEffect, useState, PropsWithChildren } from "react";
 import { User } from "../objects/Entities";
 
 import UserHttpRepository from "../repositories/implementations/UserHttpRepository";
-import { useNavigate } from "react-router-dom";
-import { sendSuccessNotice } from "../components/notification/Notification";
+import { useLocation, useNavigate } from "react-router-dom";
+import { enqueueSnackbar } from "notistack";
 
-export interface IUserAuthorityContext {
+export interface IUserAuthorizationContext {
   user: User | null;
+  members: User[] | null;
+
   signup: (login: string, email: string, password: string) => void;
   signin: (email: string, password: string) => void;
   signout: () => void;
+
   reloadUserData: () => void;
 }
 
-export const UserAuthorityContext = createContext<IUserAuthorityContext>(
-  {} as IUserAuthorityContext
-);
+export const UserAuthorizationContext =
+  createContext<IUserAuthorizationContext>({} as IUserAuthorizationContext);
 
-export const UserAuthorityProvider: React.FC<PropsWithChildren> = ({
+export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
   children,
 }) => {
   const userHttpRepository = new UserHttpRepository("https://localhost:7132/");
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [user, setUser] = useState<User | null>(null);
+  const [members, setMembers] = useState<User[] | null>(null);
 
   useEffect(() => {
     reloadUserData();
   }, []);
+
+  useEffect(() => {
+    async function fetchMembers() {
+      if (!user) return;
+      setMembers((await userHttpRepository.getAsync()).data!);
+    }
+
+    fetchMembers();
+  }, [user]);
 
   async function signup(login: string, email: string, password: string) {
     const user: User = {
@@ -40,7 +54,7 @@ export const UserAuthorityProvider: React.FC<PropsWithChildren> = ({
 
     if (!(await userHttpRepository.postAsync(user))) return;
 
-    navigate("/authority");
+    navigate("/authorization");
   }
 
   async function signin(email: string, password: string) {
@@ -52,46 +66,45 @@ export const UserAuthorityProvider: React.FC<PropsWithChildren> = ({
     localStorage.setItem("id", user.id);
 
     navigate("/");
-
-    sendSuccessNotice("Вы вошли успешно");
   }
 
   function signout() {
     localStorage.clear();
     setUser(null);
-    navigate("/authority");
-    sendSuccessNotice("Вы вышли успешно");
+    navigate("/authorization");
   }
 
   async function reloadUserData() {
     const id = localStorage.getItem("id");
 
     if (!id) {
-      navigate("/authority");
+      navigate("/authorization");
       return;
     }
 
     const user = await userHttpRepository.getByIdAsync(id);
 
     if (!user) {
-      navigate("/authority");
+      navigate("/authorization");
       return;
     }
 
-    setUser(user);
+    navigate(location);
+    setUser(user!);
   }
 
   return (
-    <UserAuthorityContext.Provider
+    <UserAuthorizationContext.Provider
       value={{
-        user: user,
+        user,
         signup,
         signin,
         signout,
         reloadUserData,
+        members,
       }}
     >
       {children}
-    </UserAuthorityContext.Provider>
+    </UserAuthorizationContext.Provider>
   );
 };

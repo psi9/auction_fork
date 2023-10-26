@@ -65,9 +65,7 @@ public class SignInUserHandler
         {
             Id = user.Id,
             Name = user.Name,
-            Email = user.Email,
-            // Password = user.Password,
-            // Token = token
+            Email = user.Email
         };
     }
 }

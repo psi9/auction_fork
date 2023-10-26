@@ -1,7 +1,4 @@
-import {
-  sendErrorNotice,
-  sendWarnNotice,
-} from "../../components/notification/Notification";
+import { enqueueSnackbar } from "notistack";
 import { Result, User } from "../../objects/Entities";
 import IUserHttpRepository from "../interfaces/IUserHttpRepository";
 
@@ -27,15 +24,21 @@ export default class UserHttpRepository implements IUserHttpRepository {
       });
 
       if (!response.ok) {
-        sendWarnNotice("Вероятно, вы не зарегистрированы");
+        enqueueSnackbar("Вам необходимо зарегистрироваться", {
+          variant: "warning",
+        });
         return;
       }
 
       const data = await response.json();
 
+      enqueueSnackbar("Вы успешно авторизовались", { variant: "success" });
+
       return data;
     } catch (error) {
-      sendErrorNotice("Не удалось авторизоваться, попробуйте снова");
+      enqueueSnackbar("Не удалось авторизоваться, попробуйте снова", {
+        variant: "error",
+      });
     }
   }
 
@@ -53,7 +56,9 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
       return { data, flag: false };
     } catch (error) {
-      sendErrorNotice("Не удалось получить пользователей, попробуйте снова");
+      enqueueSnackbar("Не удалось получить пользователей, попробуйте снова", {
+        variant: "error",
+      });
       return { data: [], flag: false };
     }
   }
@@ -70,7 +75,9 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
       return data;
     } catch (error) {
-      sendErrorNotice("Не удалось получить пользователей, попробуйте снова");
+      enqueueSnackbar("Не удалось получить пользователей, попробуйте снова", {
+        variant: "error",
+      });
     }
   }
 
@@ -85,9 +92,15 @@ export default class UserHttpRepository implements IUserHttpRepository {
         credentials: "include",
       });
 
+      enqueueSnackbar("Вы успешно зарегистрировались, нужно авторизоваться", {
+        variant: "success",
+      });
+
       return true;
     } catch (error) {
-      sendErrorNotice("Не удалось зарегистрироваться, попробуйте снова");
+      enqueueSnackbar("Не удалось зарегистрироваться, попробуйте снова", {
+        variant: "error",
+      });
       return false;
     }
   }
@@ -104,20 +117,24 @@ export default class UserHttpRepository implements IUserHttpRepository {
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необхожимо зарегистрироваться");
+        enqueueSnackbar("Вам необходимо зарегистрироваться", {
+          variant: "warning",
+        });
         return false;
       }
 
+      enqueueSnackbar("Информация успешно обновлена", { variant: "success" });
+
       return true;
     } catch (error) {
-      sendErrorNotice(
-        "Пользователь не был изменен, попробуйте снова, попробуйте снова"
-      );
+      enqueueSnackbar("Пользователь не был изменен, попробуйте снова", {
+        variant: "error",
+      });
       return false;
     }
   }
 
-  async deleteAsync(id: number): Promise<boolean> {
+  async deleteAsync(id: string): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/user/delete/${id}`, {
         method: "DELETE",
@@ -125,15 +142,19 @@ export default class UserHttpRepository implements IUserHttpRepository {
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необхожимо зарегистрироваться");
+        enqueueSnackbar("Вам необходимо зарегистрироваться", {
+          variant: "warning",
+        });
         return false;
       }
 
+      enqueueSnackbar("Профиль удален", { variant: "success" });
+
       return true;
     } catch (error) {
-      sendErrorNotice(
-        "Пользователь не был удален, попробуйте снова, попробуйте снова"
-      );
+      enqueueSnackbar("Пользователь не был удален, попробуйте снова", {
+        variant: "error",
+      });
       return false;
     }
   }

@@ -1,57 +1,38 @@
 import { useNavigate } from "react-router-dom";
 import { Auction, User } from "../../../objects/Entities";
-import { State } from "../../../objects/Enums";
+import { State, getStateFromEnum } from "../../../objects/Enums";
 
 import "./AuctionCard.css";
 import { LotContext } from "../../../contexts/LotContext";
 import { useContext } from "react";
 
 export default function AuctionCard(props: { auction: Auction; author: User }) {
-  function getState(state: State): string {
-    switch (state) {
-      case State.awaiting: {
-        return "Ожидание";
-      }
-      case State.editing: {
-        return "Редактирование";
-      }
-      case State.running: {
-        return "Запушен";
-      }
-      case State.completed: {
-        return "Завершен";
-      }
-      case State.canceled: {
-        return "Отменен";
-      }
-    }
-  }
-
   const navigate = useNavigate();
   const { setAuctionId } = useContext(LotContext);
 
+  const dateStart = new Date(props.auction.dateStart);
+  const dateEnd = new Date(props.auction.dateEnd);
+
   function invite() {
     setAuctionId(props.auction.id);
-    navigate("/auctions/lots");
+    navigate("/lots");
   }
 
   return (
     <div className="card_container">
       <div className="auction_title">{props.auction.name}</div>
-      <div className="state">Статус: {getState(props.auction.state)}</div>
+      <div className="state">
+        Статус: {getStateFromEnum(props.auction.state)}
+      </div>
       <div className="description">{props.auction.description}</div>
       <div className="container_info">
         <div>
           <div className="info_date">Дата начала:</div>
-          <div className="date_text">
-            {new Date(props.auction.dateStart).toLocaleString()}
-          </div>
+          <div className="date_text">{dateStart.toLocaleString()}</div>
         </div>
         <div>
           <div className="info_date">Дата конца:</div>
-          <div className="date_text">
-            {new Date(props.auction.dateEnd).toLocaleDateString()}
-          </div>
+          <div className="date_text">{dateEnd.toLocaleString()}</div>
         </div>
         <div className="author">{props.author.name}</div>
       </div>

@@ -4,11 +4,11 @@ import AuctionCard from "../../components/cards/auctionCard/AuctionCard";
 import { Auction, User } from "../../objects/Entities";
 
 import "./AuctionsPage.css";
-import { UserAuthorityContext } from "../../contexts/UserAuthorityContext";
+import { UserAuthorizationContext } from "../../contexts/UserAuthorizationContext";
 import { AuctionContext } from "../../contexts/AuctionContext";
 
 export default function AuctionsPage() {
-  const { user } = useContext(UserAuthorityContext);
+  const { user, members } = useContext(UserAuthorizationContext);
   const [error, setError] = useState<string>("");
 
   const [title, setTitle] = useState<string>("");
@@ -18,13 +18,8 @@ export default function AuctionsPage() {
     useContext(AuctionContext);
 
   const validateCreation = (): boolean => {
-    if (!title.length || !description.length) {
+    if (!title || !description) {
       setError("Заполните все поля");
-      return false;
-    }
-
-    if (title.length > 30 || description.length > 300) {
-      setError("Вы превысили количество символов");
       return false;
     }
 
@@ -53,6 +48,7 @@ export default function AuctionsPage() {
           className="create_name"
           type="text"
           value={title}
+          maxLength={30}
           onChange={(event) => setTitle(event.target.value)}
           placeholder="Введите название аукциона (до 30 символов)"
         />
@@ -60,6 +56,7 @@ export default function AuctionsPage() {
           className="create_description"
           rows={10}
           value={description}
+          maxLength={300}
           onChange={(event) => setDescription(event.target.value)}
           placeholder="Введите описание аукциона (до 300 символов)"
         ></textarea>
@@ -82,7 +79,11 @@ export default function AuctionsPage() {
               <AuctionCard
                 key={auction.id}
                 auction={auction}
-                author={{ name: "123" } as User}
+                author={
+                  members?.find(
+                    (member: User) => member.id === auction.authorId
+                  )!
+                }
               />
             ))
             .reverse()

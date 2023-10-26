@@ -1,10 +1,12 @@
 import { useState, useContext } from "react";
 
-import "./AuthorityCard.css";
-import { UserAuthorityContext } from "../../../contexts/UserAuthorityContext";
+import "./AuthorizationCard.css";
+import { UserAuthorizationContext } from "../../../contexts/UserAuthorizationContext";
 
 export default function AuthorityCard() {
-  const {signin: signinFromContext, signup: signupFromContext} = useContext(UserAuthorityContext)
+  const { signin: signinFromContext, signup: signupFromContext } = useContext(
+    UserAuthorizationContext
+  );
 
   const [isSignin, setIsSignin] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

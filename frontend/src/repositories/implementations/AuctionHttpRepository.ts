@@ -1,7 +1,4 @@
-import {
-  sendErrorNotice,
-  sendWarnNotice,
-} from "../../components/notification/Notification";
+import { enqueueSnackbar } from "notistack";
 import { Auction, Result } from "../../objects/Entities";
 import IAuctionHttpRepository from "../interfaces/IAuctionHttpRepository";
 
@@ -26,8 +23,33 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
       return { data, flag: true };
     } catch (error) {
-      sendErrorNotice("Не удалось получить аукционы, попробуйте снова");
+      enqueueSnackbar("Не удалось получить аукционы, попробуйте снова", {
+        variant: "error",
+      });
       return { data: [], flag: false };
+    }
+  }
+
+  async getByIdAsync(id: string): Promise<Auction | undefined> {
+    try {
+      const response = await fetch(
+        `${this.baseURL}api/auction/get_by_id/${id}`,
+        {
+          credentials: "include",
+        }
+      );
+
+      if (response.status === 401) {
+        return;
+      }
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      enqueueSnackbar("Не удалось получить аукцион, попробуйте снова", {
+        variant: "error",
+      });
     }
   }
 
@@ -43,13 +65,19 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необхожимо зарегистрироваться");
+        enqueueSnackbar("Вам необхожимо зарегистрироваться", {
+          variant: "warning",
+        });
         return false;
       }
 
+      enqueueSnackbar("Аукцион создан успешно", { variant: "success" });
+
       return true;
     } catch (error) {
-      sendErrorNotice("Не удалось создать аукцион, попробуйте снова");
+      enqueueSnackbar("Не удалось создать аукцион, попробуйте снова", {
+        variant: "error",
+      });
       return false;
     }
   }
@@ -66,18 +94,24 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться");
+        enqueueSnackbar("Вам необходимо зарегистрироваться", {
+          variant: "warning",
+        });
         return false;
       }
 
+      enqueueSnackbar("Аукцион успешно изменен", { variant: "success" });
+
       return true;
     } catch (error) {
-      sendErrorNotice("Не удалось изменить аукцион, попробуйте снова");
+      enqueueSnackbar("Не удалось изменить аукцион, попробуйте снова", {
+        variant: "error",
+      });
       return false;
     }
   }
 
-  async deleteAsync(id: number): Promise<boolean> {
+  async deleteAsync(id: string): Promise<boolean> {
     try {
       const response = await fetch(`${this.baseURL}api/auction/delete/${id}`, {
         method: "DELETE",
@@ -85,13 +119,19 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
       });
 
       if (response.status === 401) {
-        sendWarnNotice("Вам необхожимо зарегистрироваться");
+        enqueueSnackbar("Вам необхожимо зарегистрироваться", {
+          variant: "warning",
+        });
         return false;
       }
 
+      enqueueSnackbar("Аукцион успешно удален", { variant: "success" });
+
       return true;
     } catch (error) {
-      sendErrorNotice("Не удалось удалить аукцион, попробуйте снова");
+      enqueueSnackbar("Не удалось удалить аукцион, попробуйте снова", {
+        variant: "error",
+      });
       return false;
     }
   }
