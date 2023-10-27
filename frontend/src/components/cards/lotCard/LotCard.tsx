@@ -24,7 +24,7 @@ export default function LotCard(props: { lot: Lot }) {
         <div className="bet_step">Шаг ставки:</div>
         <div className="step">{props.lot.betStep}p.</div>
       </div>
-      <button className="do_bet_button">Сделать ставку</button>
+      <button className="submit_create">Сделать ставку</button>
     </div>
   );
 }

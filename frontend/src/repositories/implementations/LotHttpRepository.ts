@@ -1,9 +1,7 @@
-import {
-  sendErrorNotice,
-  sendWarnNotice,
-} from "../../components/notification/Notification";
-import { Lot, Result } from "../../objects/Entities";
+import { enqueueSnackbar } from "notistack";
+import { Lot } from "../../objects/Entities";
 import ILotHttpRepository from "../interfaces/ILotHttpRepository";
+import { handleCommonRequest, handleCommonResponse } from "./RequestHandler";
 
 export default class LotHttpRepository implements ILotHttpRepository {
   private baseURL: string;
@@ -12,109 +10,87 @@ export default class LotHttpRepository implements ILotHttpRepository {
     this.baseURL = baseURL;
   }
 
-  async getAsync(): Promise<Result<Lot>> {
+  async getAsync(): Promise<Lot[] | undefined> {
     try {
-      const response = await fetch(`${this.baseURL}api/lot/get_list`, {
+      const response = await fetch(`${this.baseURL}api/lot/get-list`, {
         credentials: "include",
       });
 
-      if (response.status === 401) {
-        return { data: [], flag: false };
-      }
+      if (!handleCommonResponse(response)) return;
 
-      const data = await response.json();
-
-      return { data, flag: true };
+      return await response.json();
     } catch (error) {
-      sendErrorNotice("Не удалось получить лоты, попробуйте снова");
-      return { data: [], flag: false };
+      enqueueSnackbar("Не удалось получить лоты, попробуйте снова", {
+        variant: "error",
+      });
     }
   }
 
-  async getByAuctionAsync(auctionId: string): Promise<Result<Lot>> {
+  async getByAuctionAsync(auctionId: string): Promise<Lot[] | undefined> {
     try {
       const response = await fetch(
-        `${this.baseURL}api/lot/get_list_by_auction/${auctionId}`,
+        `${this.baseURL}api/lot/get-list-by-auction/${auctionId}`,
         {
           credentials: "include",
         }
       );
 
-      if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться");
-        return { data: [], flag: false };
-      }
+      if (!handleCommonResponse(response)) return;
 
-      const data = await response.json();
-
-      return { data, flag: true };
+      return await response.json();
     } catch (error) {
-      sendErrorNotice("Не удалось получить лоты по аукциону, попробуйте снова");
-      return { data: [], flag: false };
+      enqueueSnackbar(
+        "Не удалось получить лоты по аукциону, попробуйте снова",
+        { variant: "error" }
+      );
     }
   }
 
-  async postAsync(entity: Lot): Promise<boolean> {
+  async postAsync(entity: Lot): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}api/lot/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json; charset: UTF-8;",
-        },
-        body: JSON.stringify(entity),
-        credentials: "include",
-      });
+      await handleCommonRequest<void>(
+        `${this.baseURL}api/lot/create`,
+        "POST",
+        entity
+      );
 
-      if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться");
-        return false;
-      }
-
-      return true;
+      enqueueSnackbar("Лот успешно создан", { variant: "success" });
     } catch (error) {
-      sendErrorNotice("Не удалось создать лот, попробуйте снова");
-      return false;
+      enqueueSnackbar("Не удалось создать лот, попробуйте снова", {
+        variant: "error",
+      });
     }
   }
 
-  async putAsync(entity: Lot): Promise<boolean> {
+  async putAsync(entity: Lot): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}api/lot/update`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json; charset: UTF-8;",
-        },
-        body: JSON.stringify(entity),
-        credentials: "include",
-      });
+      await handleCommonRequest<void>(
+        `${this.baseURL}api/lot/update`,
+        "PUT",
+        entity
+      );
 
-      if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться");
-        return false;
-      }
-      return true;
+      enqueueSnackbar("Лот успешно изменен", { variant: "success" });
     } catch (error) {
-      sendErrorNotice("Не удалось изменить лот, попробуйте снова");
-      return true;
+      enqueueSnackbar("Не удалось изменить лот, попробуйте снова", {
+        variant: "error",
+      });
     }
   }
 
-  async deleteAsync(id: number): Promise<boolean> {
+  async deleteAsync(id: string): Promise<void> {
     try {
-      const response = await fetch(`${this.baseURL}api/lot/delete/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      await handleCommonRequest<void>(
+        `${this.baseURL}api/lot/delete/${id}`,
+        "DELETE",
+        {}
+      );
 
-      if (response.status === 401) {
-        sendWarnNotice("Вам необходимо зарегистрироваться");
-        return false;
-      }
-
-      return true;
+      enqueueSnackbar("Лот успешно удален", { variant: "success" });
     } catch (error) {
-      sendErrorNotice("Не удалось удалить лот, попробуйте снова");
-      return false;
+      enqueueSnackbar("Не удалось удалить лот, попробуйте снова", {
+        variant: "error",
+      });
     }
   }
 }

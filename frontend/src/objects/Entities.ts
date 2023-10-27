@@ -44,8 +44,3 @@ export type Auction = {
   state: State;
   lots: Lot[];
 };
-
-export type Result<T> = {
-  data: T[] | undefined;
-  flag: boolean;
-}

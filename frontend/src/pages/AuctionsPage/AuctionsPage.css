@@ -98,6 +98,7 @@
   height: 40px;
 
   background: none;
+  background-color: rgba(52, 73, 94, 0.5);
   backdrop-filter: blur(50px);
   box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.2);
 

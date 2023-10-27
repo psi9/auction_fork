@@ -79,7 +79,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="id">Уникальный индентификатор пользователя</param>
     /// <returns>Пользователь</returns>
-    [HttpGet("get_by_id/{id:guid}/")]
+    [HttpGet("get-by-id/{id:guid}/")]
     public async Task<UserDto> GetUserByIdAsync(Guid id)
     {
         return await _getByIdHandler.GetUserById(id);
@@ -89,7 +89,7 @@ public class UserController : ControllerBase
     /// Запрос на получение списка пользователей
     /// </summary>
     /// <returns>Список пользователей</returns>
-    [HttpGet("get_list/")]
+    [HttpGet("get-list/")]
     public async Task<IEnumerable<UserDto>> GetUsersAsync()
     {
         return await _getHandler.GetUsersAsync();
@@ -101,7 +101,7 @@ public class UserController : ControllerBase
     /// <param name="user">Пользователь</param>
     /// <returns>Пользователь</returns>
     [AllowAnonymous]
-    [HttpPost("sign_in/")]
+    [HttpPost("sign-in/")]
     public async Task<UserDto> SignInUserAsync([FromBody] UserSignInDto user)
     {
         return await _signInHandler.SignInUserAsync(user.Email, user.Password);
@@ -112,7 +112,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="user">Пользователь</param>
     [AllowAnonymous]
-    [HttpPost("sign_up/")]
+    [HttpPost("sign-up/")]
     public async Task SignUpUserAsync([FromBody] UserDto user)
     {
         await _signUpHandler.SignUpUserAsync(user);

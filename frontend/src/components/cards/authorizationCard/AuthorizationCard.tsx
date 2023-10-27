@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 
 import "./AuthorizationCard.css";
 import { UserAuthorizationContext } from "../../../contexts/UserAuthorizationContext";
+import { enqueueSnackbar } from "notistack";
 
 export default function AuthorityCard() {
   const { signin: signinFromContext, signup: signupFromContext } = useContext(
@@ -9,7 +10,6 @@ export default function AuthorityCard() {
   );
 
   const [isSignin, setIsSignin] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
 
   const [login, setLogin] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -17,7 +17,6 @@ export default function AuthorityCard() {
   const [repeatPassword, setRepeatPassword] = useState<string>("");
 
   const resetState = (): void => {
-    setError("");
     setLogin("");
     setRepeatPassword("");
   };
@@ -28,12 +27,16 @@ export default function AuthorityCard() {
     errorMessage: string
   ): boolean => {
     if (!value) {
-      setError("Все поля должны быть заполнены!");
+      enqueueSnackbar("Все поля должны быть заполнены", {
+        variant: "error",
+      });
       return false;
     }
 
     if (!validationRegex?.test(value)) {
-      setError(errorMessage);
+      enqueueSnackbar(errorMessage, {
+        variant: "error",
+      });
       return false;
     }
 
@@ -42,12 +45,16 @@ export default function AuthorityCard() {
 
   const repeatPasswordValidation = (pwd1: string, pwd2: string): boolean => {
     if (!pwd1 || !pwd2) {
-      setError("Пароли должны быть указаны!");
+      enqueueSnackbar("Пароли должны быть указаны", {
+        variant: "error",
+      });
       return false;
     }
 
     if (pwd1 !== pwd2) {
-      setError("Пароли не совпадают!");
+      enqueueSnackbar("Пароли не совпадают", {
+        variant: "error",
+      });
       return false;
     }
 
@@ -120,7 +127,6 @@ export default function AuthorityCard() {
           className={`type ${isSignin ? "active" : ""}`}
           onClick={() => {
             setIsSignin(true);
-            setError("");
           }}
         >
           Авторизация
@@ -129,7 +135,6 @@ export default function AuthorityCard() {
           className={`type ${!isSignin ? "active" : ""}`}
           onClick={() => {
             setIsSignin(false);
-            setError("");
           }}
         >
           Регистрация
@@ -204,7 +209,6 @@ export default function AuthorityCard() {
           </button>
         </div>
       )}
-      <div className="error">{error}</div>
     </div>
   );
 }

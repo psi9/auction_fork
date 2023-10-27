@@ -38,7 +38,7 @@ export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     async function fetchAuctions() {
       if (!user) return;
 
-      setAuctions((await auctionRepository.getAsync()).data);
+      setAuctions(await auctionRepository.getAsync());
     }
 
     fetchAuctions();

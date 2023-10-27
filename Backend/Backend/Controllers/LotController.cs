@@ -116,7 +116,7 @@ public class LotController : ControllerBase
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <param name="lotId">Уникальный индентификатор лота</param>
     /// <param name="state">Новое состояние</param>
-    [HttpPut("change_status/{auctionId:guid}/{lotId:guid}/{state:int}/")]
+    [HttpPut("change-status/{auctionId:guid}/{lotId:guid}/{state:int}/")]
     public async Task ChangeLotStatusAsync(Guid auctionId, Guid lotId, int state)
     {
         await _changeStatusHandler.ChangeLotStatusAsync(auctionId, lotId, (State)state);
@@ -128,7 +128,7 @@ public class LotController : ControllerBase
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <param name="lotId">Уникальный индентификатор лота</param>
     /// <param name="userId">Уникальный индентификатор пользователя</param>
-    [HttpPut("do_bet/{auctionId:guid}/{lotId:guid}/{userId:guid}/")]
+    [HttpPut("do-bet/{auctionId:guid}/{lotId:guid}/{userId:guid}/")]
     public async Task DoBetAsync(Guid auctionId, Guid lotId, Guid userId)
     {
         await _doBetHandler.DoBetAsync(auctionId, lotId, userId);
@@ -148,7 +148,7 @@ public class LotController : ControllerBase
     /// Запрос на получение списка лотов
     /// </summary>
     /// <returns>список лотов</returns>
-    [HttpGet("get_list/")]
+    [HttpGet("get-list/")]
     public async Task<IReadOnlyCollection<LotDto>> GetLotsAsync()
     {
         return await _getLotsHandler.GetLots();
@@ -159,7 +159,7 @@ public class LotController : ControllerBase
     /// </summary>
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <returns>список лотов</returns>
-    [HttpGet("get_list_by_auction/{auctionId:guid}")]
+    [HttpGet("get-list-by-auction/{auctionId:guid}")]
     public async Task<IReadOnlyCollection<LotDto>> GetLotsByAuctionAsync(Guid auctionId)
     {
         return await _getLotsByAuctionHandler.GetLotsByAuction(auctionId);

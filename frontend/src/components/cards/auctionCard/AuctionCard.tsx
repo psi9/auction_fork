@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Auction, User } from "../../../objects/Entities";
-import { State, getStateFromEnum } from "../../../objects/Enums";
+import { getStateFromEnum } from "../../../objects/Enums";
 
 import "./AuctionCard.css";
 import { LotContext } from "../../../contexts/LotContext";
@@ -36,7 +36,7 @@ export default function AuctionCard(props: { auction: Auction; author: User }) {
         </div>
         <div className="author">{props.author.name}</div>
       </div>
-      <button className="invite_button" onClick={invite}>
+      <button className="submit_create" onClick={invite}>
         Принять участие
       </button>
     </div>

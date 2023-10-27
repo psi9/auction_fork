@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "./Header.css";
+import { UserAuthorizationContext } from "../../contexts/UserAuthorizationContext";
 
 export default function Header() {
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
@@ -26,6 +27,9 @@ export default function Header() {
     };
   }, []);
 
+  const { user } = useContext(UserAuthorizationContext);
+  if (!user) return <div></div>;
+
   return (
     <header className={`header ${isHeaderFixed ? "fixed" : ""}`}>
       <div className="header_container">
@@ -34,6 +38,7 @@ export default function Header() {
           <div className="logo_text">Auctions</div>
         </div>
         <div className="container_tools">
+          <div className="cur_user">{user.name}</div>
           <Link to="/profile">
             <button className="tool_item">
               <img className="item_img user" alt="Профиль" />

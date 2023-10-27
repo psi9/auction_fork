@@ -34,8 +34,7 @@ export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     async function fetchLots() {
       if (!user) return;
-
-      setLots((await lotRepository.getAsync()).data);
+      setLots(await lotRepository.getAsync());
     }
 
     fetchLots();
@@ -43,12 +42,10 @@ export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   async function getLotsByAuction(): Promise<Lot[] | undefined> {
     if (!curAuctionId) return [];
-    return (await lotRepository.getByAuctionAsync(curAuctionId)).data;
+    return await lotRepository.getByAuctionAsync(curAuctionId);
   }
 
-  async function createLot(formData: FormData) {
-    await lotRepository.postFormDataAsync(formData);
-  }
+  async function createLot(formData: FormData) {}
 
   function setAuctionId(auctionId: string) {
     setCurAuctionId(auctionId);

@@ -6,10 +6,10 @@ import { Auction, User } from "../../objects/Entities";
 import "./AuctionsPage.css";
 import { UserAuthorizationContext } from "../../contexts/UserAuthorizationContext";
 import { AuctionContext } from "../../contexts/AuctionContext";
+import { enqueueSnackbar } from "notistack";
 
 export default function AuctionsPage() {
   const { user, members } = useContext(UserAuthorizationContext);
-  const [error, setError] = useState<string>("");
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -19,7 +19,9 @@ export default function AuctionsPage() {
 
   const validateCreation = (): boolean => {
     if (!title || !description) {
-      setError("Заполните все поля");
+      enqueueSnackbar("Заполните все поля", {
+        variant: "error",
+      });
       return false;
     }
 
@@ -29,7 +31,6 @@ export default function AuctionsPage() {
   const resetState = () => {
     setTitle("");
     setDescription("");
-    setError("");
   };
 
   const createAuction = async () => {
@@ -63,7 +64,6 @@ export default function AuctionsPage() {
         <button className="submit_create" onClick={createAuction}>
           Создать
         </button>
-        <div className="error">{error}</div>
       </div>
       <div className="main_container">
         {!auctions?.length ? (

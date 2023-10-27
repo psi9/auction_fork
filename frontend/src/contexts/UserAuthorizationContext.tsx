@@ -4,11 +4,10 @@ import { User } from "../objects/Entities";
 
 import UserHttpRepository from "../repositories/implementations/UserHttpRepository";
 import { useLocation, useNavigate } from "react-router-dom";
-import { enqueueSnackbar } from "notistack";
 
 export interface IUserAuthorizationContext {
-  user: User | null;
-  members: User[] | null;
+  user: User | undefined;
+  members: User[] | undefined;
 
   signup: (login: string, email: string, password: string) => void;
   signin: (email: string, password: string) => void;
@@ -28,8 +27,8 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [user, setUser] = useState<User | null>(null);
-  const [members, setMembers] = useState<User[] | null>(null);
+  const [user, setUser] = useState<User | undefined>(undefined);
+  const [members, setMembers] = useState<User[] | undefined>(undefined);
 
   useEffect(() => {
     reloadUserData();
@@ -38,7 +37,7 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
   useEffect(() => {
     async function fetchMembers() {
       if (!user) return;
-      setMembers((await userHttpRepository.getAsync()).data!);
+      setMembers(await userHttpRepository.getAsync());
     }
 
     fetchMembers();
@@ -52,7 +51,7 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
       password: password,
     };
 
-    if (!(await userHttpRepository.postAsync(user))) return;
+    await userHttpRepository.postAsync(user);
 
     navigate("/authorization");
   }
@@ -70,7 +69,7 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
 
   function signout() {
     localStorage.clear();
-    setUser(null);
+    setUser(undefined);
     navigate("/authorization");
   }
 
