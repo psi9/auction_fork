@@ -21,10 +21,7 @@ export default function ProfilePage() {
   return (
     <div className="profile_container">
       <div className="main_info">
-        <img
-          className="profile_image"
-          alt="Изображение профиля"
-        />
+        <img className="profile_image" alt="Изображение профиля" />
         <div className="profile_data">
           <div className="user_name">{user?.name}</div>
           <div className="user_email">{user?.email}</div>
@@ -37,7 +34,7 @@ export default function ProfilePage() {
       </div>
       <div className="activity_box">
         <div className="box_title">Ваши аукционы</div>
-        <div className="box_items">
+        <div className="box_items_auction">
           {!filteredAuctions?.length ? (
             <div className="main_empty">
               <div className="empty">

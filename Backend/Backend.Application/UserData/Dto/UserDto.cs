@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace Backend.Application.UserData.Dto;
 
 /// <summary>
@@ -26,9 +24,4 @@ public class UserDto
     /// Пароль пользователя
     /// </summary>
     public string Password { get; set; } = string.Empty;
-
-    /// <summary>
-    /// Токен авторизации пользователя
-    /// </summary>
-    public string Token { get; set; } = string.Empty;
 }

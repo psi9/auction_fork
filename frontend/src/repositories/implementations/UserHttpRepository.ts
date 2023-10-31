@@ -64,7 +64,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
       return await response.json();
     } catch (error) {
-      enqueueSnackbar("Не удалось получить пользователя, попробуйте снова", {
+      enqueueSnackbar("Не удалось распознать вас, авторизуйтесь", {
         variant: "error",
       });
     }

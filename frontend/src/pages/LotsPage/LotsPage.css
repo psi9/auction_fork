@@ -1,4 +1,4 @@
-.main_container {
+.main_container_lots {
   width: 1200px;
 
   margin: 20px auto;
@@ -10,9 +10,7 @@
   border-radius: 15px;
 
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  grid-auto-rows: minmax(100px, auto);
 }
 
 .main_empty {
@@ -20,6 +18,10 @@
   align-items: center;
 
   row-gap: 20px;
+}
+
+.dismiss_btn {
+  margin-left: 20px;
 }
 
 .empty {
@@ -134,6 +136,11 @@
 .image {
   width: 200px;
   height: 200px;
+
+  border-radius: 15px;
+  box-shadow: 10px 5px 15px rgba(0, 0, 0, 0.3);
+
+  transition: all 0.2s;
 }
 
 .about_image {
@@ -210,6 +217,13 @@
 input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+.image:hover {
+  border-radius: 10px;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
+
+  transition: all 0.2s;
 }
 
 @media screen and (max-width: 800px) {

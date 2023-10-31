@@ -1,3 +1,4 @@
+using Backend.Domain.Entity;
 using Backend.Domain.Enum;
 
 namespace Backend.Application.LotData.Dto;
@@ -50,10 +51,10 @@ public class LotDto
     /// <summary>
     /// Ставки лота
     /// </summary>
-    public IEnumerable<BetDto> Bets { get; set; } = new List<BetDto>();
+    public IEnumerable<Bet> Bets { get; set; } = new List<Bet>();
 
     /// <summary>
     /// Изображения лота
     /// </summary>
-    public IEnumerable<ImageDto> Images { get; set; } = new List<ImageDto>();
+    public IEnumerable<object> Images { get; set; } = new List<object>();
 }

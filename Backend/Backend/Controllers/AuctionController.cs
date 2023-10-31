@@ -106,7 +106,7 @@ public class AuctionController : ControllerBase
     /// </summary>
     /// <param name="entity">Аукцион</param>
     [HttpPost("create/")]
-    public async Task CreateAuctionAsync([FromBody] AuctionDto entity)
+    public async Task CreateAuctionAsync([FromBody] CreateAuctionDto entity)
     {
         await _createHandler.CreateAuctionAsync(entity);
     }

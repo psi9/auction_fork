@@ -6,9 +6,10 @@ import { useEffect, useState, useContext, ChangeEvent } from "react";
 import { Auction, Lot } from "../../objects/Entities";
 import { LotContext } from "../../contexts/LotContext";
 import { AuctionContext } from "../../contexts/AuctionContext";
-import { State, getStateFromEnum } from "../../objects/Enums";
+import { getStateFromEnum } from "../../objects/Enums";
 import { UserAuthorizationContext } from "../../contexts/UserAuthorizationContext";
 import { enqueueSnackbar } from "notistack";
+import { Await } from "react-router";
 
 export default function LotsPage() {
   const { getLotsByAuction, createLot } = useContext(LotContext);
@@ -27,7 +28,9 @@ export default function LotsPage() {
   const author = members?.find((member) => member.id === auction?.authorId);
   const isAuthor = user?.id === author?.id;
 
-  const [selectedImages, setSelectedImages] = useState<FileList | null>(null);
+  const [selectedImages, setSelectedImages] = useState<FileList | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const getLots = async () => {
@@ -52,24 +55,11 @@ export default function LotsPage() {
     setDescription("");
     setStartPrice(0);
     setBetStep(0);
-    setSelectedImages(null);
+    setSelectedImages(undefined);
   };
 
   const createNewLot = () => {
     if (!validateCreateLot()) return;
-
-    const lot: Lot = {
-      id: "",
-      name: title,
-      description: description,
-      auctionId: curAuctionId,
-      startPrice: startPrice!,
-      buyoutPrice: 0,
-      betStep: betStep!,
-      state: State.awaiting,
-      bets: [],
-      images: [],
-    };
 
     const formData = new FormData();
 
@@ -93,7 +83,7 @@ export default function LotsPage() {
     await deleteAuction(curAuctionId);
   };
 
-  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
 
@@ -209,7 +199,7 @@ export default function LotsPage() {
                 id="input__file"
                 className="input input__file"
                 multiple
-                accept="image"
+                accept="image/jpeg"
                 onChange={handleImageChange}
               />
               <label htmlFor="input__file" className="input__file-button">
@@ -248,7 +238,7 @@ export default function LotsPage() {
           </button>
         </div>
       )}
-      <div className="main_container">
+      <div className="main_container_lots">
         {!lots?.length ? (
           <div className="main_empty">
             <div className="empty">
@@ -256,7 +246,7 @@ export default function LotsPage() {
             </div>
           </div>
         ) : (
-          lots.map((lot) => <LotCard key={lot.id} lot={lot} />)
+          lots.map((lot) => <LotCard key={lot.id} lot={lot} />).reverse()
         )}
       </div>
     </div>

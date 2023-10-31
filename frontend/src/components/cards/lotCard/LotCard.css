@@ -21,10 +21,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  text-shadow: 10px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .description {
   margin-top: 10px;
+
+  text-shadow: 10px 5px 15px rgba(0, 0, 0, 0.2);
 
   font-size: 15px;
   font-weight: 700;
@@ -47,27 +51,41 @@
   font-weight: 500;
 }
 
-.container_info {
+.container_info_lot {
   margin: 20px 0;
 
-  display: grid;
+  display: flex;
   row-gap: 10px;
 
   font-size: small;
+  align-items: center;
+  justify-content: space-between;
+
+  text-shadow: 10px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .info_price {
   font-weight: 700;
   color: rgb(225, 240, 255);
+
+  text-shadow: 10px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .price_text {
   text-indent: 20px;
   font-weight: 500;
+
+  text-shadow: 10px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .card_footer {
   display: flex;
+}
+
+.image_box {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
 }
 
 .bet_step {
