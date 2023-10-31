@@ -8,21 +8,14 @@ export function handleCommonResponse(response: Response): boolean {
     return false;
   }
 
-  if (!response.ok) {
-    enqueueSnackbar("Что-то пошло не так, попробуйте снова", {
-      variant: "warning",
-    });
-    return false;
-  }
-
   return true;
 }
 
-export async function handleCommonRequest<T>(
+export async function handleCommonRequest(
   url: string,
   httpMethod: string,
   body: any
-): Promise<T | undefined> {
+): Promise<void> {
   const response = await fetch(url, {
     method: httpMethod,
     headers: {
@@ -32,9 +25,5 @@ export async function handleCommonRequest<T>(
     credentials: "include",
   });
 
-  if (!handleCommonResponse(response)) return;
-
-  const data = await response.json();
-
-  return data;
+  handleCommonResponse(response);
 }

@@ -15,17 +15,22 @@ export default class UserHttpRepository implements IUserHttpRepository {
     password: string
   ): Promise<User | undefined> {
     try {
-      const user = await handleCommonRequest<User>(
-        `${this.baseURL}api/user/sign-in`,
-        "POST",
-        { email, password }
-      );
+      const response = await fetch(`${this.baseURL}api/user/sign-in`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset: UTF-8;",
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: "include",
+      });
+
+      if (!handleCommonResponse(response)) return;
 
       enqueueSnackbar("Вы успешно авторизовались", {
         variant: "success",
       });
 
-      return user;
+      return await response.json();
     } catch (error) {
       enqueueSnackbar("Не удалось авторизоваться, попробуйте снова", {
         variant: "error",
@@ -59,7 +64,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
       return await response.json();
     } catch (error) {
-      enqueueSnackbar("Не удалось получить пользователей, попробуйте снова", {
+      enqueueSnackbar("Не удалось получить пользователя, попробуйте снова", {
         variant: "error",
       });
     }
@@ -67,7 +72,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async postAsync(entity: User): Promise<void> {
     try {
-      await handleCommonRequest<void>(
+      await handleCommonRequest(
         `${this.baseURL}api/user/sign-up`,
         "POST",
         entity
@@ -85,7 +90,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async putAsync(entity: User): Promise<void> {
     try {
-      await handleCommonRequest<void>(
+      await handleCommonRequest(
         `${this.baseURL}api/user/update`,
         "PUT",
         entity
@@ -101,7 +106,7 @@ export default class UserHttpRepository implements IUserHttpRepository {
 
   async deleteAsync(id: string): Promise<void> {
     try {
-      await handleCommonRequest<void>(
+      await handleCommonRequest(
         `${this.baseURL}api/user/delete/${id}`,
         "DELETE",
         {}

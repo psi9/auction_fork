@@ -47,7 +47,7 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async postAsync(entity: Auction): Promise<void> {
     try {
-      await handleCommonRequest<void>(
+      await handleCommonRequest(
         `${this.baseURL}api/auction/create`,
         "POST",
         entity
@@ -63,7 +63,7 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async putAsync(entity: Auction): Promise<void> {
     try {
-      await handleCommonRequest<void>(
+      await handleCommonRequest(
         `${this.baseURL}api/auction/update`,
         "PUT",
         entity
@@ -79,7 +79,7 @@ export default class AuctionHttpRepository implements IAuctionHttpRepository {
 
   async deleteAsync(id: string): Promise<void> {
     try {
-      await handleCommonRequest<void>(
+      await handleCommonRequest(
         `${this.baseURL}api/auction/delete/${id}`,
         "DELETE",
         {}

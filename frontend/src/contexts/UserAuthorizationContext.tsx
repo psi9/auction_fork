@@ -35,15 +35,15 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
   }, []);
 
   useEffect(() => {
-    async function fetchMembers() {
+    const fetchMembers = async () => {
       if (!user) return;
       setMembers(await userHttpRepository.getAsync());
-    }
+    };
 
     fetchMembers();
   }, [user]);
 
-  async function signup(login: string, email: string, password: string) {
+  const signup = async (login: string, email: string, password: string) => {
     const user: User = {
       id: "5D9871B2-C2E4-4DAF-945F-A1E78F8724EC",
       name: login,
@@ -54,9 +54,9 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
     await userHttpRepository.postAsync(user);
 
     navigate("/authorization");
-  }
+  };
 
-  async function signin(email: string, password: string) {
+  const signin = async (email: string, password: string) => {
     const user = await userHttpRepository.signinAsync(email, password);
 
     if (!user) return;
@@ -65,15 +65,15 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
     localStorage.setItem("id", user.id);
 
     navigate("/");
-  }
+  };
 
-  function signout() {
+  const signout = () => {
     localStorage.clear();
     setUser(undefined);
     navigate("/authorization");
-  }
+  };
 
-  async function reloadUserData() {
+  const reloadUserData = async () => {
     const id = localStorage.getItem("id");
 
     if (!id) {
@@ -90,7 +90,7 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
 
     navigate(location);
     setUser(user!);
-  }
+  };
 
   return (
     <UserAuthorizationContext.Provider

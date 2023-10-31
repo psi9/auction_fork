@@ -47,12 +47,18 @@ export default class LotHttpRepository implements ILotHttpRepository {
   }
 
   async postAsync(entity: Lot): Promise<void> {
+    throw new Error("Метод не реализован");
+  }
+
+  async createLotAsync(formData: FormData): Promise<void> {
     try {
-      await handleCommonRequest<void>(
-        `${this.baseURL}api/lot/create`,
-        "POST",
-        entity
-      );
+      const response = await fetch(`${this.baseURL}api/lot/create`, {
+        method: "POST",
+        body: formData,
+        credentials: "include",
+      });
+
+      if (!handleCommonResponse(response)) return;
 
       enqueueSnackbar("Лот успешно создан", { variant: "success" });
     } catch (error) {
@@ -64,11 +70,7 @@ export default class LotHttpRepository implements ILotHttpRepository {
 
   async putAsync(entity: Lot): Promise<void> {
     try {
-      await handleCommonRequest<void>(
-        `${this.baseURL}api/lot/update`,
-        "PUT",
-        entity
-      );
+      await handleCommonRequest(`${this.baseURL}api/lot/update`, "PUT", entity);
 
       enqueueSnackbar("Лот успешно изменен", { variant: "success" });
     } catch (error) {
@@ -80,7 +82,7 @@ export default class LotHttpRepository implements ILotHttpRepository {
 
   async deleteAsync(id: string): Promise<void> {
     try {
-      await handleCommonRequest<void>(
+      await handleCommonRequest(
         `${this.baseURL}api/lot/delete/${id}`,
         "DELETE",
         {}
