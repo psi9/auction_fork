@@ -32,42 +32,41 @@ public class GetAuctionByIdHandler
     {
         var auction = await _auctionRepository.SelectAsync(id);
 
-        var lots = auction.Lots.Values;
+        var lotsDto = new List<LotDto>();
+        var lots = auction.Lots;
 
-        var lotsDto = (from lot in lots
-            let bets = lot.Bets
-            let betsDto = bets.Select(bet => new BetDto
-                {
-                    Id = bet.Id,
-                    Value = bet.Value,
-                    LotId = bet.LotId,
-                    UserId = bet.UserId,
-                    DateTime = bet.DateTime
-                })
-                .AsParallel()
-                .ToList()
-            let images = lot.Images
-            let imagesDto = images.Select(image => new ImageDto
-                {
-                    Id = image.Id,
-                    LotId = image.LotId,
-                    Path = image.Path
-                })
-                .AsParallel()
-                .ToList()
-            select new LotDto
+        foreach (var lot in lots)
+        {
+            var imagesData = new List<object>();
+
+            var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Backend.Images", lot.Value.Name);
+            if (!Directory.Exists(imagesPath)) continue;
+
+            var imageFiles = Directory.GetFiles(imagesPath);
+
+            foreach (var imageFile in imageFiles)
             {
-                Id = lot.Id,
-                Name = lot.Name,
-                Description = lot.Description,
-                AuctionId = lot.AuctionId,
-                StartPrice = lot.StartPrice,
-                BuyoutPrice = lot.BuyoutPrice,
-                BetStep = lot.BetStep,
-                State = lot.State,
-                Bets = betsDto,
-                Images = imagesDto
-            }).AsParallel().ToList();
+                var imageBytes = await File.ReadAllBytesAsync(imageFile);
+                var base64Image = Convert.ToBase64String(imageBytes);
+                var imageName = Path.GetFileName(imageFile);
+
+                var imageData = new { name = imageName, data = base64Image };
+                imagesData.Add(imageData);
+            }
+
+            lotsDto.Add(new LotDto()
+            {
+                Id = lot.Value.Id,
+                Name = lot.Value.Name,
+                Description = lot.Value.Description,
+                StartPrice = lot.Value.StartPrice,
+                BuyoutPrice = lot.Value.BuyoutPrice,
+                BetStep = lot.Value.BetStep,
+                State = lot.Value.State,
+                Bets = lot.Value.Bets,
+                Images = imagesData
+            });
+        }
 
         return new AuctionDto
         {

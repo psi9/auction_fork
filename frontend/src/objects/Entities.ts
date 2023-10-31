@@ -16,9 +16,8 @@ export type Bet = {
 };
 
 export type Image = {
-  id: string;
-  lotId: string;
-  path: string;
+  name: string;
+  data: string;
 };
 
 export type Lot = {

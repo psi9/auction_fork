@@ -29,53 +29,61 @@ public class GetAuctionsHandler
     /// <returns>Список моделей аукциона</returns>
     public async Task<IReadOnlyCollection<AuctionDto>> GetAuctions()
     {
+        var auctionsDto = new List<AuctionDto>();
         var auctions = await _auctionRepository.SelectManyAsync();
 
-        return (from auction in auctions
-            let lots = auction.Lots.Values
-            let lotsDto = (from lot in lots
-                let bets = lot.Bets
-                let betsDto = bets.Select(bet => new BetDto
-                    {
-                        Id = bet.Id,
-                        Value = bet.Value,
-                        LotId = bet.LotId,
-                        UserId = bet.UserId,
-                        DateTime = bet.DateTime
-                    })
-                    .AsParallel()
-                    .ToList()
-                let images = lot.Images
-                let imagesDto = images.Select(image => new ImageDto
-                    {
-                        Id = image.Id,
-                        LotId = image.LotId,
-                        Path = image.Path
-                    })
-                    .AsParallel()
-                    .ToList()
-                select new LotDto
-                {
-                    Id = lot.Id,
-                    Name = lot.Name,
-                    Description = lot.Description,
-                    StartPrice = lot.StartPrice,
-                    BuyoutPrice = lot.BuyoutPrice,
-                    BetStep = lot.BetStep,
-                    State = lot.State,
-                    Bets = betsDto,
-                    Images = imagesDto
-                }).AsParallel().ToList()
-            select new AuctionDto
+        foreach (var auction in auctions)
+        {
+            var lotsDto = new List<LotDto>();
+            var lots = auction.Lots;
+
+            foreach (var lot in lots)
             {
-                Id = auction.Id,
-                Name = auction.Name,
-                Description = auction.Description,
-                DateStart = auction.DateStart,
-                DateEnd = auction.DateEnd,
-                AuthorId = auction.AuthorId,
-                State = auction.State,
-                Lots = lotsDto
-            }).AsParallel().ToList();
+                var imagesData = new List<object>();
+
+                var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Backend.Images", lot.Value.Name);
+                if (!Directory.Exists(imagesPath)) continue;
+
+                var imageFiles = Directory.GetFiles(imagesPath);
+
+                foreach (var imageFile in imageFiles)
+                {
+                    var imageBytes = await File.ReadAllBytesAsync(imageFile);
+                    var base64Image = Convert.ToBase64String(imageBytes);
+                    var imageName = Path.GetFileName(imageFile);
+
+                    var imageData = new { name = imageName, data = base64Image };
+                    imagesData.Add(imageData);
+                }
+
+                lotsDto.Add(new LotDto()
+                {
+                    Id = lot.Value.Id,
+                    Name = lot.Value.Name,
+                    Description = lot.Value.Description,
+                    StartPrice = lot.Value.StartPrice,
+                    BuyoutPrice = lot.Value.BuyoutPrice,
+                    BetStep = lot.Value.BetStep,
+                    State = lot.Value.State,
+                    Bets = lot.Value.Bets,
+                    Images = imagesData
+                });
+            }
+
+            auctionsDto.Add(
+                new AuctionDto
+                {
+                    Id = auction.Id,
+                    Name = auction.Name,
+                    Description = auction.Description,
+                    DateStart = auction.DateStart,
+                    DateEnd = auction.DateEnd,
+                    AuthorId = auction.AuthorId,
+                    State = auction.State,
+                    Lots = lotsDto
+                });
+        }
+
+        return auctionsDto;
     }
 }
