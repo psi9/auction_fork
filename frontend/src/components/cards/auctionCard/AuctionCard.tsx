@@ -13,10 +13,10 @@ export default function AuctionCard(props: { auction: Auction; author: User }) {
   const dateStart = new Date(props.auction.dateStart);
   const dateEnd = new Date(props.auction.dateEnd);
 
-  function invite() {
+  const invite = () => {
     setAuctionId(props.auction.id);
     navigate("/lots");
-  }
+  };
 
   return (
     <div className="card_container">
@@ -37,7 +37,7 @@ export default function AuctionCard(props: { auction: Auction; author: User }) {
         <div className="author">{props.author.name}</div>
       </div>
       <button className="submit_create" onClick={invite}>
-        Принять участие
+        Подробнее
       </button>
     </div>
   );

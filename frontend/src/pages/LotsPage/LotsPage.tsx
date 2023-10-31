@@ -30,9 +30,9 @@ export default function LotsPage() {
   const [selectedImages, setSelectedImages] = useState<FileList | null>(null);
 
   useEffect(() => {
-    async function getLots() {
+    const getLots = async () => {
       setLots(await getLotsByAuction());
-    }
+    };
 
     getLots();
   }, []);
@@ -40,12 +40,20 @@ export default function LotsPage() {
   useEffect(() => {
     if (!curAuctionId) return;
 
-    async function getCurAuctionAsync() {
+    const getCurAuctionAsync = async () => {
       setAuction(await getAuction(curAuctionId));
-    }
+    };
 
     getCurAuctionAsync();
   }, [curAuctionId]);
+
+  const resetState = () => {
+    setTitle("");
+    setDescription("");
+    setStartPrice(0);
+    setBetStep(0);
+    setSelectedImages(null);
+  };
 
   const createNewLot = () => {
     if (!validateCreateLot()) return;
@@ -69,9 +77,14 @@ export default function LotsPage() {
       formData.append("images", image);
     }
 
-    formData.append("entity", JSON.stringify(lot));
+    formData.append("name", title);
+    formData.append("description", description);
+    formData.append("auctionId", curAuctionId);
+    formData.append("startPrice", startPrice?.toString()!);
+    formData.append("betStep", betStep?.toString()!);
 
     createLot(formData);
+    resetState();
   };
 
   const deleteCurAuction = async () => {
@@ -83,6 +96,14 @@ export default function LotsPage() {
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
+
+    if (files.length > 5) {
+      enqueueSnackbar("Изображений может быть не более 5", {
+        variant: "warning",
+      });
+      return;
+    }
+
     setSelectedImages(files);
   };
 

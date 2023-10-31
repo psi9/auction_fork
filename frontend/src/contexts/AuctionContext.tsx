@@ -35,20 +35,20 @@ export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { user } = useContext(UserAuthorizationContext);
 
   useEffect(() => {
-    async function fetchAuctions() {
+    const fetchAuctions = async () => {
       if (!user) return;
 
       setAuctions(await auctionRepository.getAsync());
-    }
+    };
 
     fetchAuctions();
   }, [user]);
 
-  async function createAuction(
+  const createAuction = async (
     title: string,
     description: string,
     authorId: string
-  ) {
+  ) => {
     const auction: Auction = {
       id: "B5FEA3BD-F650-4D61-BE5F-0A1411809E4F",
       name: title,
@@ -61,17 +61,17 @@ export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     };
 
     await auctionRepository.postAsync(auction);
-  }
+  };
 
-  async function getAuction(id: string): Promise<Auction | undefined> {
+  const getAuction = async (id: string): Promise<Auction | undefined> => {
     const auction = await auctionRepository.getByIdAsync(id);
     if (!auction) return;
     return auction;
-  }
+  };
 
-  async function deleteAuction(auctionId: string) {
+  const deleteAuction = async (auctionId: string) => {
     await auctionRepository.deleteAsync(auctionId);
-  }
+  };
 
   return (
     <AuctionContext.Provider

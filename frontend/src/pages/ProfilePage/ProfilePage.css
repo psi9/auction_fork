@@ -19,6 +19,7 @@
 
 .profile_image {
   width: 50px;
+  content: url("../../components/header/assets/user.png");
 }
 
 .profile_data {

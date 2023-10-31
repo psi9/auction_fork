@@ -8,7 +8,7 @@ export default function Header() {
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
   useEffect(() => {
-    function handleScroll() {
+    const handleScroll = () => {
       const scrollY = window.scrollY;
       const header = document.querySelector(".header");
       const headerHeight = header?.clientHeight || 0;
@@ -18,7 +18,7 @@ export default function Header() {
       } else {
         setIsHeaderFixed(false);
       }
-    }
+    };
 
     window.addEventListener("scroll", handleScroll);
 

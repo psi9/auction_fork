@@ -32,24 +32,26 @@ export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { user } = useContext(UserAuthorizationContext);
 
   useEffect(() => {
-    async function fetchLots() {
+    const fetchLots = async () => {
       if (!user) return;
       setLots(await lotRepository.getAsync());
-    }
+    };
 
     fetchLots();
   }, [user]);
 
-  async function getLotsByAuction(): Promise<Lot[] | undefined> {
-    if (!curAuctionId) return [];
+  const getLotsByAuction = async (): Promise<Lot[] | undefined> => {
+    if (!curAuctionId) return;
     return await lotRepository.getByAuctionAsync(curAuctionId);
-  }
+  };
 
-  async function createLot(formData: FormData) {}
+  const createLot = async (formData: FormData) => {
+    await lotRepository.createLotAsync(formData);
+  };
 
-  function setAuctionId(auctionId: string) {
+  const setAuctionId = (auctionId: string) => {
     setCurAuctionId(auctionId);
-  }
+  };
 
   return (
     <LotContext.Provider

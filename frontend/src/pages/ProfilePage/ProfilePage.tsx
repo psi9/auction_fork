@@ -18,14 +18,11 @@ export default function ProfilePage() {
     (auction) => auction.authorId === user?.id
   );
 
-  const userImage = require("../../components/header/assets/user.png");
-
   return (
     <div className="profile_container">
       <div className="main_info">
         <img
           className="profile_image"
-          src={userImage}
           alt="Изображение профиля"
         />
         <div className="profile_data">
