@@ -92,11 +92,11 @@ public class LotController : ControllerBase
     /// <summary>
     /// Запрос на создание лота
     /// </summary>
-    /// <param name="lot">Лот</param>
+    /// <param name="formCollection">Изображения лота</param>
     [HttpPost("create/")]
-    public async Task CreateLotASync([FromBody] LotDto lot)
+    public async Task CreateLotASync([FromForm] IFormCollection formCollection)
     {
-        await _createHandler.CreateLotAsync(lot);
+        await _createHandler.CreateLotAsync(formCollection);
     }
 
     /// <summary>

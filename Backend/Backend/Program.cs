@@ -13,6 +13,7 @@ using Backend.Hubs;
 using Backend.Notifications;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,11 +33,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
     {
         options.RequireHttpsMetadata = true;
-        // options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateLifetime = true,
-            
+
             ValidateAudience = false,
             ValidateIssuer = false,
 
@@ -46,6 +46,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
         };
     });
+
+builder.Services.Configure<FormOptions>(options => { options.MultipartBodyLengthLimit = long.MaxValue; });
 
 builder.Services.AddSingleton<IAuctionRepository, AuctionRepository>();
 builder.Services.AddSingleton<ILotRepository, LotRepository>();
