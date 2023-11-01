@@ -31,6 +31,7 @@ public class GetLotsHandler
         var lotsDto = new List<LotDto>();
         var lots = await _lotRepository.SelectManyAsync();
 
+        // Пока проект тестовый, принято решение оставить упрощенную версию сохранения изображений
         foreach (var lot in lots)
         {
             var imagesData = new List<object>();

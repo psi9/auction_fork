@@ -149,9 +149,9 @@ public class LotController : ControllerBase
     /// </summary>
     /// <returns>список лотов</returns>
     [HttpGet("get-list/")]
-    public async Task<IReadOnlyCollection<LotDto>> GetLotsAsync()
+    public Task<IReadOnlyCollection<LotDto>> GetLotsAsync()
     {
-        return await _getLotsHandler.GetLots();
+        return _getLotsHandler.GetLots();
     }
 
     /// <summary>
@@ -160,8 +160,8 @@ public class LotController : ControllerBase
     /// <param name="auctionId">Уникальный индентификатор аукциона</param>
     /// <returns>список лотов</returns>
     [HttpGet("get-list-by-auction/{auctionId:guid}")]
-    public async Task<IReadOnlyCollection<LotDto>> GetLotsByAuctionAsync(Guid auctionId)
+    public Task<IReadOnlyCollection<LotDto>> GetLotsByAuctionAsync(Guid auctionId)
     {
-        return await _getLotsByAuctionHandler.GetLotsByAuction(auctionId);
+        return _getLotsByAuctionHandler.GetLotsByAuction(auctionId);
     }
 }

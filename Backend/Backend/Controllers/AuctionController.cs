@@ -1,5 +1,6 @@
 using Backend.Application.AuctionData.Dto;
 using Backend.Application.AuctionData.UseCases;
+using Backend.Domain.Enum;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,6 +50,11 @@ public class AuctionController : ControllerBase
     private readonly UpdateAuctionHandler _updateHandler;
 
     /// <summary>
+    /// Обработчик смены статуса
+    /// </summary>
+    private readonly ChangeAuctionStatusHandler _changeAuctionStatusHandler;
+
+    /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="deleteHandler">Обработчик удаления</param>
@@ -58,9 +64,11 @@ public class AuctionController : ControllerBase
     /// <param name="setDateEndHandler">Обработчик установки даты конца</param>
     /// <param name="setDateStartHandler">Обработчик установки даты начала</param>
     /// <param name="updateHandler">Обработчик обновления аукциона</param>
+    /// <param name="changeAuctionStatusHandler">Обработчик смены статуса</param>
     public AuctionController(DeleteAuctionHandler deleteHandler, GetAuctionByIdHandler getByIdHandler,
         GetAuctionsHandler getHandler, CreateAuctionHandler createHandler, SetDateEndAuctionHandler setDateEndHandler,
-        SetDateStartAuctionHandler setDateStartHandler, UpdateAuctionHandler updateHandler)
+        SetDateStartAuctionHandler setDateStartHandler, UpdateAuctionHandler updateHandler,
+        ChangeAuctionStatusHandler changeAuctionStatusHandler)
     {
         _deleteHandler = deleteHandler;
         _getByIdHandler = getByIdHandler;
@@ -69,13 +77,14 @@ public class AuctionController : ControllerBase
         _setDateEndHandler = setDateEndHandler;
         _setDateStartHandler = setDateStartHandler;
         _updateHandler = updateHandler;
+        _changeAuctionStatusHandler = changeAuctionStatusHandler;
     }
 
     /// <summary>
     /// Запрос на удаление аукциона
     /// </summary>
     /// <param name="id">Уникальный идентификатор аукциона</param>
-    [HttpDelete("delete/{id:guid}/")]
+    [HttpDelete("delete/{id:guid}")]
     public async Task DeleteAuctionAsync(Guid id)
     {
         await _deleteHandler.DeleteAuctionAsync(id);
@@ -85,17 +94,17 @@ public class AuctionController : ControllerBase
     /// Запрос на получение аукциона по уникальному идентификатору
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [HttpGet("get-by-id/{id:guid}/")]
-    public async Task<AuctionDto> GetAuctionByIdAsync(Guid id)
+    [HttpGet("get-by-id/{id:guid}")]
+    public Task<AuctionDto> GetAuctionByIdAsync(Guid id)
     {
-        return await _getByIdHandler.GetAuctionByIdAsync(id);
+        return _getByIdHandler.GetAuctionByIdAsync(id);
     }
 
     /// <summary>
     /// Запрос на получение списка аукционов
     /// </summary>
     /// <returns>Список аукционов</returns>
-    [HttpGet("get-list/")]
+    [HttpGet("get-list")]
     public async Task<IEnumerable<AuctionDto>> GetAuctionsAsync()
     {
         return await _getHandler.GetAuctions();
@@ -105,7 +114,7 @@ public class AuctionController : ControllerBase
     /// Запрос на создание аукциона
     /// </summary>
     /// <param name="entity">Аукцион</param>
-    [HttpPost("create/")]
+    [HttpPost("create")]
     public async Task CreateAuctionAsync([FromBody] CreateAuctionDto entity)
     {
         await _createHandler.CreateAuctionAsync(entity);
@@ -115,7 +124,7 @@ public class AuctionController : ControllerBase
     /// Запрос на установку даты завершения аукциона
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [HttpPut("date-end/{id:guid}/")]
+    [HttpPut("date-end/{id:guid}")]
     public async Task SetDateEndAsync(Guid id)
     {
         await _setDateEndHandler.SetDateEndAuctionAsync(id);
@@ -125,7 +134,7 @@ public class AuctionController : ControllerBase
     /// Запрос на установку даты начала аукциона
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [HttpPut("date-start/{id:guid}/")]
+    [HttpPut("date-start/{id:guid}")]
     public async Task SetDateStartAsync(Guid id)
     {
         await _setDateStartHandler.SetDateStartAuctionAsync(id);
@@ -135,9 +144,19 @@ public class AuctionController : ControllerBase
     /// Запрос на обновление аукциона
     /// </summary>
     /// <param name="entity">Аукцион</param>
-    [HttpPut("update/")]
+    [HttpPut("update")]
     public async Task UpdateAsync([FromBody] AuctionDto entity)
     {
         await _updateHandler.UpdateAuctionAsync(entity);
+    }
+
+    /// <summary>
+    /// Запрос наизменение статуса аукциона
+    /// </summary>
+    /// <param name="newStatus">ID лота и новый статус</param>
+    [HttpPut("change-status")]
+    public async Task ChangeAuctionStatusAsync([FromBody] ChangeStatusDto newStatus)
+    {
+        await _changeAuctionStatusHandler.ChangeAuctionStatus(newStatus);
     }
 }

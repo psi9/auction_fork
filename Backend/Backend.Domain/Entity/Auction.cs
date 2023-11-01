@@ -136,7 +136,7 @@ public class Auction
         DateEnd = DateTime.Now;
 
         var lotsWithBets = Lots.Values.Where(l => l.Bets.Count > 0).ToArray();
-        var maxBetDate = lotsWithBets.SelectMany(l => l.Bets).Max(s => s.DateTime).AddSeconds(30);
+        var maxBetDate = lotsWithBets.SelectMany(l => l.Bets).Max(s => s.DateTime).AddSeconds(60);
 
         DateEnd = DateEnd >= maxBetDate ? DateEnd : maxBetDate;
 
@@ -165,6 +165,11 @@ public class Auction
     /// <returns>Успех или неудача</returns>
     public Result ChangeStatus(State state)
     {
+        if (state is State.Canceled or State.Completed)
+        {
+            DateEnd = DateTime.Now;
+        }
+
         State = state;
         return Result.Ok();
     }

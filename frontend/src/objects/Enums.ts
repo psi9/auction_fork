@@ -15,7 +15,7 @@ export const getStateFromEnum = (state: State): string => {
       return "Редактирование";
     }
     case State.running: {
-      return "Запушен";
+      return "Запущен";
     }
     case State.completed: {
       return "Завершен";

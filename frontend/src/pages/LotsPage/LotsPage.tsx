@@ -6,15 +6,14 @@ import { useEffect, useState, useContext, ChangeEvent } from "react";
 import { Auction, Lot } from "../../objects/Entities";
 import { LotContext } from "../../contexts/LotContext";
 import { AuctionContext } from "../../contexts/AuctionContext";
-import { getStateFromEnum } from "../../objects/Enums";
+import { State, getStateFromEnum } from "../../objects/Enums";
 import { UserAuthorizationContext } from "../../contexts/UserAuthorizationContext";
 import { enqueueSnackbar } from "notistack";
-import { Await } from "react-router";
 
 export default function LotsPage() {
   const { getLotsByAuction, createLot } = useContext(LotContext);
-  const { curAuctionId } = useContext(LotContext);
-  const { getAuction, deleteAuction } = useContext(AuctionContext);
+  const { getAuction, deleteAuction, changeState, curAuctionId } =
+    useContext(AuctionContext);
 
   const [lots, setLots] = useState<Lot[] | undefined>([]);
   const [auction, setAuction] = useState<Auction>();
@@ -26,11 +25,17 @@ export default function LotsPage() {
 
   const { members, user } = useContext(UserAuthorizationContext);
   const author = members?.find((member) => member.id === auction?.authorId);
+
   const isAuthor = user?.id === author?.id;
+  const isChangable =
+    auction?.state == State.running ||
+    auction?.state == State.editing ||
+    auction?.state == State.awaiting;
 
   const [selectedImages, setSelectedImages] = useState<FileList | undefined>(
     undefined
   );
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const getLots = async () => {
@@ -79,8 +84,24 @@ export default function LotsPage() {
 
   const deleteCurAuction = async () => {
     if (!curAuctionId) return;
-
     await deleteAuction(curAuctionId);
+  };
+
+  const changeStateCurAuction = async (state: State) => {
+    if (!curAuctionId) return;
+
+    if (auction?.state == state) {
+      enqueueSnackbar("Выберите статус отличный от текущего", {
+        variant: "warning",
+      });
+      return;
+    }
+
+    await changeState(curAuctionId, state);
+  };
+
+  const handleOpen = () => {
+    setOpen(!open);
   };
 
   const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -128,22 +149,84 @@ export default function LotsPage() {
           <div className="wrapper">
             <div className="sub_title">Начало:</div>
             <div className="date_start">
-              {new Date(auction?.dateStart!).toLocaleDateString()}
+              {new Date(auction?.dateStart!).toLocaleString()}
             </div>
           </div>
           <div className="wrapper">
             <div className="sub_title">Конец:</div>
             <div className="date_end">
-              {new Date(auction?.dateEnd!).toLocaleDateString()}
+              {new Date(auction?.dateEnd!).toLocaleString()}
             </div>
           </div>
         </div>
         {isAuthor && (
-          <button className="dismiss_btn" onClick={deleteCurAuction}>
-            <img className="dismiss_image" alt="Dismiss" />
-          </button>
+          <div className="button_auction_box">
+            {true && (
+              <div className="button_auction_box">
+                <button className="button_item" onClick={handleOpen}>
+                  <img
+                    className="image_item change_status"
+                    alt="Изменить статус"
+                  />
+                </button>
+                {open ? (
+                  <div className="menu">
+                    <button
+                      className="button_item"
+                      onClick={() => changeStateCurAuction(State.awaiting)}
+                    >
+                      Ожидание
+                    </button>
+                    <button
+                      className="button_item"
+                      onClick={() => changeStateCurAuction(State.editing)}
+                    >
+                      Редактирование
+                    </button>
+                    <button
+                      className="button_item"
+                      onClick={() => changeStateCurAuction(State.running)}
+                    >
+                      Запущен
+                    </button>
+                    <button
+                      className="button_item"
+                      onClick={() => changeStateCurAuction(State.completed)}
+                    >
+                      Завершен
+                    </button>
+                    <button
+                      className="button_item"
+                      onClick={() => changeStateCurAuction(State.canceled)}
+                    >
+                      Отменен
+                    </button>
+                  </div>
+                ) : null}
+                <button className="button_item">
+                  <img className="image_item edit" alt="Редактировать" />
+                </button>
+                <button
+                  className="button_item danger_button"
+                  onClick={() => changeStateCurAuction(State.completed)}
+                >
+                  <img className="image_item completed" alt="Завершить" />
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
+      {isAuthor && (
+        <div className="help_div">
+          <button
+            className="button_item danger_button danger_delete_button"
+            onClick={deleteCurAuction}
+          >
+            <img className="image_item delete" alt="Удалить" />
+          </button>
+        </div>
+      )}
       {isAuthor && (
         <div className="input_box">
           <div className="title_create">Создайте лот</div>

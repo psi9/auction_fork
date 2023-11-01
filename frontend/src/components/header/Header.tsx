@@ -44,11 +44,6 @@ export default function Header() {
               <img className="item_img user" alt="Профиль" />
             </button>
           </Link>
-          <Link to="/search">
-            <button className="tool_item">
-              <img className="item_img search" alt="Поиск" />
-            </button>
-          </Link>
         </div>
       </div>
     </header>

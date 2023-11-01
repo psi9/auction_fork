@@ -95,10 +95,6 @@
   content: url("./assets/user.png");
 }
 
-.item_img.search {
-  content: url("./assets/search.png");
-}
-
 .item_img:hover {
   cursor: pointer;
 }

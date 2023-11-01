@@ -3,12 +3,12 @@ import { Auction, User } from "../../../objects/Entities";
 import { getStateFromEnum } from "../../../objects/Enums";
 
 import "./AuctionCard.css";
-import { LotContext } from "../../../contexts/LotContext";
 import { useContext } from "react";
+import { AuctionContext } from "../../../contexts/AuctionContext";
 
 export default function AuctionCard(props: { auction: Auction; author: User }) {
   const navigate = useNavigate();
-  const { setAuctionId } = useContext(LotContext);
+  const { setAuctionId } = useContext(AuctionContext);
 
   const dateStart = new Date(props.auction.dateStart);
   const dateEnd = new Date(props.auction.dateEnd);

@@ -1,5 +1,5 @@
 UPDATE "Lots"
 SET "name"        = @name,
-    "description" = @dateTime,
+    "description" = @description,
     "betStep"     = @betStep
 WHERE "id" = @id;

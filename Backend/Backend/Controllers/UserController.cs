@@ -80,9 +80,9 @@ public class UserController : ControllerBase
     /// <param name="id">Уникальный индентификатор пользователя</param>
     /// <returns>Пользователь</returns>
     [HttpGet("get-by-id/{id:guid}/")]
-    public async Task<UserDto> GetUserByIdAsync(Guid id)
+    public Task<UserDto> GetUserByIdAsync(Guid id)
     {
-        return await _getByIdHandler.GetUserById(id);
+        return _getByIdHandler.GetUserById(id);
     }
 
     /// <summary>
@@ -102,9 +102,9 @@ public class UserController : ControllerBase
     /// <returns>Пользователь</returns>
     [AllowAnonymous]
     [HttpPost("sign-in/")]
-    public async Task<UserDto> SignInUserAsync([FromBody] UserSignInDto user)
+    public Task<UserDto> SignInUserAsync([FromBody] UserSignInDto user)
     {
-        return await _signInHandler.SignInUserAsync(user.Email, user.Password);
+        return _signInHandler.SignInUserAsync(user.Email, user.Password);
     }
 
     /// <summary>
