@@ -165,9 +165,14 @@ public class Auction
     /// <returns>Успех или неудача</returns>
     public Result ChangeStatus(State state)
     {
-        if (state is State.Canceled or State.Completed)
+        switch (state)
         {
-            DateEnd = DateTime.Now;
+            case State.Canceled or State.Completed:
+                DateEnd = DateTime.Now;
+                break;
+            case State.Running:
+                DateStart = DateTime.Now;
+                break;
         }
 
         State = state;

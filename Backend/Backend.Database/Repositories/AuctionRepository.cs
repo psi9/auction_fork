@@ -191,18 +191,8 @@ public class AuctionRepository : IAuctionRepository
                 new KeyValuePair<string, object>("id", entity.Id),
                 new KeyValuePair<string, object>("name", lot.Name),
                 new KeyValuePair<string, object>("description", lot.Description),
-                new KeyValuePair<string, object>("betStep", lot.BetStep));
-
-            await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
-                new KeyValuePair<string, object>("lotId", lot.Id));
-
-            foreach (var image in lot.Images)
-            {
-                await _pgsqlHandler.ExecuteAsync("Image.InsertImage",
-                    new KeyValuePair<string, object>("id", image.Id),
-                    new KeyValuePair<string, object>("lotId", image.LotId),
-                    new KeyValuePair<string, object>("path", image.Path!));
-            }
+                new KeyValuePair<string, object>("betStep", lot.BetStep),
+                new KeyValuePair<string, object>("state", (int)lot.State));
         }
     }
 

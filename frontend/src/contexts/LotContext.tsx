@@ -25,6 +25,7 @@ const lotRepository = new LotHttpRepository("https://localhost:7132/");
 
 export const LotProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [lots, setLots] = useState<Lot[] | undefined>([]);
+
   const { user } = useContext(UserAuthorizationContext);
   const { curAuctionId } = useContext(AuctionContext);
 

@@ -214,18 +214,8 @@ public class LotRepository : ILotRepository
             new KeyValuePair<string, object>("id", entity.Id),
             new KeyValuePair<string, object>("name", entity.Name),
             new KeyValuePair<string, object>("description", entity.Description),
-            new KeyValuePair<string, object>("betStep", entity.BetStep));
-
-        await _pgsqlHandler.ExecuteAsync("Image.DeleteImage",
-            new KeyValuePair<string, object>("lotId", entity.Id));
-
-        foreach (var image in entity.Images)
-        {
-            await _pgsqlHandler.ExecuteAsync("Image.InsertImage",
-                new KeyValuePair<string, object>("id", image.Id),
-                new KeyValuePair<string, object>("lotId", image.LotId),
-                new KeyValuePair<string, object>("path", image.Path!));
-        }
+            new KeyValuePair<string, object>("betStep", entity.BetStep),
+            new KeyValuePair<string, object>("state", (int)entity.State));
     }
 
     /// <summary>

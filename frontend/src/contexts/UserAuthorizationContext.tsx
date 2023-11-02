@@ -1,9 +1,17 @@
-import { createContext, useEffect, useState, PropsWithChildren } from "react";
+import {
+  createContext,
+  useEffect,
+  useState,
+  PropsWithChildren,
+  useContext,
+} from "react";
 
 import { User } from "../objects/Entities";
 
 import UserHttpRepository from "../repositories/implementations/UserHttpRepository";
 import { useLocation, useNavigate } from "react-router-dom";
+import { AuctionContext } from "./AuctionContext";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 export interface IUserAuthorizationContext {
   user: User | undefined;
@@ -24,11 +32,18 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
 }) => {
   const userHttpRepository = new UserHttpRepository("https://localhost:7132/");
 
+  const [activeUserId, saveActiveUserId] = useLocalStorage(
+    "savedActiveUserId",
+    ""
+  );
+
   const navigate = useNavigate();
   const location = useLocation();
 
   const [user, setUser] = useState<User | undefined>(undefined);
   const [members, setMembers] = useState<User[] | undefined>(undefined);
+
+  const { auction } = useContext(AuctionContext);
 
   useEffect(() => {
     reloadUserData();
@@ -62,7 +77,7 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
     if (!user) return;
 
     setUser(user);
-    localStorage.setItem("id", user.id);
+    saveActiveUserId(user.id);
 
     navigate("/");
   };
@@ -74,14 +89,12 @@ export const UserAuthorizationProvider: React.FC<PropsWithChildren> = ({
   };
 
   const reloadUserData = async () => {
-    const id = localStorage.getItem("id");
-
-    if (!id) {
+    if (!activeUserId) {
       navigate("/authorization");
       return;
     }
 
-    const user = await userHttpRepository.getByIdAsync(id);
+    const user = await userHttpRepository.getByIdAsync(activeUserId);
 
     if (!user) {
       navigate("/authorization");

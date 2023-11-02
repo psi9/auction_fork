@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-import { Auction } from "../objects/Entities";
+import { Auction, User } from "../objects/Entities";
 import { State } from "../objects/Enums";
 
 import AuctionHttpRepository from "../repositories/implementations/AuctionHttpRepository";
@@ -15,6 +15,10 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 
 interface IAuctionContext {
   auctions: Auction[] | undefined;
+  auction: Auction | undefined;
+
+  author: User | undefined;
+  isAuthor: boolean;
 
   curAuctionId: string;
   setAuctionId: (auctionId: string) => void;
@@ -36,10 +40,24 @@ export const AuctionContext = createContext<IAuctionContext>(
 const auctionRepository = new AuctionHttpRepository("https://localhost:7132/");
 
 export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const [auction, setAuction] = useState<Auction>();
   const [auctions, setAuctions] = useState<Auction[] | undefined>([]);
-  const { user } = useContext(UserAuthorizationContext);
+  const { user, members } = useContext(UserAuthorizationContext);
 
   const [curAuctionId, saveAuctionId] = useLocalStorage("savedAuctionId", "");
+
+  const author = members?.find((member) => member.id === auction?.authorId);
+  const isAuthor = user?.id === author?.id;
+
+  useEffect(() => {
+    if (!curAuctionId) return;
+
+    const getCurAuctionAsync = async () => {
+      setAuction(await getAuction(curAuctionId));
+    };
+
+    getCurAuctionAsync();
+  }, [curAuctionId]);
 
   useEffect(() => {
     const fetchAuctions = async () => {
@@ -84,10 +102,6 @@ export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const changeState = async (auctionId: string, state: State) => {
     if (!(await getAuction(auctionId))) return;
-
-    if (state == State.running)
-      await auctionRepository.setDateStartAsync(auctionId);
-
     await auctionRepository.changeStateAsync(auctionId, state);
   };
 
@@ -99,6 +113,9 @@ export const AuctionProvider: React.FC<PropsWithChildren> = ({ children }) => {
     <AuctionContext.Provider
       value={{
         auctions,
+        auction,
+        author,
+        isAuthor,
         curAuctionId,
         setAuctionId,
         createAuction,
