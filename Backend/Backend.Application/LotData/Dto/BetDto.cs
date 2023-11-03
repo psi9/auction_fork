@@ -3,7 +3,7 @@ namespace Backend.Application.LotData.Dto;
 /// <summary>
 /// Ставка
 /// </summary>
-public class BetDto
+public class BetDto // todo Class 'BetDto' is never used
 {
     /// <summary>
     /// Уникальный идентификатор

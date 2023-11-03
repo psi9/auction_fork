@@ -48,7 +48,7 @@ public class SignInUserHandler
     {
         var user = await _userRepository.SelectByNameAsync(email);
 
-        if (!_authorityHandler.VerifyUserData(email, password, user))
+        if (!_authorityHandler.VerifyUserData(email, password, user)) // todo вот это выглядит как костыль. может лучше возвращать Result<UserDto> и показывать на фронте ошибку?
             return new UserDto();
 
         var token = _authorityHandler.CreateToken(email);

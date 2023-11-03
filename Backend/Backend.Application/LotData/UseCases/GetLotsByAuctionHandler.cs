@@ -34,6 +34,7 @@ public class GetLotsByAuctionHandler
 
         foreach (var lot in lots)
         {
+            // todo все тот же коммент про отдельный класс для работы с файлами и про переиспользование
             var imagesData = new List<object>();
 
             var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Backend.Images", lot.Name);

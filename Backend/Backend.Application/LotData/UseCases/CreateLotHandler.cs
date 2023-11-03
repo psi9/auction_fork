@@ -39,7 +39,7 @@ public class CreateLotHandler
     {
         var lot = new Lot(
             Guid.NewGuid(),
-            formCollection["name"],
+            formCollection["name"], // todo тут не надо никакой try parse? что будет, если по индексатору чего-то не будет в форме?
             formCollection["description"],
             Guid.Parse(formCollection["auctionId"]),
             decimal.Parse(formCollection["startPrice"]),
@@ -47,6 +47,7 @@ public class CreateLotHandler
             decimal.Parse(formCollection["betStep"]),
             State.Awaiting);
 
+        // todo 3ий раз уже вижу код по работе с файлами: выглядит, как будто это надо вынести в какой-то отдельный класс для работы с файлами и его инжектить, куда надо
         var imageFiles = formCollection.Files.GetFiles("images");
         var images = new List<Image>();
         var number = 0;

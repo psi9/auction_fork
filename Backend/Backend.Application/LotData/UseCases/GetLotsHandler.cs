@@ -36,6 +36,7 @@ public class GetLotsHandler
         {
             var imagesData = new List<object>();
 
+            // todo все тот же коммент про отдельный класс для работы с файлами и про переиспользование
             var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Backend.Images", lot.Name);
             if (!Directory.Exists(imagesPath)) continue;
 

@@ -6,7 +6,8 @@ namespace Backend.Application.AuctionData.Dto;
 /// <summary>
 /// Аукцион
 /// </summary>
-public class AuctionDto
+public class AuctionDto // todo тут часть полей не используется, get-ы серым подсвечены в IDE 
+// todo GLOBAL COMMENT - это приходит из контроллера == это неизменяемая сущность - class сделать record-ом, всем полям вместо set сделать init
 {
     /// <summary>
     /// Уникальный идентификатор

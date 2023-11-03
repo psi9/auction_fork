@@ -37,7 +37,7 @@ public class DoBetHandler
     {
         var auction = await _auctionRepository.SelectAsync(doBetDto.AuctionId);
 
-        auction.DoBet(doBetDto.LotId, doBetDto.UserId);
+        auction.DoBet(doBetDto.LotId, doBetDto.UserId); // todo не обрабатывается результат fail
 
         await _auctionRepository.UpdateAsync(auction);
 

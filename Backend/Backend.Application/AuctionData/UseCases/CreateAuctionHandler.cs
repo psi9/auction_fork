@@ -35,7 +35,8 @@ public class CreateAuctionHandler
             entity.Name,
             entity.Description,
             new DateTime(),
-            new DateTime(),
+            new DateTime(), // todo это норм что тут 2 даты одинаковые? они ведь еще неизвестны в момент создания аукциона? может быть там NULL-ы должны быть?
+                // к тому же у тебя в схеме БД эти 2 поля вот такие:  DEFAULT now() - зачем вообще тогда их пихать туда, БД же сама создаст
             entity.AuthorId,
             State.Awaiting));
     }

@@ -3,7 +3,7 @@ namespace Backend.Application.LotData.Dto;
 /// <summary>
 /// Изображения лота
 /// </summary>
-public class ImageDto
+public class ImageDto // todo Class 'ImageDto' is never used
 {
     /// <summary>
     /// Уникальный идентификатор

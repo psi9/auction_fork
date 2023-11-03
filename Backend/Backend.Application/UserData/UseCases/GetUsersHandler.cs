@@ -36,6 +36,6 @@ public class GetUsersHandler
             Name = user.Name,
             Email = user.Email,
             Password = user.Password
-        }).AsParallel().ToList();
+        }).AsParallel().ToList(); // todo AsParallel это зачем такое? у тебя здесь в один селект выполняется запрос, как ты представляешь его распараллеливание?
     }
 }

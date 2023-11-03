@@ -6,12 +6,12 @@ namespace Backend.Domain.Entity;
 /// <summary>
 /// Аукцион
 /// </summary>
-public class Auction
+public class Auction //todo private init 
 {
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid(); 
 
     /// <summary>
     /// Название аукциона
@@ -54,7 +54,7 @@ public class Auction
     /// <param name="name">Название аукциона</param>
     /// <param name="description">Описание аукциона</param>
     /// <param name="authorId">Уникальный идентификатор автора</param>
-    public Auction(string? name, string? description, Guid authorId)
+    public Auction(string? name, string? description, Guid authorId) // todo Constructor 'Auction' is never used
     {
         Name = name;
         Description = description;
@@ -89,7 +89,7 @@ public class Auction
     /// <param name="name">Название аукциона</param>
     /// <param name="description">Описание аукциона</param>
     /// <returns>Успех или неудача</returns>
-    public Result UpdateInformation(string? name, string? description)
+    public Result UpdateInformation(string? name, string? description) // todo Method 'UpdateInformation' return value is never used
     {
         Name = name;
         Description = description;
@@ -141,7 +141,8 @@ public class Auction
     /// </summary>
     /// <param name="state">Состояние аукциона</param>
     /// <returns>Успех или неудача</returns>
-    public Result ChangeStatus(State state)
+    public Result ChangeStatus(State state) // todo Method 'ChangeStatus' return value is never used
+    // todo тут должен быть void
     {
         switch (state)
         {
@@ -178,7 +179,7 @@ public class Auction
     /// <param name="lotId">Уникальный идентификатор лота</param>
     /// <param name="userId">Уникальный идентификатор пользователя</param>
     /// <returns>Успех или неудача</returns>
-    public Result DoBet(Guid lotId, Guid userId)
+    public Result DoBet(Guid lotId, Guid userId) // todo Method 'DoBet' return value is never used
     {
         return Lots.TryGetValue(lotId, out var lot)
             ? lot.TryDoBet(userId)
@@ -191,7 +192,7 @@ public class Auction
     /// <param name="lotId">Уникальный идентификатор лота</param>
     /// <param name="images">Изображения</param>
     /// <returns>Успех или неудача</returns>
-    public Result AddLotImages(Guid lotId, IEnumerable<Image> images)
+    public Result AddLotImages(Guid lotId, IEnumerable<Image> images) // todo Method 'AddLotImages' can be made private
     {
         return Lots.TryGetValue(lotId, out var lot)
             ? lot.SetImages(images)
@@ -204,7 +205,7 @@ public class Auction
     /// <param name="lotId">Уникальный идентификатор лота</param>
     /// <param name="bets">Ставки</param>
     /// <returns>Успех или неудача</returns>
-    public Result AddLotBets(Guid lotId, IEnumerable<Bet> bets)
+    public Result AddLotBets(Guid lotId, IEnumerable<Bet> bets) // todo Method 'AddLotBets' can be made private
     {
         return Lots.TryGetValue(lotId, out var lot)
             ? lot.SetBets(bets)
@@ -218,7 +219,7 @@ public class Auction
     /// <param name="images">Изображения лота</param>
     /// <param name="bets">Ставки</param>
     /// <returns>Успех или неудача</returns>
-    public Result AddLot(Lot lot, IEnumerable<Image> images, IEnumerable<Bet> bets)
+    public Result AddLot(Lot lot, IEnumerable<Image> images, IEnumerable<Bet> bets) // todo Method 'AddLot' return value is never used
     {
         Lots.Add(lot.Id, lot);
         AddLotImages(lot.Id, images);
@@ -236,7 +237,7 @@ public class Auction
     /// <param name="betStep">Новый шаг ставки</param>
     /// <param name="images">Изображения лота</param>
     /// <returns>Успех или неудача</returns>
-    public Result UpdateLot(Guid lotId, string name, string description, decimal betStep,
+    public Result UpdateLot(Guid lotId, string name, string description, decimal betStep, // todo Method 'UpdateLot' return value is never used
         IEnumerable<Image> images)
     {
         return Lots.TryGetValue(lotId, out var lot)
@@ -249,7 +250,7 @@ public class Auction
     /// </summary>
     /// <param name="lotId">Уникальный идентификатор лота</param>
     /// <returns>Успех или неудача</returns>
-    public Result RemoveLot(Guid lotId)
+    public Result RemoveLot(Guid lotId) // todo Usages of 'RemoveLot(…)' were not foun
     {
         if (!Lots.ContainsKey(lotId))
             return Result.Fail("Лот не найден");

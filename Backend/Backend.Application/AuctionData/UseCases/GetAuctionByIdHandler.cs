@@ -28,7 +28,7 @@ public class GetAuctionByIdHandler
     /// </summary>
     /// <param name="id">Уникальный идентификатор аукциона</param>
     /// <returns>Модель аукциона</returns>
-    public async Task<AuctionDto> GetAuctionByIdAsync(Guid id)
+    public async Task<AuctionDto> GetAuctionByIdAsync(Guid id) // todo разбить на private методы
     {
         var auction = await _auctionRepository.SelectAsync(id);
 
@@ -39,7 +39,7 @@ public class GetAuctionByIdHandler
         {
             var imagesData = new List<object>();
 
-            var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Backend.Images", lot.Value.Name);
+            var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "Backend.Images", lot.Value.Name); // todo ты тут идешь от current directory вверх костыльно через .., а надо по идее идти из AppDomain директории вниз
             if (!Directory.Exists(imagesPath)) continue;
 
             var imageFiles = Directory.GetFiles(imagesPath);

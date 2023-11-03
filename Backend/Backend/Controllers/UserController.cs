@@ -10,7 +10,7 @@ namespace Backend.Controllers;
 /// </summary>
 [Authorize]
 [ApiController]
-[Route("api/user/")]
+[Route("api/user/")] // todo закрывающий слэш в роуте не нужен, фреймворк смаппает
 public class UserController : ControllerBase
 {
     /// <summary>
@@ -68,7 +68,7 @@ public class UserController : ControllerBase
     /// Запрос на удаление пользователя
     /// </summary>
     /// <param name="id">Уникальный индентификатор пользователя</param>
-    [HttpDelete("delete/{id:guid}")]
+    [HttpDelete("delete/{id:guid}")] // Fromquery
     public async Task DeleteUserAsync(Guid id)
     {
         await _deleteHandler.DeleteUserAsync(id);
@@ -79,7 +79,7 @@ public class UserController : ControllerBase
     /// </summary>
     /// <param name="id">Уникальный индентификатор пользователя</param>
     /// <returns>Пользователь</returns>
-    [HttpGet("get-by-id/{id:guid}")]
+    [HttpGet("get-by-id/{id:guid}")] // Fromquery
     public Task<UserDto> GetUserByIdAsync(Guid id)
     {
         return _getByIdHandler.GetUserById(id);
@@ -104,7 +104,7 @@ public class UserController : ControllerBase
     [HttpPost("sign-in")]
     public Task<UserDto> SignInUserAsync([FromBody] UserSignInDto user)
     {
-        return _signInHandler.SignInUserAsync(user.Email, user.Password);
+        return _signInHandler.SignInUserAsync(user.Email, user.Password); // todo во все хэндлеры параметром кидаешь DTO, а именно в этот один ДТО раскладываешь на поля; чем он такой особенный? лучше однообразно сделать
     }
 
     /// <summary>

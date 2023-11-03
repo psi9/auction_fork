@@ -51,7 +51,7 @@ public class LotDto
     /// <summary>
     /// Ставки лота
     /// </summary>
-    public IEnumerable<Bet> Bets { get; set; } = new List<Bet>();
+    public IEnumerable<Bet> Bets { get; set; } = new List<Bet>(); // todo и ниже еще тоже: Auto-property accessor 'Bets.get' is never used 
 
     /// <summary>
     /// Изображения лота

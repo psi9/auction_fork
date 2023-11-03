@@ -37,7 +37,7 @@ public class ChangeLotStatusHandler
     {
         var auction = await _auctionRepository.SelectAsync(changeLotStatusDto.AuctionId);
 
-        auction.ChangeLotStatus(changeLotStatusDto.LotId, changeLotStatusDto.State);
+        auction.ChangeLotStatus(changeLotStatusDto.LotId, changeLotStatusDto.State); // todo никак не обрабатываешь кейс, если тут вернется fail
 
         await _auctionRepository.UpdateAsync(auction);
 

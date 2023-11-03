@@ -30,7 +30,7 @@ public class UpdateAuctionHandler
     {
         var auction = await _auctionRepository.SelectAsync(entity.Id);
 
-        auction.UpdateInformation(entity.Name, entity.Description);
+        auction.UpdateInformation(entity.Name, entity.Description); //todo не обрабатываешь кейс, когда ошибка + надо ли его обрабатывать?
 
         await _auctionRepository.UpdateAsync(auction);
     }

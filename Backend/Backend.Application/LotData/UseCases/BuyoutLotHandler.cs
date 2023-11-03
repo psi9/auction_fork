@@ -37,7 +37,7 @@ public class BuyoutLotHandler
     {
         var auction = await _auctionRepository.SelectAsync(buyoutDto.AuctionId);
 
-        auction.BuyoutLot(buyoutDto.LotId);
+        auction.BuyoutLot(buyoutDto.LotId); // todo ты тут никак не обрабатываешь результат того, что произойдет, если лот не будет выкуплен
 
         await _auctionRepository.UpdateAsync(auction);
 

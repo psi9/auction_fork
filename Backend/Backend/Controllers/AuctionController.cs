@@ -11,7 +11,7 @@ namespace Backend.Controllers;
 /// </summary>
 [Authorize]
 [ApiController]
-[Route("api/auction/")]
+[Route("api/auction/")] // todo закрывающий слэш в роуте не нужен, фреймворк смаппает
 public class AuctionController : ControllerBase
 {
     /// <summary>
@@ -84,7 +84,7 @@ public class AuctionController : ControllerBase
     /// Запрос на удаление аукциона
     /// </summary>
     /// <param name="id">Уникальный идентификатор аукциона</param>
-    [HttpDelete("delete/{id:guid}")]
+    [HttpDelete("delete/{id:guid}")] // todo FromQuery
     public async Task DeleteAuctionAsync(Guid id)
     {
         await _deleteHandler.DeleteAuctionAsync(id);
@@ -94,7 +94,7 @@ public class AuctionController : ControllerBase
     /// Запрос на получение аукциона по уникальному идентификатору
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [HttpGet("get-by-id/{id:guid}")]
+    [HttpGet("get-by-id/{id:guid}")] // todo FromQuery
     public Task<AuctionDto> GetAuctionByIdAsync(Guid id)
     {
         return _getByIdHandler.GetAuctionByIdAsync(id);
@@ -124,7 +124,7 @@ public class AuctionController : ControllerBase
     /// Запрос на установку даты завершения аукциона
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [HttpPut("date-end/{id:guid}")]
+    [HttpPut("date-end/{id:guid}")] // todo FromQuery
     public async Task SetDateEndAsync(Guid id)
     {
         await _setDateEndHandler.SetDateEndAuctionAsync(id);
@@ -134,7 +134,7 @@ public class AuctionController : ControllerBase
     /// Запрос на установку даты начала аукциона
     /// </summary>
     /// <param name="id">Уникальный индентификатор аукциона</param>
-    [HttpPut("date-start/{id:guid}")]
+    [HttpPut("date-start/{id:guid}")] //todo FromQuery
     public async Task SetDateStartAsync(Guid id)
     {
         await _setDateStartHandler.SetDateStartAuctionAsync(id);

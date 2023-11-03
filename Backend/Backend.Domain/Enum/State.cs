@@ -8,12 +8,12 @@ public enum State
     /// <summary>
     /// Лот/Аукцион подготавливается
     /// </summary>
-    Awaiting = 0,
+    Awaiting = 0, // todo Preparing мб
 
     /// <summary>
     /// Лот/Аукцион редактируется
     /// </summary>
-    Editing = 1,
+    Editing = 1, // todo Enum member 'Editing' is never used
 
     /// <summary>
     /// Лот/Аукцион активен (Ведутся торги)

@@ -56,7 +56,7 @@ public class AuthorityHandler
     /// <param name="email">Почта пользователя</param>
     /// <param name="user">Пользователь</param>
     /// <returns>True или False</returns>
-    public bool VerifyUserData(string email, string password, User user)
+    public bool VerifyUserData(string email, string password, User user) // todo internal
     {
         var hashToCompare = Rfc2898DeriveBytes.Pbkdf2(
             Encoding.ASCII.GetBytes(password),
@@ -80,7 +80,7 @@ public class AuthorityHandler
     /// </summary>
     /// <param name="email">Почта пользователя</param>
     /// <returns>Токен</returns>
-    public string CreateToken(string email)
+    public string CreateToken(string email) // todo internal
     {
         var symmetricKey = Encoding.ASCII.GetBytes(Secret);
         var tokenHandler = new JwtSecurityTokenHandler();

@@ -28,6 +28,10 @@ public class GetAuctionsHandler
     /// </summary>
     /// <returns>Список моделей аукциона</returns>
     public async Task<IReadOnlyCollection<AuctionDto>> GetAuctions()
+    // todo разбить на private методы
+    // todo вижу, что у тебя здесь и в классе выше копипаста метода - надо вынести
+    // может быть вообще нет смысла городить 2 разных класса, а сделать один хэндлер с двумя перегрузками: одна с параметром, другая без
+    // обе перегрузки ходят в один и тот же private метод
     {
         var auctionsDto = new List<AuctionDto>();
         var auctions = await _auctionRepository.SelectManyAsync();

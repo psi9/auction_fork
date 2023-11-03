@@ -59,7 +59,7 @@ public class User
     /// <param name="name">Имя пользователя</param>
     /// <param name="email">Почта пользователя</param>
     /// <param name="password">Пароль пользователя</param>
-    public void UpdateInformation(string name, string email, string password)
+    public void UpdateInformation(string name, string email, string password) // todo Method 'UpdateInformation' is never used
     {
         Name = name;
         Email = email;

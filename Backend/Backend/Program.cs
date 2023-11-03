@@ -26,7 +26,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOptions<PgsqlConnection>()
     .Bind(builder.Configuration.GetSection("Config:PgsqlConnection"));
 
-builder.Services.AddOptions<AuthorityHandler>()
+builder.Services.AddOptions<AuthorityHandler>() // todo весь нейминг Authority поменять на Auth или Authorization
     .Bind(builder.Configuration.GetSection("Config:AuthorityHandler"));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -77,7 +77,7 @@ public class Lot
     /// <param name="startPrice">Начальная цена</param>
     /// <param name="betStep">Шаг ставки лота</param>
     /// <param name="images">Изображения лота</param>
-    public Lot(string name, string description, Guid auctionId, decimal startPrice, decimal betStep,
+    public Lot(string name, string description, Guid auctionId, decimal startPrice, decimal betStep, // todo Constructor 'Lot' is never used
         IEnumerable<Image> images)
     {
         Name = name;
@@ -121,7 +121,7 @@ public class Lot
     /// <param name="betStep">Шаг ставки</param>
     /// <param name="images">Изображения лота</param>
     /// <returns>Успех или неудача</returns>
-    public Result UpdateInformation(string name, string description, decimal betStep, IEnumerable<Image> images)
+    public Result UpdateInformation(string name, string description, decimal betStep, IEnumerable<Image> images) // todo здесь есть возвращаемое значение, но оно нигде по стеку вызовов не используется, просто всегда ОК
     {
         Name = name;
         Description = description;

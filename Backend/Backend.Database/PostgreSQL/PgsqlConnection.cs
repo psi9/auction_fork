@@ -3,7 +3,7 @@ namespace Backend.Database.PostgreSQL;
 /// <summary>
 /// Класс строки подключения базы данных PostgreSQL
 /// </summary>
-public class PgsqlConnection
+public class PgsqlConnection // todo тут пропы все { private get; init } - ты их читаешь только в этом классе
 {
     /// <summary>
     /// Название сервера
@@ -34,7 +34,7 @@ public class PgsqlConnection
     /// Получить строку подключения к базе данных
     /// </summary>
     /// <returns>Строку подключения к базе данных PostgreSQL</returns>
-    public string GetConnectionString()
+    public string GetConnectionString() // todo internal
     {
         return $"Server={Server};Port={Port};Database={Database};User Id={User};Password={Password};";
     }

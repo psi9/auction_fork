@@ -10,7 +10,8 @@ namespace Backend.Controllers;
 /// </summary>
 [Authorize]
 [ApiController]
-[Route("api/lot/")]
+[Route("api/lot/")] // todo почему тут у каких-то эндпоинтов есть [From...], а у каких-то нет? (GET-ы к комменту не относятся)
+// todo закрывающий слэш в роуте не нужен, фреймворк смаппает
 public class LotController : ControllerBase
 {
     /// <summary>
@@ -83,7 +84,7 @@ public class LotController : ControllerBase
     /// </summary>
     /// <param name="id">Уникальный индентификатор лота</param>
     [HttpDelete("delete/{id:guid}")]
-    public async Task DeleteLotAsync(Guid id)
+    public async Task DeleteLotAsync(Guid id) 
     {
         await _deleteHandler.DeleteLotAsync(id);
     }
